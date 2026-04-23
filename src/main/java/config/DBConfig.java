@@ -25,7 +25,7 @@ public class DBConfig {
 		ComboPooledDataSource ds = new ComboPooledDataSource(); //Connection Pool 객체 생성
 		try {
 			ds.setDriverClass("org.mariadb.jdbc.Driver");
-			ds.setJdbcUrl("jdbc:mariadb://localhost:3306/springdb");
+			ds.setJdbcUrl("jdbc:mariadb://localhost:3306/springdb?characterEncoding=UTF-8");
 			ds.setUser("root");
 			ds.setPassword("1234");
 			ds.setMaxPoolSize(20); //최대 객체의 갯수
