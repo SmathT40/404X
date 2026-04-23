@@ -123,9 +123,19 @@ public class BoardController {
     }
 
     @PostMapping("/delete")
-    public String delete(@RequestParam int boardid,
-                         @RequestParam int board_no) {
-        boardService.delete(board_no);
+    public String delete(
+            @RequestParam int boardid,
+            @RequestParam int board_no){
+
+        try{
+
+            boardService.delete(board_no);
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+        }
+
         return "redirect:/community/board/list?boardid=" + boardid;
     }
 

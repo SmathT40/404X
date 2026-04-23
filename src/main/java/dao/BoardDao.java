@@ -47,6 +47,13 @@ public class BoardDao {
         param.put("searchcontent", searchcontent);
         return template.getMapper(cls).selectList(param);
     }
+    public List<Board> myPostList(String userId, int pageNum, int limit) {
+        return template.getMapper(cls).selectMyPostList(userId, (pageNum-1)*limit, limit);
+    }
+
+    public int myPostCount(String userId) {
+        return template.getMapper(cls).countMyPost(userId);
+    }
 
     public Board selectOne(Integer board_no) {
         return template.getMapper(cls).selectOne(board_no);
