@@ -1,0 +1,427 @@
+/* =============================================
+   404 X CLUB - layout.css (전체 수정본)
+   목표 디자인 반영: 중앙 정렬 GNB & 이탤릭 로고
+   ============================================= */
+
+/* =============================================
+   1. 헤더 (로고 및 유틸리티)
+   ============================================= */
+#header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 900;
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 40px; /* 상하 여백 확대 */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header-logo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 900;
+    font-style: italic; /* 목표 디자인: 기울임꼴 */
+    letter-spacing: -0.5px;
+    color: #222;
+    text-transform: uppercase;
+}
+
+.header-utils {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-utils a {
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+}
+
+.header-utils a:hover {
+    color: #222;
+}
+
+/* =============================================
+   2. GNB (Global Navigation Bar) - 부트스트랩 통합
+   ============================================= */
+.gnb.navbar {
+    background: #f8f8f8 !important;
+    border-top: 1px solid #eee;
+    padding: 0 !important;
+    min-height: 52px;
+}
+
+/* 메뉴 전체를 화면 정중앙으로 배치 */
+.navbar-nav {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item .nav-link {
+    padding: 16px 85px !important; /* 좌우 간격을 넓게 설정하여 목표 이미지 구현 */
+    font-size: 14px;
+    font-weight: 700;
+    color: #444 !important;
+    letter-spacing: -0.2px;
+    transition: all 0.2s;
+}
+
+.nav-item .nav-link:hover {
+    color: #000 !important;
+    background: rgba(0,0,0,0.03);
+}
+
+/* GNB 드롭다운 (숨김 및 호버 논리) */
+.nav-item.dropdown .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 0 0 8px 8px;
+    min-width: 150px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    z-index: 1000;
+    margin: 0;
+    padding: 8px 0;
+}
+
+.nav-item.dropdown:hover > .dropdown-menu {
+    display: block;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px 20px;
+    font-size: 13px;
+    color: #555 !important;
+    transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+    background: #f8f8f8 !important;
+    color: #e63946 !important; /* 포인트 컬러 적용 */
+}
+
+.dropdown-toggle::after {
+    display: none; /* 화살표 제거 */
+}
+
+/* =============================================
+   3. 관리자/호스트 사이드바 레이아웃 (기존 유지)
+   ============================================= */
+.admin-wrap {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar-admin, .sidebar-host {
+    width: 240px;
+    background: #111;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.sidebar-logo {
+    padding: 24px 20px;
+    border-bottom: 1px solid #333;
+}
+
+.admin-content {
+    flex: 1;
+    background: #f5f5f5;
+    padding: 28px;
+}
+
+/* =============================================
+   4. 푸터 및 기타 (기존 유지)
+   
+/* =============================================
+   [원본 복구] 사용자 페이지 공통 레이아웃
+   ============================================= */
+.user-content {
+    max-width: 860px; /* 상세페이지 등 본문 폭 고정 */
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* =============================================
+   [원본 복구] 푸터 중앙 정렬 및 내부 레이아웃
+   ============================================= */
+#footer {
+    background: #f8f8f8;
+    border-top: 1px solid #eee;
+    padding: 30px 0; /* 상하 여백 */
+    width: 100%;
+}
+
+#footer .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 좌우 분산 정렬 */
+    padding: 0 40px;
+    font-size: 13px;
+    color: #999;
+}
+
+/* =============================================
+   [원본 복구] 페이지별 탭 (강의/마이페이지/문의)
+   ============================================= */
+.mypage-tab-bar, .lecture-cat-tab, .support-tab-bar {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 30px;
+}
+/* ... 이하 탭 세부 스타일은 원본에서 복사 권장 ... */
+
+/* =============================================
+   [원본 복구] 맨 위로 버튼 (Floating)
+   ============================================= */
+#scroll-top {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+/* =============================================
+   1. 헤더 (로고 및 유틸리티)
+   ============================================= */
+#header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 900;
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header-logo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 900;
+    font-style: italic; /* 기울임꼴 로고 */
+    letter-spacing: -0.5px;
+    color: #222;
+    text-transform: uppercase;
+    text-decoration: none !important;
+}
+
+.header-utils {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-utils a {
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+    text-decoration: none;
+}
+
+.header-utils a:hover {
+    color: #222;
+}
+
+/* =============================================
+   2. GNB (Global Navigation Bar) - 중앙 정렬
+   ============================================= */
+.gnb.navbar {
+    background: #f8f8f8 !important;
+    border-top: 1px solid #eee;
+    padding: 0 !important;
+    min-height: 52px;
+}
+
+.navbar-nav {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item .nav-link:hover {
+    color: #000 !important;
+    background: rgba(0,0,0,0.03);
+}
+
+/* GNB 드롭다운 호버 로직 */
+.nav-item.dropdown .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 0 0 8px 8px;
+    min-width: 150px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    z-index: 1000;
+}
+
+.nav-item.dropdown:hover > .dropdown-menu {
+    display: block;
+}
+
+.dropdown-item:hover {
+    background: #f8f8f8 !important;
+    color: #e63946 !important;
+}
+
+.dropdown-toggle::after { display: none; }
+
+/* =============================================
+   3. 사용자 페이지 본문 및 탭 레이아웃 (원본 복구)
+   ============================================= */
+.user-content {
+    max-width: 860px; /* 상세페이지 등 본문 폭 고정 */
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* 공통 탭 스타일 (마이페이지, 강의목록, 고객센터) */
+.mypage-tab-bar, .lecture-cat-tab, .support-tab-bar {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 30px;
+}
+
+.mypage-tab-bar { justify-content: center; }
+.support-tab-bar .tab-item { flex: 1; text-align: center; }
+
+.tab-item {
+    padding: 14px 30px;
+    font-size: 14px;
+    color: #aaa;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+}
+
+.tab-item.active {
+    color: #222;
+    border-bottom-color: #222;
+    font-weight: 600;
+}
+
+/* 강의목록 둥근 필터 버튼 */
+.lecture-sub-tab {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.lecture-sub-tab .sub-item {
+    padding: 7px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #555;
+    cursor: pointer;
+}
+
+.lecture-sub-tab .sub-item.active {
+    background: #222;
+    color: #fff;
+    border-color: #222;
+}
+
+/* =============================================
+   4. 푸터 (Footer) - 중앙 정렬 및 좌우 배치
+   ============================================= */
+#footer {
+    background: #f8f8f8;
+    border-top: 1px solid #eee;
+    padding: 30px 0;
+    width: 100%;
+}
+
+#footer .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 좌우 끝 배치 */
+    padding: 0 40px;
+    font-size: 13px;
+    color: #999;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#footer .footer-info a {
+    color: #e63946;
+    text-decoration: none;
+}
+
+/* =============================================
+   5. 기타 유틸리티 (스크롤 버튼 등)
+   ============================================= */
+#scroll-top {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+#scroll-top:hover {
+    background: #222;
+    color: #fff;
+}
