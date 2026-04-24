@@ -88,12 +88,12 @@
             </table>
         </div>
 
-        <jsp:include page="/WEB-INF/views/common/pagination.jsp">
+        <jsp:include page="/WEB-INF/view/common/pagination.jsp">
             <jsp:param name="currentPage" value="${currentPage}"/>
             <jsp:param name="totalPage"   value="${totalPage}"/>
             <jsp:param name="pageUrl"
                 value="/host/class/classList?classId=${classVO.classId}&page="/>
-
+		</jsp:include>
         <div style="margin-top:20px;">
             <a href="${pageContext.request.contextPath}/host/class/list"
                class="btn btn-ghost btn-sm">&#8592; 목록으로</a>

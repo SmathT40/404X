@@ -77,11 +77,11 @@
             </c:otherwise>
         </c:choose>
 
-        <jsp:include page="/WEB-INF/views/common/pagination.jsp">
+        <jsp:include page="/WEB-INF/view/common/pagination.jsp">
             <jsp:param name="currentPage" value="${currentPage}"/>
             <jsp:param name="totalPage"   value="${totalPage}"/>
             <jsp:param name="pageUrl"     value="/admin/host/${activeTab}?page="/>
-
+		</jsp:include>
     </div>
 </div>
 </div>

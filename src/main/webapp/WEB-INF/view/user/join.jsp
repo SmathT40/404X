@@ -22,7 +22,7 @@
                 <div class="form-label">아이디 <span style="color:#e63946;">*</span></div>
                 <div class="form-inline">
                     <input type="text" id="userId" name="user_id" class="form-control"
-                           placeholder="아이디를 입력해 주세요." maxlength="20">
+                           placeholder="아이디를 입력해 주세요." maxlength="20" value="${user.user_id}">
                     <button type="button" class="btn btn-black btn-sm" style="white-space:nowrap;"
                             onclick="checkDupId()">중복확인</button>
                 </div>
@@ -54,25 +54,25 @@
             <div class="form-group">
                 <div class="form-label">이름 <span style="color:#e63946;">*</span></div>
                 <input type="text" id="userName" name="user_name" class="form-control"
-                       placeholder="이름을 입력해 주세요.">
+                       placeholder="이름을 입력해 주세요." value="${user.user_name}">
             </div>
 
             <div class="form-group">
                 <div class="form-label">생년월일 <span style="color:#e63946;">*</span></div>
                 <input type="text" id="userBirth" name="user_birth" class="form-control"
-                       placeholder="생년월일을 입력해 주세요. ( ex. 19981102 )" maxlength="8">
+                       placeholder="생년월일을 입력해 주세요. ( ex. 19981102 )" maxlength="8" value="${user.user_birth}">
             </div>
 
             <div class="form-group">
                 <div class="form-label">전화번호 <span style="color:#e63946;">*</span></div>
                 <input type="text" id="userPhone" name="user_phone" class="form-control"
-                       placeholder="전화번호를 입력해 주세요 (ex. 01011112222)." maxlength="11">
+                       placeholder="전화번호를 입력해 주세요 (ex. 01011112222)." maxlength="11" value="${user.user_phone}">
             </div>
 
             <div class="form-group">
                 <div class="form-label">이메일</div>
                 <input type="email" id="userEmail" name="user_email" class="form-control"
-                       placeholder="이메일을 입력해 주세요.">
+                       placeholder="이메일을 입력해 주세요." value="${user.user_email}">
             </div>
         </div>
 
@@ -100,7 +100,7 @@ function checkDupId(){
     var id = $('#userId').val().trim();
     if(!id){ showAlert('아이디를 입력해주세요.'); return; }
     ajaxRequest('${pageContext.request.contextPath}/user/checkId',
-        {userId: id}, 'POST',
+        {user_id: id}, 'POST',
         function(res){
             if(res.available){
                 $('#idMsg').text('사용 가능한 아이디입니다.').css('color','#166534');
@@ -121,6 +121,15 @@ $('#userPwChk').on('input', function(){
         $('#pwMsg').text('비밀번호가 일치하지 않습니다.').css('color','#991b1b');
     }
 });
+
+/* 아이디 입력 칸에 글자를 치면 중복확인 상태 초기화 */
+$('#userId').on('input', function () {	// 이 'input' 이라는 거 덕에 쪼금이라도 바뀌는 순간 바로 아래 함정 카드 발동! 빰!빰빠빠빠바라바바빰!빰!
+	// 중복 확인 통과 상태를 즉시 취소
+	idChecked = false;
+	
+	// 입력칸 아래 메세지를 다시 빨간색 경고로 리셋
+	$('#idMsg').text('아이디 중복 확인이 필요합니다.').css('color', '#991b1b');
+})
 
 /* 회원가입 제출 */
 function doJoin(){

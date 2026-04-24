@@ -19,7 +19,7 @@ public class UserDao {
 	private static final String NAMESPACE = "mapper.UserMapper.";
 	
 	public int checkId(String user_id) {
-		return sqlSession.selectOne(NAMESPACE + "checkId", user_id);
+		return userMapper.checkId(user_id);
 	}
 	
 	public void insertUser(User user) {

@@ -42,10 +42,11 @@
                 </c:choose>
             </tbody>
         </table>
-        <jsp:include page="/WEB-INF/views/common/pagination.jsp">
+        <jsp:include page="/WEB-INF/view/common/pagination.jsp">
             <jsp:param name="currentPage" value="${activePage}"/>
             <jsp:param name="totalPage"   value="${activeTotalPage}"/>
             <jsp:param name="pageUrl"     value="/mypage/classroom?type=active&page="/>
+        </jsp:include>
     </div>
 
     <%-- 만료된 강의 --%>
@@ -76,10 +77,11 @@
                 </c:choose>
             </tbody>
         </table>
-        <jsp:include page="/WEB-INF/views/common/pagination.jsp">
+        <jsp:include page="/WEB-INF/view/common/pagination.jsp">
             <jsp:param name="currentPage" value="${expiredPage}"/>
             <jsp:param name="totalPage"   value="${expiredTotalPage}"/>
             <jsp:param name="pageUrl"     value="/mypage/classroom?type=expired&page="/>
+        </jsp:include>
     </div>
 
 </div>

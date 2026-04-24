@@ -50,11 +50,11 @@
             </table>
         </div>
 
-        <jsp:include page="/WEB-INF/views/common/pagination.jsp">
+        <jsp:include page="/WEB-INF/view/common/pagination.jsp">
             <jsp:param name="currentPage" value="${currentPage}"/>
             <jsp:param name="totalPage"   value="${totalPage}"/>
             <jsp:param name="pageUrl"     value="/host/class/status?page="/>
-
+		</jsp:include>
     </div>
 </div>
 
