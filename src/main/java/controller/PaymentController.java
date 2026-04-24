@@ -27,13 +27,33 @@ public class PaymentController {
     // =========================================================================
 
     // 장바구니 목록
+    /*
     @GetMapping("/cart")
     public String cartList(HttpSession session, Model model) {
         List<ClassDto> cartList = (List<ClassDto>) session.getAttribute("cart");
         model.addAttribute("cartList", cartList);
         return "payment/cart";
     }
-
+    */
+    @GetMapping("/cart")
+    public String cartList(HttpSession session, Model model) {
+        // 임시 테스트용 - 나중에 삭제
+        if(session.getAttribute("cart") == null) {
+            List<ClassDto> testCart = new ArrayList<>();
+            ClassDto item = new ClassDto();
+            item.setClass_id(1);
+            item.setCls_title("JAVA 기초 제1강");
+            item.setCls_price(50000);
+            item.setUser_name("김강사");
+            testCart.add(item);
+            session.setAttribute("cart", testCart);
+        }
+        //여기까지
+        List<ClassDto> cartList = (List<ClassDto>) session.getAttribute("cart");
+        model.addAttribute("cartList", cartList);
+        return "payment/cart";
+    } 
+    
     // 장바구니 담기
     @ResponseBody
     @PostMapping("/cart/add")
@@ -136,4 +156,5 @@ public class PaymentController {
         }
         return "redirect:/mypage/classroom";
     }
+    
 }
