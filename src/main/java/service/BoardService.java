@@ -33,9 +33,7 @@ public class BoardService {
             String savedFile = saveFile(board.getBoard_file_path(), "file", request);
             board.setFileurl(savedFile);
         }
-        if (board.getUser_id() == null || board.getUser_id().isEmpty()) {
-            board.setUser_id("csw");
-        }
+       
         boardDao.insert(board);
     }
 

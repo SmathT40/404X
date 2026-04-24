@@ -38,12 +38,12 @@
         </c:otherwise>
     </c:choose>
 
-   <%--  <c:if test="${sessionScope.loginUser.user_role == 2}">   --%>
+     <c:if test="${sessionScope.loginUser.user_role == 2}">   
         <div style="text-align:right;margin-top:12px;">
             <a href="${pageContext.request.contextPath}/community/board/form?boardid=0"
                class="btn btn-black btn-sm">글쓰기</a>
         </div>
-    <%--  </c:if>   --%>
+      </c:if>  
 
 </div>
 </main>
