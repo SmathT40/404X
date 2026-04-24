@@ -24,10 +24,10 @@
         ${board.board_content}
     </div>
 
-    <c:if test="${not empty board.board_file_path}">
+    <c:if test="${not empty board.fileurl}">
         <div style="margin-bottom:24px;">
             <a href="${pageContext.request.contextPath}/resources/upload/file/${board.fileurl}"
-               target="_blank">첨부파일: ${board.board_file_path}</a>
+               target="_blank">첨부파일: ${board.fileurl}</a>
         </div>
     </c:if>
 

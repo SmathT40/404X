@@ -60,8 +60,17 @@ public class BoardService {
         return boardDao.count(board_type, searchtype, searchcontent);
     }
 
+    public List<Board> getMyPostList(String userId, int pageNum, int limit) {
+        return boardDao.myPostList(userId, pageNum, limit);
+    }
+
+    public int getMyPostTotalPage(String userId, int limit) {
+        int count = boardDao.myPostCount(userId);
+        return (int) Math.ceil((double) count / limit);
+    }
     public Board getDetail(int board_no) { return boardDao.selectOne(board_no); }
     public void delete(int board_no) { boardDao.delete(board_no); }
     public Board getPrev(int board_type, int board_no) { return boardDao.prev(board_type, board_no); }
     public Board getNext(int board_type, int board_no) { return boardDao.next(board_type, board_no); }
 }
+

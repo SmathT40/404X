@@ -63,7 +63,7 @@
 	                    <%-- 로그인 상태 --%>
 	                    <a href="${pageContext.request.contextPath}/mypage/classroom">&#128218; 내강의실</a>
 	                    <a href="${pageContext.request.contextPath}/mypage">&#128100; 마이페이지</a>
-	                    <a href="${pageContext.request.contextPath}/cart">&#128722; 장바구니</a>
+	                    <a href="${pageContext.request.contextPath}/payment/cart">&#128722; 장바구니</a>
 	                    <a href="${pageContext.request.contextPath}/user/logout">&#128682; 로그아웃</a>
 	                
 	                </c:when>

@@ -46,4 +46,16 @@ public interface BoardMapper {
 
     @Select("SELECT board_no, board_title FROM board WHERE board_type = #{board_type} AND board_no > #{board_no} ORDER BY board_no ASC LIMIT 1")
     Board selectNext(@Param("board_type") int board_type, @Param("board_no") int board_no);
+    
+ // 내가 쓴 게시글 목록
+    @Select("SELECT board_no, board_title, board_type, board_reg_date FROM board " +
+            "WHERE user_id = #{userId} AND board_type IN (1, 3) ORDER BY board_no DESC " +
+            "LIMIT #{startrow}, #{limit}")
+    List<Board> selectMyPostList(@Param("userId") String userId,
+                                  @Param("startrow") int startrow,
+                                  @Param("limit") int limit);
+
+    // 내가 쓴 게시글 수
+    @Select("SELECT COUNT(*) FROM board WHERE user_id = #{userId} AND board_type IN (1, 3)")
+    int countMyPost(@Param("userId") String userId);
 }

@@ -174,19 +174,5 @@ function openWithdrawModal() {
     $('#withdrawModal').addClass('active');
 }
 
-function sendFile(file) {
-    var form = new FormData();
-    form.append("file", file);
-    $.ajax({
-        url: "${pageContext.request.contextPath}/community/board/uploadImage",
-        type: "POST",
-        data: form,
-        contentType: false,
-        processData: false,
-        success: function(res) {
-            $("#summernote").summernote("insertImage", res.url);
-        }
-    });
-}
 
 

@@ -1,57 +1,139 @@
 package controller;
 
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import dto.ClassDto;
+import service.PaymentService;
 
 @Controller
+@RequestMapping("/payment")
 public class PaymentController {
 
-    // 1. 장바구니 목록 조회
-    @GetMapping("/payment/cart")
-    public String cartList(Model model) {
-        // model.addAttribute("cartList", paymentService.getCartList(userId));
-        return "payment/cart"; 
+    @Autowired
+    private PaymentService paymentService;
+
+    // =========================================================================
+    // --- 장바구니 ---
+    // =========================================================================
+
+    // 장바구니 목록
+    @GetMapping("/cart")
+    public String cartList(HttpSession session, Model model) {
+        List<ClassDto> cartList = (List<ClassDto>) session.getAttribute("cart");
+        model.addAttribute("cartList", cartList);
+        return "payment/cart";
     }
 
-    // 2. 장바구니 선택 삭제 (AJAX)
+    // 장바구니 담기
     @ResponseBody
-    @PostMapping("/cart/deleteMulti")
-    public String deleteMulti(@RequestParam("cartIds") String cartIds) {
-        // int result = paymentService.deleteMulti(cartIds);
-        return "{\"success\":true}"; 
+    @PostMapping("/cart/add")
+    public Map<String, Object> cartAdd(@RequestParam int class_id,
+                                        HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            paymentService.addCart(class_id, session);
+            result.put("success", true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("msg", e.getMessage());
+        }
+        return result;
     }
 
-    // 3. 장바구니 개별 삭제 (AJAX)
+    // 장바구니 개별 삭제
     @ResponseBody
     @PostMapping("/cart/delete")
-    public String deleteItem(@RequestParam("cartId") int cartId) {
-        // int result = paymentService.delete(cartId);
-        return "{\"success\":true}";
+    public Map<String, Object> cartDelete(@RequestParam int cartIdx,
+                                           HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            paymentService.deleteCart(cartIdx, session);
+            result.put("success", true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+        }
+        return result;
     }
 
-    // 4. 결제 페이지 이동
-    @GetMapping("/payment/checkout")
-    public String checkout(@RequestParam("cartIds") String cartIds, Model model) {
-        // model.addAttribute("checkoutList", paymentService.getCheckoutList(cartIds));
-        return "payment/checkout";
-    }
-    
- // 5. 결제 실행 (AJAX 요청 대응)
+    // 장바구니 선택 삭제
     @ResponseBody
-    @PostMapping("/payment/pay")
-    public String doPay(@RequestParam("cartIds") String cartIds, 
-                        @RequestParam("payMethod") String payMethod,
-                        HttpSession session) {
+    @PostMapping("/cart/deleteMulti")
+    public Map<String, Object> cartDeleteMulti(@RequestParam String cartIds,
+                                                HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            paymentService.deleteCartMulti(cartIds, session);
+            result.put("success", true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+        }
+        return result;
+    }
+
+    // =========================================================================
+    // --- 결제 ---
+    // =========================================================================
+
+    // 결제 페이지
+    @GetMapping("/checkout")
+    public String checkout(@RequestParam(required = false) String cartIds,
+                           HttpSession session, Model model) {
+    	List<ClassDto> checkoutList = paymentService.getCheckoutList(cartIds, session);
+        model.addAttribute("checkoutList", checkoutList);
+        model.addAttribute("cartIds", cartIds);
+        return "payment/checkout";
+        //테스트용
+    	 /*
+        List<ClassDto> checkoutList = (List<ClassDto>) session.getAttribute("cart");
+        if(checkoutList == null) checkoutList = new ArrayList<>();
         
-        // 여기에 결제 로직 (DB pay 테이블 insert 등) 구현
-        // UserVO user = (UserVO) session.getAttribute("loginUser");
-        
-        return "{\"success\":true}"; // 결제 성공 시
+        model.addAttribute("checkoutList", checkoutList);
+        model.addAttribute("cartIds", cartIds != null ? cartIds : "");
+        return "payment/checkout";
+        */        
+    }
+
+    // 카카오페이 결제 준비
+    @ResponseBody
+    @PostMapping("/kakao/ready")
+    public Map<String, Object> kakaoReady(@RequestParam String cartIds,
+                                           @RequestParam String payMethod,
+                                           HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            String redirectUrl = paymentService.kakaoReady(cartIds, session);
+            result.put("success", true);
+            result.put("redirectUrl", redirectUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("msg", "결제 준비 실패");
+        }
+        return result;
+    }
+
+    // 카카오페이 결제 승인
+    @GetMapping("/kakao/approve")
+    public String kakaoApprove(@RequestParam("pg_token") String pgToken,
+                                HttpSession session) {
+        try {
+            paymentService.kakaoApprove(pgToken, session);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/mypage/classroom";
     }
 }

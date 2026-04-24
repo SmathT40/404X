@@ -82,9 +82,27 @@ $(function(){
 
     $("#noticeForm").on("submit", function(e){
         e.preventDefault();
+        var form = this;
+
+        var title = $('input[name=board_title]').val().trim();
+        if(!title){
+            showAlert('제목을 입력해주세요.');
+            return;
+        }
+
         var content = $("#summernote").summernote("code");
-        $("#summernote").val(content);
-        this.submit();
+        if(!content || content == '<p><br></p>'){
+            showAlert('내용을 입력해주세요.');
+            return;
+        }
+
+        var isUpdate = $('input[name=board_no]').length > 0;
+        var msg = isUpdate ? '수정하시겠습니까?' : '등록하시겠습니까?';
+
+        showConfirm(msg, function(){
+            $("#summernote").val(content);
+            form.submit();
+        });
     });
 });
 </script>

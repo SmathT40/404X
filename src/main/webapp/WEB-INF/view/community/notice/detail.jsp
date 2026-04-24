@@ -25,16 +25,33 @@
     </c:if>
 
 
-    <c:if test="${sessionScope.loginUser.user_role == 2}">
+   <%--    <c:if test="${sessionScope.loginUser.user_role == 2}"> --%>
 
             <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:24px;">
-            <a href="${pageContext.request.contextPath}/community/board/form?boardid=0&board_no=${board.board_no}"
-               class="btn btn-black btn-sm">수정</a>
-            <button class="btn btn-ghost btn-sm" onclick="doDelete(${board.board_no})">삭제</button>
-        </div>
+
+        <a href="${pageContext.request.contextPath}/community/board/form?boardid=0&board_no=${board.board_no}"
+              class="btn btn-black btn-sm">수정</a>
+
+            <form action="${pageContext.request.contextPath}/community/board/delete"
+             method="post" 
+             style="display:inline;">
+
+           <input type="hidden"
+            name="boardid"
+            value="${boardid}">
+
+            <input type="hidden"
+            name="board_no"
+            value="${board.board_no}">
+
+          <button type="button"
+           class="btn btn-ghost btn-sm"
+            onclick="doDelete(this)">삭제</button>
+</form>
+</div>
 
         
-    </c:if>
+   <%-- </c:if> --%>
 
 
     <div class="post-nav">
@@ -63,18 +80,19 @@
 
 </div>
 </main>
-
 <script>
-function doDelete(id){
-    showConfirm('삭제하시겠습니까?', function(){
-        ajaxRequest(
-            '${pageContext.request.contextPath}/community/board/delete',
-            {boardid: 0, board_no: id}, 'POST',
-            function(res){
-                if(res.success)
-                    location.href='${pageContext.request.contextPath}/community/board/list?boardid=0';
-            }
-        );
-    });
+
+function doDelete(btn){
+
+    showConfirm(
+      '삭제하시겠습니까?',
+      function(){
+
+          btn.form.submit();
+
+      }
+    );
+
 }
+
 </script>

@@ -3,52 +3,44 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"  %>
 <title>결제하기 - 404 X CLUB</title>
 
-<body>
 <main class="content-area">
 <div class="user-content" style="max-width:700px;">
 
     <h2 class="section-title">결제정보</h2>
 
-    <%-- 결제 강의 목록 --%>
     <table class="data-table" style="margin-bottom:24px;">
-        <thead>
-            <tr><th>강의명</th><th>강사명</th><th>가격</th><th>등록일</th><th>관리</th></tr>
-        </thead>
+        
         <tbody>
             <c:forEach var="item" items="${checkoutList}">
                 <tr>
-                    <td>${item.className}</td>
-                    <td>${item.userName}</td>
-                    <td><fmt:formatNumber value="${item.clsPrice}" pattern="#,###"/>원</td>
-                    <td>${item.addDate}</td>
-                    <td>
-                        <button class="btn btn-black btn-sm" onclick="removeItem(${item.cartId})">삭제</button>
-                    </td>
+                    <td>${item.cls_title}</td>
+                    <td>${item.user_name}</td>
+                    <td><fmt:formatNumber value="${item.cls_price}" pattern="#,###"/>원</td>
+                    <td class="pay-date"></td>
+                    <td><button class="btn btn-black btn-sm">삭제</button></td>
                 </tr>
             </c:forEach>
         </tbody>
     </table>
 
-    <%-- 주문자 정보 --%>
     <div class="card" style="margin-bottom:20px;">
         <div style="font-weight:600;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #eee;">주문자 정보</div>
         <table style="width:100%;font-size:13px;border-collapse:collapse;">
             <tr>
                 <td style="padding:8px 0;color:#888;width:80px;">이름</td>
-                <td style="padding:8px 0;background:#f9f9f9;padding-left:12px;border-radius:4px;">${sessionScope.loginUser.userName}</td>
+                <td style="padding:8px 0;padding-left:12px;">${sessionScope.loginUser.user_name}</td>
             </tr>
             <tr>
                 <td style="padding:8px 0;color:#888;">연락처</td>
-                <td style="padding:8px 0;background:#f9f9f9;padding-left:12px;border-radius:4px;">${sessionScope.loginUser.userPhone}</td>
+                <td style="padding:8px 0;padding-left:12px;">${sessionScope.loginUser.user_phone}</td>
             </tr>
             <tr>
                 <td style="padding:8px 0;color:#888;">이메일</td>
-                <td style="padding:8px 0;background:#f9f9f9;padding-left:12px;border-radius:4px;">${sessionScope.loginUser.userEmail}</td>
+                <td style="padding:8px 0;padding-left:12px;">${sessionScope.loginUser.user_email}</td>
             </tr>
         </table>
     </div>
 
-    <%-- 결제수단 --%>
     <div class="card" style="margin-bottom:24px;">
         <div style="font-weight:600;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #eee;">결제수단</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
@@ -73,24 +65,22 @@
         </div>
     </div>
 
-    <%-- 최종 결제금액 --%>
     <div class="card" style="margin-bottom:28px;">
         <div style="font-weight:600;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #eee;">최종 결제금액</div>
         <c:set var="total" value="0"/>
         <c:forEach var="item" items="${checkoutList}">
             <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:10px;">
-                <span>${item.className}</span>
-                <span>${item.userName}</span>
-                <span><fmt:formatNumber value="${item.clsPrice}" pattern="#,###"/>원</span>
+                <span>${item.cls_title}</span>
+                <span>${item.user_name}</span>
+                <span><fmt:formatNumber value="${item.cls_price}" pattern="#,###"/>원</span>
             </div>
-            <c:set var="total" value="${total + item.clsPrice}"/>
+            <c:set var="total" value="${total + item.cls_price}"/>
         </c:forEach>
         <div style="text-align:right;font-size:16px;font-weight:700;margin-top:16px;padding-top:12px;border-top:1px solid #eee;">
             총 금액 <span style="color:#e63946;"><fmt:formatNumber value="${total}" pattern="#,###"/>원</span>
         </div>
     </div>
 
-    <%-- 버튼 --%>
     <div style="display:flex;justify-content:center;gap:16px;">
         <a href="${pageContext.request.contextPath}/payment/cart" class="btn btn-ghost btn-lg" style="min-width:120px;">취소</a>
         <button class="btn btn-black btn-lg" style="min-width:120px;" onclick="doPayment()">구매하기</button>
@@ -100,24 +90,44 @@
 </main>
 
 <script>
-/* 결제수단 선택 스타일 */
-$('input[name=payMethod]').on('change', function(){
-    $('.pay-btn').css('outline','none');
-    $('[data-for=' + $(this).attr('id') + ']').css('outline','2px solid #222');
+$(function(){
+    // 현재 시간 표시
+    var now = new Date();
+    var y = now.getFullYear();
+    var m = String(now.getMonth()+1).padStart(2,'0');
+    var d = String(now.getDate()).padStart(2,'0');
+    var h = String(now.getHours()).padStart(2,'0');
+    var mi = String(now.getMinutes()).padStart(2,'0');
+    var nowStr = y + '.' + m + '.' + d + ' ' + h + ':' + mi;
+    $('.pay-date').text(nowStr);
+
+    // pay-btn 클릭시 radio 선택
+    $('.pay-btn').on('click', function(){
+        var forId = $(this).data('for');
+        $('#' + forId).prop('checked', true).trigger('change');
+    });
+
+    // 결제수단 선택 스타일
+    $('input[name=payMethod]').on('change', function(){
+        $('.pay-btn').css('outline','none');
+        $('[data-for=' + $(this).attr('id') + ']').css('outline','2px solid #222');
+    });
 });
 
-/* 결제 실행 */
 function doPayment(){
     var method = $('input[name=payMethod]:checked').val();
     if(!method){ showAlert('결제수단을 선택해주세요.'); return; }
-    var cartIds = '${cartIds}';
-    ajaxRequest('${pageContext.request.contextPath}/payment/pay',
-        {cartIds: cartIds, payMethod: method}, 'POST',
+
+    if(method === 'NAVER' || method === 'BANK'){
+        showAlert('준비 중인 결제수단입니다.');
+        return;
+    }
+
+    ajaxRequest('${pageContext.request.contextPath}/payment/kakao/ready',
+        {cartIds: '${cartIds}', payMethod: method}, 'POST',
         function(res){
             if(res.success){
-                showAlert('결제가 완료되었습니다.', function(){
-                    location.href = '${pageContext.request.contextPath}/mypage/classroom';
-                });
+                location.href = res.redirectUrl;
             } else {
                 showAlert(res.msg || '결제에 실패했습니다.');
             }
@@ -125,4 +135,3 @@ function doPayment(){
     );
 }
 </script>
-</body>
