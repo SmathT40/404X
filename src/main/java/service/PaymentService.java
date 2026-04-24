@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import dao.PaymentDao;
 import dto.ClassDto;
 import dto.Pay;
+import dto.User;
 import mapper.ClassMapper;
 
 @Service
@@ -122,11 +123,16 @@ public class PaymentService {
 
         String orderId = "ORDER_" + System.currentTimeMillis();
 
+     // ⭐ 1. 여기서 userId를 가장 먼저 생성합니다. (순서가 제일 중요!)
+        User loginUser = (User) session.getAttribute("loginUser");
+        String userId = loginUser != null ? loginUser.getUser_id() : "testUser";
+        
         // 세션에 저장
         session.setAttribute("kakaoCartIds", cartIds);
         session.setAttribute("kakaoOrderId", orderId);
         session.setAttribute("kakaoGoods", goods);
         session.setAttribute("kakaoTotal", total);
+        session.setAttribute("kakaoUserId", userId);
 
         // 카카오페이 API 호출
         RestTemplate rt = new RestTemplate();
@@ -138,7 +144,9 @@ public class PaymentService {
         Map<String, Object> params = new HashMap<>();
         params.put("cid", CID);
         params.put("partner_order_id", orderId);
-        params.put("partner_user_id", session.getAttribute("user_id"));
+        //4월 24일 수정
+  
+        params.put("partner_user_id", userId);
         params.put("item_name", goods);
         params.put("quantity", checkoutList.size());
         params.put("total_amount", total);
@@ -166,7 +174,8 @@ public class PaymentService {
     public void kakaoApprove(String pgToken, HttpSession session) throws Exception {
         String tid = (String) session.getAttribute("kakaoTid");
         String orderId = (String) session.getAttribute("kakaoOrderId");
-        String userId = (String) session.getAttribute("user_id");
+        // 4월 24일 수정
+        String userId = (String) session.getAttribute("kakaoUserId");
         String goods = (String) session.getAttribute("kakaoGoods");
         int total = (int) session.getAttribute("kakaoTotal");
         String cartIds = (String) session.getAttribute("kakaoCartIds");
@@ -221,4 +230,16 @@ public class PaymentService {
         session.removeAttribute("kakaoTotal");
         session.removeAttribute("kakaoCartIds");
     }
+    
+        // =========================================================================
+       // --- 결제내역 조회 추가 4월 24일---
+      // =========================================================================
+      public List<Pay> getPayList(String userId, int pageNum, int limit) {
+      return paymentDao.getPayList(userId, pageNum, limit);
+    }
+
+      public int getPayTotalPage(String userId, int limit) {
+      int count = paymentDao.countPay(userId);
+      return (int) Math.ceil((double) count / limit);
+   }
 }

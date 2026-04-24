@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import dto.Board;
 import dto.User;
 import service.BoardService;
+import service.PaymentService;
 import service.UserService;
 
 @Controller

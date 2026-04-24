@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import dto.Board;
+import dto.User;
 import service.BoardService;
 
 @Controller
@@ -91,14 +92,14 @@ public class BoardController {
         model.addAttribute("boardid", boardid);
         return getFormView(boardid);
     }
-
+    //4월 24일 수정//
     @PostMapping("/insert")
     public String insert(Board board,
                          @RequestParam(value = "boardid", required = false, defaultValue = "1") int boardid,
                          HttpServletRequest request, RedirectAttributes rttr) {
         try {
-            String userId = (String) request.getSession().getAttribute("user_id");
-            if (userId != null) board.setUser_id(userId);
+        	User loginUser = (User) request.getSession().getAttribute("loginUser");
+        	if (loginUser != null) board.setUser_id(loginUser.getUser_id());
             board.setBoard_type(boardid);
             boardService.insert(board, request);
             rttr.addFlashAttribute("msg", "등록되었습니다.");
