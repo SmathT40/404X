@@ -8,7 +8,8 @@ import lombok.Data;
 public class ClassDto {
     private int class_id;
     private String user_id;
-    private int category_code;
+    private Integer category_code;
+    private Integer parent_code;
     private String cls_title;
     private String cls_thumbnail;
     private Date cls_reg_date;
@@ -18,4 +19,5 @@ public class ClassDto {
     private int cls_price;
     private String cls_content;
     private int cls_status;
+    private int cls_exp;
 }

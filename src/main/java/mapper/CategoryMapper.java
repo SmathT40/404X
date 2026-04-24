@@ -1,12 +1,15 @@
 package mapper;
 
 import java.util.List;
+
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import dto.CategoryDto;
 
+@Mapper
 public interface CategoryMapper {
 
 	@Select("SELECT * FROM category WHERE parent_code IS NULL ORDER BY category_code DESC")

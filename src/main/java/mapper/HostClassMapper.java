@@ -2,10 +2,13 @@ package mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import dto.ClassDto;
+import dto.LecDto;
 
 public interface HostClassMapper {
 	@Select("""
@@ -32,4 +35,25 @@ public interface HostClassMapper {
         @Param("userId") String userId,
         @Param("status") Integer status
     );
+	
+	@Insert("INSERT INTO cls (user_id, category_code, cls_title, cls_exp, cls_price, cls_thumbnail, cls_content) " +
+	        "VALUES (#{user_id}, #{category_code}, #{cls_title}, #{cls_exp}, #{cls_price}, #{cls_thumbnail}, #{cls_content})")
+	int insertClass(ClassDto dto);
+
+	@Insert("INSERT INTO lec (lec_title,lec_time,lec_url,lec_no,lec_content,class_id) " +
+			"VALUES (#{lec_title},#{lec_time},#{lec_url},#{lec_no},#{lec_content},#{class_id})")
+	int insertLec(LecDto dto);
+
+	@Update("""
+		    UPDATE lec 
+		    SET 
+		        lec_no = #{lec_no},
+		        lec_title = #{lec_title},
+		        lec_url = #{lec_url},
+		        lec_content = #{lec_content},
+		        lec_time = #{lec_time}
+		    WHERE 
+		        lec_id = #{lec_id}
+		""")
+	void updateLec(LecDto dto);
 }
