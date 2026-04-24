@@ -14,7 +14,7 @@ public class SitemeshFilter extends ConfigurableSiteMeshFilter {
 
         // 2. 관리자 및 강사 전용 레이아웃 분리
         builder.addDecoratorPath("/admin/*", "admin.jsp");
-        builder.addDecoratorPath("/host/*", "host.jsp");
+        builder.addDecoratorPath("/host/*", "admin.jsp");
 
         // 3. 레이아웃 적용 제외 (가장 중요한 부분!)
         // 정적 리소스(이미지, CSS, JS)는 레이아웃을 입힐 필요가 없습니다.

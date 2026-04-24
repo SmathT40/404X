@@ -17,4 +17,5 @@ public class ClassDto {
     private int cls_featured;
     private int cls_price;
     private String cls_content;
+    private int cls_status;
 }

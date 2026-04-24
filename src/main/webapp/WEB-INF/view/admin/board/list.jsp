@@ -2,6 +2,7 @@
 <title>게시판 관리 - 404 X CLUB</title>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+
 <div class="admin-content">
 
     <div class="admin-tab-bar">
@@ -18,6 +19,7 @@
             <c:when test="${activeTab == 'setting'}">
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
 
+                    <%-- 좌측: 상단탭 + 카테고리 --%>
                     <div>
                         <div class="admin-section">
                             <div class="admin-section-header">
@@ -45,6 +47,7 @@
                         </div>
                     </div>
 
+                    <%-- 우측: 게시판 설정 --%>
                     <div class="admin-section">
                         <div class="admin-section-header">
                             <span class="admin-section-title">게시판 설정</span>
@@ -85,50 +88,29 @@
                 <div class="admin-section" style="padding:0;">
                     <table class="data-table" id="boardTable">
                         <thead>
-                            <tr>
-                                <th><input type="checkbox" class="chk-all"></th>
-                                <th>제목</th>
-                                <th>작성자</th>
-                                <th>작성게시판</th>
-                                <th>작성일</th>
-                                <th>관리</th>
-                            </tr>
+                            <tr><th><input type="checkbox" class="chk-all"></th><th>제목</th><th>작성자</th><th>작성게시판</th><th>작성일</th><th>관리</th></tr>
                         </thead>
                         <tbody>
                             <c:forEach var="post" items="${postList}">
                                 <tr>
-                                    <td><input type="checkbox" class="chk-item" value="${post.board_no}"></td>
-                                    <td>${post.board_title}</td>
-                                    <td>${post.user_id}</td>
-                                    <td>
-                                        <c:choose>
-                                            <c:when test="${post.board_type == 0}">공지사항</c:when>
-                                            <c:when test="${post.board_type == 1}">자유게시판</c:when>
-                                            <c:when test="${post.board_type == 3}">문의사항</c:when>
-                                        </c:choose>
-                                    </td>
-                                    <td>${post.board_reg_date}</td>
+                                    <td><input type="checkbox" class="chk-item" value="${post.boardNo}"></td>
+                                    <td>${post.boardTitle}</td>
+                                    <td>${post.userName}</td>
+                                    <td>${post.boardName}</td>
+                                    <td>${post.boardRegDate}</td>
                                     <td style="display:flex;gap:6px;">
                                         <c:choose>
-                                            <%-- 공지사항: 수정/삭제 --%>
-                                            <c:when test="${post.board_type == 0}">
-                                                <button class="btn btn-black btn-sm" onclick="location.href='${pageContext.request.contextPath}/community/board/form?boardid=0&board_no=${post.board_no}'">수정</button>
-                                                <button class="btn btn-ghost btn-sm" onclick="deletePost(${post.board_no})">삭제</button>
+                                            <c:when test="${post.boardType == 'NOTICE'}">
+                                                <button class="btn btn-black btn-sm" onclick="location.href='${pageContext.request.contextPath}/admin/board/edit?id=${post.boardNo}'">수정</button>
+                                                <button class="btn btn-ghost btn-sm" onclick="deletePost(${post.boardNo})">삭제</button>
                                             </c:when>
-                                            <%-- 문의사항 답변대기: 승인/삭제 --%>
-                                            <c:when test="${post.board_type == 3 && post.board_status == 0}">
-                                                <button class="btn btn-black btn-sm" onclick="approvePost(${post.board_no})">승인</button>
-                                                <button class="btn btn-ghost btn-sm" onclick="deletePost(${post.board_no})">삭제</button>
+                                            <c:when test="${post.approveStatus == '미승인'}">
+                                                <button class="btn btn-black btn-sm" onclick="approvePost(${post.boardNo})">승인</button>
+                                                <button class="btn btn-ghost btn-sm" onclick="deletePost(${post.boardNo})">삭제</button>
                                             </c:when>
-                                            <%-- 문의사항 답변완료: 수정/거절 --%>
-                                            <c:when test="${post.board_type == 3 && post.board_status == 1}">
-                                                <button class="btn btn-black btn-sm" onclick="location.href='${pageContext.request.contextPath}/community/board/form?boardid=3&board_no=${post.board_no}'">수정</button>
-                                                <button class="btn btn-ghost btn-sm" onclick="rejectPost(${post.board_no})">거절</button>
-                                            </c:when>
-                                            <%-- 자유게시판: 수정/삭제 --%>
                                             <c:otherwise>
-                                                <button class="btn btn-black btn-sm" onclick="location.href='${pageContext.request.contextPath}/community/board/form?boardid=1&board_no=${post.board_no}'">수정</button>
-                                                <button class="btn btn-ghost btn-sm" onclick="deletePost(${post.board_no})">삭제</button>
+                                                <button class="btn btn-black btn-sm" onclick="location.href='${pageContext.request.contextPath}/admin/board/edit?id=${post.boardNo}'">수정</button>
+                                                <button class="btn btn-ghost btn-sm" onclick="rejectPost(${post.boardNo})">거절</button>
                                             </c:otherwise>
                                         </c:choose>
                                     </td>
@@ -138,31 +120,44 @@
                     </table>
                 </div>
 
-                <jsp:include page="/WEB-INF/view/common/pagination.jsp">
+                <jsp:include page="/WEB-INF/views/common/pagination.jsp">
                     <jsp:param name="currentPage" value="${currentPage}"/>
                     <jsp:param name="totalPage"   value="${totalPage}"/>
                     <jsp:param name="pageUrl"     value="/admin/board/list?page="/>
-                </jsp:include>
             </c:otherwise>
         </c:choose>
 
     </div>
 </div>
+</div>
 
+<div class="modal-overlay" id="commonModal">
+    <div class="modal-box">
+        <div class="modal-title" id="modalTitle">알림</div>
+        <div class="modal-body"  id="modalBody"></div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" id="modalCancelBtn"  onclick="closeModal()" style="display:none">취소</button>
+            <button class="btn btn-black" id="modalConfirmBtn" onclick="closeModal()">확인</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 <script>
 var ctx='${pageContext.request.contextPath}';
 function doSearch(){ location.href=ctx+'/admin/board/list?keyword='+encodeURIComponent($('#keyword').val()); }
 function saveBoard(){ ajaxRequest(ctx+'/admin/board/save',{content:$('#boardEditContent').val()},'POST',function(res){ if(res.success) showAlert('저장되었습니다.'); }); }
 function deleteBoard(id){ showConfirm('삭제하시겠습니까?',function(){ ajaxRequest(ctx+'/admin/board/deleteBoard',{boardId:id},'POST',function(res){ if(res.success) location.reload(); }); }); }
 function addBoard(){ showAlert('게시판 추가 기능을 구현하세요.'); }
-function approvePost(id){ showConfirm('승인하시겠습니까?',function(){ ajaxRequest(ctx+'/admin/board/approve',{board_no:id},'POST',function(res){ if(res.success) location.reload(); }); }); }
-function rejectPost(id){ showConfirm('거절하시겠습니까?',function(){ ajaxRequest(ctx+'/admin/board/reject',{board_no:id},'POST',function(res){ if(res.success) location.reload(); }); }); }
-function deletePost(id){ showConfirm('삭제하시겠습니까?',function(){ ajaxRequest(ctx+'/admin/board/deletePost',{board_no:id},'POST',function(res){ if(res.success) location.reload(); }); }); }
+function approvePost(id){ showConfirm('승인하시겠습니까?',function(){ ajaxRequest(ctx+'/admin/board/approve',{boardId:id},'POST',function(res){ if(res.success) location.reload(); }); }); }
+function rejectPost(id){ showConfirm('거절하시겠습니까?',function(){ ajaxRequest(ctx+'/admin/board/reject',{boardId:id},'POST',function(res){ if(res.success) location.reload(); }); }); }
+function deletePost(id){ showConfirm('삭제하시겠습니까?',function(){ ajaxRequest(ctx+'/admin/board/deletePost',{boardId:id},'POST',function(res){ if(res.success) location.reload(); }); }); }
 function deleteSelected(){
     var ids=[]; $('.chk-item:checked').each(function(){ ids.push($(this).val()); });
     if(!ids.length){ showAlert('삭제할 항목을 선택해주세요.'); return; }
     showConfirm('선택 항목을 삭제하시겠습니까?', function(){
-        ajaxRequest(ctx+'/admin/board/deleteMulti',{board_nos:ids.join(',')},'POST',function(res){ if(res.success) location.reload(); });
+        ajaxRequest(ctx+'/admin/board/deleteMulti',{boardIds:ids.join(',')},'POST',function(res){ if(res.success) location.reload(); });
     });
 }
 </script>

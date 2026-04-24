@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<title>내가쓴글 - 404 X CLUB</title>
+<title>내 게시글 - 404 X CLUB</title>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <main class="content-area">
@@ -25,18 +25,11 @@
                 <c:choose>
                     <c:when test="${not empty myPostList}">
                         <c:forEach var="post" items="${myPostList}">
-                            <tr onclick="location.href='${pageContext.request.contextPath}/community/board/detail?boardid=${post.board_type}&board_no=${post.board_no}'"
-                                style="cursor:pointer;">
-                                <td>${post.board_no}</td>
-                                <td>${post.board_title}</td>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${post.board_type == 0}">공지사항</c:when>
-                                        <c:when test="${post.board_type == 1}">자유게시판</c:when>
-                                        <c:when test="${post.board_type == 3}">문의사항</c:when>
-                                    </c:choose>
-                                </td>
-                                <td>${post.board_reg_date}</td>
+                            <tr onclick="location.href='${pageContext.request.contextPath}/community/free/detail?id=${post.boardNo}'" style="cursor:pointer;">
+                                <td>${post.boardNo}</td>
+                                <td>${post.boardTitle}</td>
+                                <td>${post.boardCategory}</td>
+                                <td>${post.boardRegDate}</td>
                             </tr>
                         </c:forEach>
                     </c:when>
@@ -46,11 +39,10 @@
                 </c:choose>
             </tbody>
         </table>
-        <jsp:include page="/WEB-INF/view/common/pagination.jsp">
+        <jsp:include page="/WEB-INF/views/common/pagination.jsp">
             <jsp:param name="currentPage" value="${postPage}"/>
             <jsp:param name="totalPage"   value="${postTotalPage}"/>
             <jsp:param name="pageUrl"     value="/mypage/myPost?type=post&page="/>
-        </jsp:include>
     </div>
 
     <%-- 나의 댓글 --%>
@@ -64,18 +56,11 @@
                 <c:choose>
                     <c:when test="${not empty myCommentList}">
                         <c:forEach var="cmt" items="${myCommentList}">
-                            <tr onclick="location.href='${pageContext.request.contextPath}/community/board/detail?boardid=${cmt.board_type}&board_no=${cmt.board_no}'"
-                                style="cursor:pointer;">
-                                <td>${cmt.board_no}</td>
-                                <td>${cmt.board_title}</td>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${cmt.board_type == 0}">공지사항</c:when>
-                                        <c:when test="${cmt.board_type == 1}">자유게시판</c:when>
-                                        <c:when test="${cmt.board_type == 3}">문의사항</c:when>
-                                    </c:choose>
-                                </td>
-                                <td>${cmt.board_reg_date}</td>
+                            <tr onclick="location.href='${pageContext.request.contextPath}/community/free/detail?id=${cmt.boardId}'" style="cursor:pointer;">
+                                <td>${cmt.boardNo}</td>
+                                <td>${cmt.title}</td>
+                                <td>${cmt.boardCategory}</td>
+                                <td>${cmt.regDate}</td>
                             </tr>
                         </c:forEach>
                     </c:when>
@@ -85,11 +70,10 @@
                 </c:choose>
             </tbody>
         </table>
-        <jsp:include page="/WEB-INF/view/common/pagination.jsp">
+        <jsp:include page="/WEB-INF/views/common/pagination.jsp">
             <jsp:param name="currentPage" value="${cmtPage}"/>
             <jsp:param name="totalPage"   value="${cmtTotalPage}"/>
             <jsp:param name="pageUrl"     value="/mypage/myPost?type=comment&page="/>
-        </jsp:include>
     </div>
 
 </div>
