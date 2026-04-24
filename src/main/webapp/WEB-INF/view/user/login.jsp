@@ -19,7 +19,7 @@
         <%-- 아이디 --%>
         <div class="form-group">
             <div style="position:relative;">
-                <input type="text" id="userId" name="userId"
+                <input type="text" id="userId" name="user_id"
                        class="form-control" placeholder="아이디를 입력해 주세요."
                        value="${cookie.savedId.value}" style="padding-right:40px;">
                 <span id="clearId" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#aaa;display:none;">&#10005;</span>
@@ -28,7 +28,7 @@
 
         <%-- 비밀번호 --%>
         <div class="form-group">
-            <input type="password" id="userPw" name="userPw"
+            <input type="password" id="userPw" name="user_pw"
                    class="form-control" placeholder="패스워드를 입력해 주세요.">
         </div>
 
@@ -123,10 +123,10 @@ function doFindId(){
     if(!name || !email){ showAlert('이름과 이메일을 입력해주세요.'); return; }
 
     ajaxRequest('${pageContext.request.contextPath}/user/findId',
-        {userName: name, userEmail: email}, 'POST',
+        {user_name: name, user_email: email}, 'POST',
         function(res){
             if(res.success){
-                $('#findIdResult').text('회원님의 아이디는 ' + res.userId + ' 입니다.').show();
+                $('#findIdResult').text('회원님의 아이디는 ' + res.user_id + ' 입니다.').show();
             } else {
                 showAlert('일치하는 회원 정보가 없습니다.');
             }
@@ -142,7 +142,7 @@ function doFindPw(){
     if(!id || !name || !email){ showAlert('모든 항목을 입력해주세요.'); return; }
 
     ajaxRequest('${pageContext.request.contextPath}/user/findPw',
-        {userId: id, userName: name, userEmail: email}, 'POST',
+        {user_id: id, user_name: name, user_email: email}, 'POST',
         function(res){
             if(res.success){
                 $('#findPwResult').text('회원님의 이메일로 임시비밀번호가 전송 되었습니다.').show();
