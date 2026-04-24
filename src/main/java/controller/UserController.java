@@ -104,10 +104,8 @@ public class UserController {
                          @RequestParam(defaultValue="1") int cmtPage,
                          HttpSession session, Model model) {
 
-    	//=================== 4월 24일 수정===================/
         // 로그인 세션 연동
-    	User loginUser = (User) session.getAttribute("loginUser");
-    	String userId = loginUser != null ? loginUser.getUser_id() : null;
+        String userId = (String) session.getAttribute("user_id");
 
         // 내가 쓴 게시글
         List<Board> myPostList = boardService.getMyPostList(userId, postPage, 10);
@@ -123,26 +121,4 @@ public class UserController {
 
         return "user/mypage/myPost";
     }
-    
- // =========================================================================
- // --- 결제내역 추가 4월 24일---
- // =========================================================================
- @Autowired
- private PaymentService paymentService;
-
- @GetMapping("/mypage/payment")
- public String payment(@RequestParam(defaultValue="1") int page,
-                       HttpSession session, Model model) {
-	 // 4월 24일 수정 //
-	 User loginUser = (User) session.getAttribute("loginUser");
-	 String userId = loginUser != null ? loginUser.getUser_id() : null;
-    
-	// 임시 테스트용 - 나중에 삭제
-	if(userId == null) userId = "csw";
-	 
-     model.addAttribute("payList", paymentService.getPayList(userId, page, 10));
-     model.addAttribute("currentPage", page);
-     model.addAttribute("totalPage", paymentService.getPayTotalPage(userId, 10));
-     return "user/mypage/payment";
- }
 }

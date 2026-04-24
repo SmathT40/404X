@@ -36,7 +36,7 @@
                             <c:forEach var="cls" items="${classList}">
                                 <tr>
                                     <td><input type="checkbox" class="chk-item" value="${cls.class_id}"></td>
-                                    <td><a href="${pageContext.request.contextPath}/host/class/lectureList?classId=${cls.class_id}">${cls.cls_title}</a></td>
+                                    <td><a href="${pageContext.request.contextPath}/class/detail?id=${cls.class_id}">${cls.cls_title}</a></td>
                                     <td>${cls.user_name}</td>
                                     <td><fmt:formatNumber value="${cls.cls_price}" pattern="#,###"/>원</td>
                                     <td>${cls.cls_reg_date}</td>
@@ -103,4 +103,12 @@ function deleteSelected(){
             function(res){ if(res.success) location.reload(); });
     });
 }
+$(document).ready(function() {
+    const msg = "${completeMsg}";
+    
+    if (msg) {
+        openModal('등록 완료', msg, function() {
+        }, false);
+    }
+});
 </script>

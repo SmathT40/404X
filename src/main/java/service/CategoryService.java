@@ -29,4 +29,10 @@ public class CategoryService {
     public List<CategoryDto> getSubCategories(int parentCode) {
         return categoryMapper.selectSubCategoryList2(parentCode);
     }
+	public void insertCategory(CategoryDto dto) {
+		// TODO Auto-generated method stub
+	}
+	public void deleteCategory(int category_code) {
+		// TODO Auto-generated method stub
+	}
 }
