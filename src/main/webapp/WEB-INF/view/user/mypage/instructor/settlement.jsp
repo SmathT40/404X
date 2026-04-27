@@ -41,10 +41,10 @@
         <a href="${pageContext.request.contextPath}/mypage/instructor/settlement/form" class="btn btn-ghost btn-sm">글쓰기</a>
     </div>
 
-    <jsp:include page="/WEB-INF/views/common/pagination.jsp">
+    <jsp:include page="/WEB-INF/view/common/pagination.jsp">
         <jsp:param name="currentPage" value="${currentPage}"/>
         <jsp:param name="totalPage"   value="${totalPage}"/>
         <jsp:param name="pageUrl"     value="/mypage/instructor/settlement?page="/>
-
+	</jsp:include>
 </div>
 </main>

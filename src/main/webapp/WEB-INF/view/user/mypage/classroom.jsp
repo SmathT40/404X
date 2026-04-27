@@ -46,7 +46,7 @@
             <jsp:param name="currentPage" value="${activePage}"/>
             <jsp:param name="totalPage"   value="${activeTotalPage}"/>
             <jsp:param name="pageUrl"     value="/mypage/classroom?type=active&page="/>
-            </jsp:include>
+        </jsp:include>
     </div>
 
     <%-- 만료된 강의 --%>
@@ -81,7 +81,7 @@
             <jsp:param name="currentPage" value="${expiredPage}"/>
             <jsp:param name="totalPage"   value="${expiredTotalPage}"/>
             <jsp:param name="pageUrl"     value="/mypage/classroom?type=expired&page="/>
-            </jsp:include>
+        </jsp:include>
     </div>
 
 </div>

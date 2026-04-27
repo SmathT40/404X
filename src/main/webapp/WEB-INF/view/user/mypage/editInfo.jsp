@@ -6,7 +6,7 @@
 <div class="user-content">
 
     <div class="mypage-tab-bar">
-        <a href="${pageContext.request.contextPath}/mypage"           class="tab-item active">마이페이지</a>
+        <a href="${pageContext.request.contextPath}/mypage/index"           class="tab-item active">마이페이지</a>
         <a href="${pageContext.request.contextPath}/mypage/classroom" class="tab-item">내강의실</a>
         <a href="${pageContext.request.contextPath}/mypage/myPost"    class="tab-item">내가쓴글</a>
         <a href="${pageContext.request.contextPath}/mypage/payment"   class="tab-item">결제내역</a>
@@ -45,19 +45,19 @@
         <form id="infoForm" action="${pageContext.request.contextPath}/mypage/updateInfo" method="post">
             <div class="form-group">
                 <div class="form-label">이름</div>
-                <input type="text" name="userName" class="form-control" value="${sessionScope.loginUser.userName}">
+                <input type="text" name="user_name" class="form-control" value="${sessionScope.loginUser.user_name}">
             </div>
             <div class="form-group">
                 <div class="form-label">생년월일</div>
-                <input type="text" name="userBirth" class="form-control" value="${sessionScope.loginUser.userBirth}">
+                <input type="text" name="user_birth" class="form-control" value="${sessionScope.loginUser.user_birth}">
             </div>
             <div class="form-group">
                 <div class="form-label">전화번호</div>
-                <input type="text" name="userPhone" class="form-control" value="${sessionScope.loginUser.userPhone}">
+                <input type="text" name="user_phone" class="form-control" value="${sessionScope.loginUser.user_phone}">
             </div>
             <div class="form-group">
                 <div class="form-label">이메일</div>
-                <input type="email" name="userEmail" class="form-control" value="${sessionScope.loginUser.userEmail}">
+                <input type="email" name="user_email" class="form-control" value="${sessionScope.loginUser.user_email}">
             </div>
             <div style="text-align:center;margin-top:24px;">
                 <button type="submit" class="btn btn-black btn-lg" style="min-width:180px;">수정하기</button>

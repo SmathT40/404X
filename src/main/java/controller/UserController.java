@@ -50,9 +50,45 @@ public class UserController {
         return res;
     }
 
+/*
     @PostMapping("/user/join")
     public String joinProcess(User user) {
         System.out.println("가입 데이터 : " + user.toString());
+        userService.joinUser(user);
+        return "redirect:/user/login";
+    }
+    // 여기까지는 보안 개구림. 아래 걸로 수정해서 보안 개쩔게 업그레이드 시킴 ㅋ
+*/
+    @PostMapping("/user/join")
+    public String joinProcess(User user, Model model,
+    						@RequestParam(value="agreePrivacy", defaultValue="off") String agreePrivacy) {
+    	
+    	// 가입하다가 한 개 빼먹었다고 다 날아가는, 개빡치는 사태를 방지하기 위한 로직
+    	model.addAttribute("user", user);
+    	
+    	// 약관 미동의 시 컷 하는 로직
+    	if (!"on".equals(agreePrivacy)) {
+    		model.addAttribute("errorMsg", "필수 약관에 동의하셔야 합니다.");
+    		return "user/join";
+    	}
+    	
+    	// 1단계 넌 모찌나간다!
+    	if (user.getUser_id() == null || user.getUser_id().trim().isEmpty()
+    		|| user.getUser_pw() == null || user.getUser_pw().trim().isEmpty()
+    		|| user.getUser_name() == null || user.getUser_name().trim().isEmpty()) {
+    		
+    		model.addAttribute("errorMsg", "필수 입력값이 누락되었습니다. 다시 확인해 주세요.");
+    		return "user/join";
+    	}
+    	
+    	// 2단계 너언 모오찌나가안다!
+    	boolean isAvailable = userService.isIdAvailable(user.getUser_id());
+    	if (!isAvailable) {
+    		model.addAttribute("errorMsg", "이미 사용 중인 아이디입니다. 다른 아이디를 입력해주세요.");
+    		return "user/join";
+    	}
+    	
+        System.out.println("가입 데이터 안전하게 통과 완료 : " + user.getUser_id());
         userService.joinUser(user);
         return "redirect:/user/login";
     }
@@ -120,5 +156,11 @@ public class UserController {
         model.addAttribute("cmtTotalPage", 1);
 
         return "user/mypage/myPost";
+    }
+    
+    @GetMapping("/user/logout")
+    public String logout(HttpSession session) {
+    	session.invalidate();
+    	return "redirect:/";
     }
 }

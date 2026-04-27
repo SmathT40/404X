@@ -51,7 +51,7 @@
             <jsp:param name="currentPage" value="${currentPage}"/>
             <jsp:param name="totalPage"   value="${totalPage}"/>
             <jsp:param name="pageUrl"     value="/host/member/list?page="/>
-            </jsp:include>
+        </jsp:include>
     </div>
 </div>
 </div>

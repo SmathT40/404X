@@ -21,10 +21,10 @@
         <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:10px;margin-bottom:20px;">
             <span style="font-weight:600;">상세정보</span>
             <div style="display:flex;gap:8px;">
-                <c:if test="${sessionScope.loginUser.userRole == 1}">
+                <c:if test="${sessionScope.loginUser.user_role == 1}">
                     <a href="${pageContext.request.contextPath}/mypage/instructor" class="btn btn-ghost btn-sm">강사마이페이지</a>
                 </c:if>
-                <c:if test="${sessionScope.loginUser.userRole == 0}">
+                <c:if test="${sessionScope.loginUser.user_role == 0}">
                     <button class="btn btn-ghost btn-sm" onclick="openInstructorRegModal()">강사등록</button>
                 </c:if>
                 <a href="${pageContext.request.contextPath}/mypage/editInfo" class="btn btn-black btn-sm">개인정보 수정</a>
@@ -34,19 +34,19 @@
         <%-- 회원 정보 표시 --%>
         <div class="form-group">
             <div class="form-label">이름 <span style="color:#e63946;">*</span></div>
-            <input type="text" class="form-control" value="${sessionScope.loginUser.userName}" readonly style="background:#f9f9f9;">
+            <input type="text" class="form-control" value="${sessionScope.loginUser.user_name}" readonly style="background:#f9f9f9;">
         </div>
         <div class="form-group">
             <div class="form-label">생년월일 <span style="color:#e63946;">*</span></div>
-            <input type="text" class="form-control" value="${sessionScope.loginUser.userBirth}" readonly style="background:#f9f9f9;">
+            <input type="text" class="form-control" value="${sessionScope.loginUser.user_birth}" readonly style="background:#f9f9f9;">
         </div>
         <div class="form-group">
             <div class="form-label">전화번호 <span style="color:#e63946;">*</span></div>
-            <input type="text" class="form-control" value="${sessionScope.loginUser.userPhone}" readonly style="background:#f9f9f9;">
+            <input type="text" class="form-control" value="${sessionScope.loginUser.user_phone}" readonly style="background:#f9f9f9;">
         </div>
         <div class="form-group">
             <div class="form-label">이메일</div>
-            <input type="text" class="form-control" value="${sessionScope.loginUser.userEmail}" readonly style="background:#f9f9f9;">
+            <input type="text" class="form-control" value="${sessionScope.loginUser.user_email}" readonly style="background:#f9f9f9;">
         </div>
 
         <div style="text-align:right;margin-top:20px;">
@@ -93,7 +93,7 @@ function doInstructorReg(){
     var code = $('#instrCode').val().trim();
     if(!code){ showAlert('인증코드를 입력해주세요.'); return; }
     ajaxRequest('${pageContext.request.contextPath}/user/instructorReg',
-        {authCode: code}, 'POST',
+        {auth_code: code}, 'POST',
         function(res){
             if(res.success){
                 showAlert('강사 등록 신청이 완료되었습니다.', function(){ location.href='${pageContext.request.contextPath}/mypage/instructor/register'; });
@@ -107,7 +107,7 @@ function doWithdraw(){
     var pw = $('#withdrawPw').val().trim();
     if(!pw){ showAlert('비밀번호를 입력해주세요.'); return; }
     ajaxRequest('${pageContext.request.contextPath}/user/withdraw',
-        {userPw: pw}, 'POST',
+        {user_pw: pw}, 'POST',
         function(res){
             if(res.success){ location.href='${pageContext.request.contextPath}/'; }
             else { showAlert('비밀번호가 올바르지 않습니다.'); }
