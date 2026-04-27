@@ -56,4 +56,17 @@ public interface HostClassMapper {
 		        lec_id = #{lec_id}
 		""")
 	void updateLec(LecDto dto);
+	@Update("""
+		    UPDATE cls 
+		    SET 
+			    category_code = #{category_code},
+			    cls_title = #{cls_title},
+			    cls_exp = #{cls_exp},
+		        cls_price = #{cls_price},
+		        cls_thumbnail = #{cls_thumbnail},
+		        cls_content = #{cls_content}
+		    WHERE 
+		        class_id = #{class_id}
+		""")
+	void updateClass(ClassDto dto);
 }

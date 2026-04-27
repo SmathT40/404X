@@ -91,7 +91,7 @@ function doEdit(){
     var ids = [];
     $('.chk-item:checked').each(function(){ ids.push($(this).val()); });
     if(ids.length !== 1){ showAlert('수정할 클래스를 1개 선택해주세요.'); return; }
-    location.href = '${pageContext.request.contextPath}/host/class/classForm?classId=' + ids[0];
+    location.href = '${pageContext.request.contextPath}/host/class/updateform?class_id=' + ids[0];
 }
 function deleteSelected(){
     var ids = [];

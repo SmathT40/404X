@@ -39,4 +39,9 @@ public class ClsReplyService {
         return parentList;
     }
 
+	public boolean deleteComment(int cls_reply_no, String userId, int userRole) {
+        int result = clsReplyMapper.delete(cls_reply_no, userId, userRole);
+        return result > 0;
+    }
+
 }

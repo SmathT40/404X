@@ -2,6 +2,7 @@ package mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -36,6 +37,13 @@ public interface ClsReplyMapper {
             "VALUES (#{user_id}, #{class_id}, #{lec_id}, #{cls_reply_content}, #{cls_reply_private}, #{cls_parent_id})")
     int insertReply(ClsReplyDto dto);
 
+    
+    @Delete("DELETE FROM cls_reply " +
+            "WHERE cls_reply_no = #{id} " +
+            "AND (user_id = #{userId} OR #{userRole} >= 1)")
+    int delete(@Param("id") int id, 
+                       @Param("userId") String userId, 
+                       @Param("userRole") int userRole);
     
 }
 

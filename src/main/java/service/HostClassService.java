@@ -35,4 +35,8 @@ public class HostClassService {
 	public void updateLecture(LecDto dto) {
 		hostClassMapper.updateLec(dto);
 	}
+
+	public void updateClass(ClassDto dto) {
+		hostClassMapper.updateClass(dto);
+	}
 }

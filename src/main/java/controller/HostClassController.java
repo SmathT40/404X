@@ -28,6 +28,8 @@ public class HostClassController {
 	HostClassService hostClassService;
 	@Autowired
 	CategoryService categoryService;
+	@Autowired
+	ClassService classService;
 	
 	@GetMapping("list")
 	public String listPage( 
@@ -68,7 +70,7 @@ public class HostClassController {
 	public String lectureForm(HttpSession session, Model model) {
 	    User loginUser = (User) session.getAttribute("loginUser");
 	    if (loginUser == null) {
-	        return "redirect:/404X/main";
+	        return "redirect:/main";
 	    }
 	    String userId = loginUser.getUser_id();
 	    
@@ -100,6 +102,27 @@ public class HostClassController {
 	    hostClassService.updateLecture(dto);
 	    rttr.addFlashAttribute("completeMsg", "강좌 정보가 성공적으로 수정되었습니다.");
 	    return "redirect:/host/class/list"; 
+	}
+	
+	@GetMapping("updateform")
+	public String classUpdateForm(@RequestParam("class_id") int classId, HttpSession session, Model model) {
+	    //  로그인 체크 (강사 본인인지 확인하는 로직 추가 권장)
+	    User loginUser = (User) session.getAttribute("loginUser");
+	    if (loginUser == null) return "redirect:/404X/main";
+
+	    ClassDto classDto = classService.getClassDetail(classId);
+	    model.addAttribute("classDto", classDto);
+
+	    List<CategoryDto> categoryList = categoryService.getMainCategories();
+	    model.addAttribute("categoryList", categoryList);
+
+	    return "host/class/classForm"; // 등록과 수정이 같이 쓰는 JSP
+	}
+	@PostMapping("update")
+	public String classUpdate(ClassDto dto, RedirectAttributes rttr) {
+		hostClassService.updateClass(dto);
+		rttr.addFlashAttribute("completeMsg", "클래스 정보가 성공적으로 수정되었습니다.");
+		return "redirect:/host/class/list";
 	}
 	
 
