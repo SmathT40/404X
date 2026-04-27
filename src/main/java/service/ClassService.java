@@ -46,4 +46,10 @@ public class ClassService {
 	public LecDto getNext(int id, int no) {
 		return classMapper.getNext(id,no);
 	}
+//	public void insertClass(ClassDto dto) {
+//		classMapper.insertClass(dto);
+//	}
+//	public void insertLec(LecDto dto) {
+//		classMapper.insertLec(dto);
+//	}
 }

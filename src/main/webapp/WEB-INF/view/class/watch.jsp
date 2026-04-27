@@ -30,7 +30,7 @@
 		<div
 			style="text-align: right; margin-bottom: 24px; display: flex; justify-content: flex-end; gap: 8px;">
 			<a
-				href="${pageContext.request.contextPath}/host/class/lectureForm?id=${lec.lec_id}"
+				href="${pageContext.request.contextPath}/host/class/lecupdate?lec_id=${lec.lec_id}"
 				class="btn btn-black btn-sm">수정</a>
 			<button class="btn btn-ghost btn-sm" onclick="doDelete()">삭제</button>
 		</div>

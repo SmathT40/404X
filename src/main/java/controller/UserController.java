@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import dto.Board;
 import dto.User;
 import service.BoardService;
+import service.PaymentService;
 import service.UserService;
 
 @Controller
@@ -92,7 +93,8 @@ public class UserController {
         return "redirect:/user/login";
     }
 
-    // ================= [로그인 로직] =================
+    // ================= [상현이가 짠 핵심 로직] =================
+    // 🚨 JS 코드에 맞춰서 주소 앞에 "/user"를 추가했어!
     @PostMapping("/user/login")
     public String login(String user_id, String user_pw, HttpSession session, Model model) {
         User loginUser = userService.loginCheck(user_id, user_pw);

@@ -24,15 +24,15 @@
                 <c:when test="${not empty payList}">
                     <c:forEach var="pay" items="${payList}">
                         <tr>
-                            <td>${pay.payNo}</td>
-                            <td>${pay.title}</td>
-                            <td><fmt:formatNumber value="${pay.payAmount}" pattern="#,###"/>원</td>
-                            <td>${pay.payDate}</td>
+                            <td>${pay.pay_no}</td>
+                            <td>${pay.pay_goods}</td>
+                            <td><fmt:formatNumber value="${pay.pay_amount}" pattern="#,###"/>원</td>
+                            <td>${pay.pay_date}</td>
                             <td>
                                 <c:choose>
-                                    <c:when test="${pay.payStatus == 1}"><span class="badge badge-blue">결제성공</span></c:when>
-                                    <c:when test="${pay.payStatus == 2}"><span class="badge badge-red">결제취소</span></c:when>
-                                    <c:otherwise><span class="badge badge-gray">${pay.status}</span></c:otherwise>
+                                    <c:when test="${pay.pay_status == 0}"><span class="badge badge-gray">대기</span></c:when>
+                                    <c:when test="${pay.pay_status == 1}"><span class="badge badge-blue">결제완료</span></c:when>
+                                    <c:when test="${pay.pay_status == 2}"><span class="badge badge-red">취소</span></c:when>
                                 </c:choose>
                             </td>
                         </tr>
@@ -49,6 +49,7 @@
         <jsp:param name="currentPage" value="${currentPage}"/>
         <jsp:param name="totalPage"   value="${totalPage}"/>
         <jsp:param name="pageUrl"     value="/mypage/payment?page="/>
-	</jsp:include>
+    </jsp:include>
+
 </div>
 </main>

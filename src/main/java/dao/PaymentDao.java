@@ -1,5 +1,7 @@
 package dao;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -34,4 +36,19 @@ public class PaymentDao {
         param.put("userId", userId);
         sqlSession.insert(NAMESPACE + "insertClassState", param);
     }
+    
+ // =========================================================================
+ // --- 결제내역 조회 추가 4월 24일---
+ // =========================================================================
+  public List<Pay> getPayList(String userId, int pageNum, int limit) {
+     java.util.Map<String, Object> param = new java.util.HashMap<>();
+     param.put("userId", userId);
+     param.put("startrow", (pageNum - 1) * limit);
+     param.put("limit", limit);
+     return sqlSession.selectList(NAMESPACE + "selectPayList", param);
+ }
+
+ public int countPay(String userId) {
+     return sqlSession.selectOne(NAMESPACE + "countPay", userId);
+ }
 }
