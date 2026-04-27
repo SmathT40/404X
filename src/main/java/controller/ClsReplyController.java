@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import dto.ClsReplyDto;
+import dto.User;
 import service.ClsReplyService;
 
 @RestController
@@ -32,16 +33,15 @@ public class ClsReplyController {
         Map<String, Object> resultMap = new HashMap<>();
         
         // 1. 세션 체크 (로그인 여부)
-//        User loginUser = (User) session.getAttribute("loginUser");
-//        if (loginUser == null) {
-//            resultMap.put("success", false);
-//            resultMap.put("message", "로그인이 필요합니다.");
-//            return resultMap;
-//        }
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            resultMap.put("success", false);
+            resultMap.put("message", "로그인이 필요합니다.");
+            return resultMap;
+        }
         
         // 2. 데이터 세팅 및 서비스 호출
-//        dto.setUser_id(loginUser.getUserId());
-        dto.setUser_id("csw"); //임의 아이디
+        dto.setUser_id(loginUser.getUser_id());
         int result = clsReplyService.addReply(dto);
         
         // 3. 결과 반환
@@ -55,5 +55,25 @@ public class ClsReplyController {
         model.addAttribute("replyList", replyList); // JSP의 c:forEach items="${replyList}"와 일치해야 함
         
         return "class/detail";
+    }
+    @PostMapping("/delete")
+    @ResponseBody // AJAX 요청이므로 페이지 이동이 아닌 JSON 응답을 보냄
+    public Map<String, Object> delete(@RequestParam("cls_reply_no") int cls_reply_no, HttpSession session) {
+        Map<String, Object> result = new HashMap<>();
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            result.put("success", false);
+            result.put("message", "로그인이 필요합니다.");
+            return result;
+        }
+
+        boolean isDeleted = clsReplyService.deleteComment(cls_reply_no, loginUser.getUser_id(), loginUser.getUser_role());
+        if (isDeleted) {
+            result.put("success", true);
+        } else {
+            result.put("success", false);
+            result.put("message", "삭제 권한이 없거나 실패했습니다.");
+        }
+        return result;
     }
 }

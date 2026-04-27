@@ -60,27 +60,38 @@
                             <span class="comment-name">${cmt.user_name}</span>
                             <span>${cmt.cls_reply_reg_date}</span>
                         </div>
-                        <div class="comment-content">
-	                        <c:choose>
-						        <%-- 비공개 일때 --%>
-						        <c:when test="${cmt.cls_reply_private == 1}">
-						            <span style="color: #999; font-style: italic;">🔒 비공개 댓글입니다. 작성자와 강사만 볼 수 있습니다. (사실 지금은 아무도 못봅니다.)</span>
-						        </c:when>
-						        <c:otherwise>
-						            ${cmt.cls_reply_content}
-						        </c:otherwise>
-					    	</c:choose>
-                        </div>
-                        <div class="comment-actions-row">
-                            <span onclick="toggleReply(${cmt.cls_reply_no})">&#128172; 댓글달기</span>
-                            <%--
-                            <c:if test="${sessionScope.loginUser.userId == cmt.authorId}">
-                                 --%>
-                                <span onclick="deleteCmt(${cmt.cls_reply_no})">삭제</span>
-                            <%--
-                            </c:if>
-                             --%>
-                        </div>
+		<div class="comment-content">
+		    <c:choose>
+		        <%-- 비공개 일때 --%>
+		        <c:when test="${cmt.cls_reply_private == 1}">
+		            <%-- [권한 체크] 작성자 본인이거나 강사/관리자(레벨 1 이상)일 때만 내용 노출 --%>
+		            <c:choose>
+		                <c:when test="${loginUser.user_id eq cmt.user_id || loginUser.user_role >= 1}">
+		                    <span style="color: #333;">🔒 ${cmt.cls_reply_content}</span>
+		                </c:when>
+		                <c:otherwise>
+		                    <span style="color: #999; font-style: italic;">🔒 비공개 댓글입니다. 작성자와 강사만 볼 수 있습니다.</span>
+		                </c:otherwise>
+		            </c:choose>
+		        </c:when>
+		        <%-- 공개 댓글일 때 --%>
+		        <c:otherwise>
+		            ${cmt.cls_reply_content}
+		        </c:otherwise>
+		    </c:choose>
+		</div>
+
+						<div class="comment-actions-row">
+						    <%-- 1. 댓글달기: 공개댓글이거나, 비공개라도 볼 권한이 있는 경우 --%>
+						    <c:if test="${cmt.cls_reply_private == 0 || (loginUser.user_id eq cmt.user_id || loginUser.user_role >= 1)}">
+						        <span onclick="toggleReply(${cmt.cls_reply_no})">&#128172; 댓글달기</span>
+						    </c:if>
+						
+						    <%-- 2. 삭제: 작성자 본인이거나 강사/관리자일 경우 --%>
+						    <c:if test="${loginUser.user_id eq cmt.user_id || loginUser.user_role >= 1}">
+						        <span onclick="deleteCmt(${cmt.cls_reply_no})">삭제</span>
+						    </c:if>
+						</div>
                         <%-- 대댓글 입력창 (숨김) --%>
                         <div id="reply-${cmt.cls_reply_no}" style="display:none;margin-top:8px;">
                             <textarea class="form-control" placeholder="댓글 내용을 입력해주세요." style="height:60px;resize:none;"></textarea>
@@ -95,7 +106,27 @@
                                     <span class="comment-name">${reply.user_name}</span>
                                     <span>${reply.cls_reply_reg_date}</span>
                                 </div>
-                                <div class="comment-content">${reply.cls_reply_content}</div>
+  						        <%-- 비공개 일때 --%>
+									<c:choose>
+							            <%-- 부모가 비공개일 때만 권한 체크 --%>
+							            <c:when test="${cmt.cls_reply_private == 1}">
+							                <c:choose>
+							                    <c:when test="${loginUser.user_id eq cmt.user_id || loginUser.user_id eq reply.user_id || loginUser.user_role >= 1}">
+							                        <span style="color: #333;">🔒 ${reply.cls_reply_content}</span>
+							                    </c:when>
+							                    <c:otherwise>
+							                        <span style="color: #999; font-style: italic; font-size: 13px;">🔒비공개 댓글입니다. 작성자와 강사만 볼 수 있습니다.</span>
+							                    </c:otherwise>
+							                </c:choose>
+							            </c:when>
+							            <c:otherwise>
+							                ${reply.cls_reply_content}
+							            </c:otherwise>
+							        </c:choose>
+							<!-- 디자인 수정요망 -->
+<c:if test="${loginUser.user_id eq reply.user_id || loginUser.user_role >= 1}">
+    <span onclick="deleteCmt(${reply.cls_reply_no})" style="cursor: pointer; font-size: 12px; color: #aaa;"><br>삭제</span>
+</c:if>
                             </div>
                         </c:forEach>
                     </div>
@@ -103,7 +134,6 @@
             </c:forEach>
         </div>
     </div>
-
     <%-- 이전글/다음글 --%>
     <div class="post-nav">
         <c:if test="${not empty prevLecture}">
@@ -190,8 +220,17 @@
 	        }
 	    });
 	}
+	function deleteCmt(id){
+	    showConfirm('삭제하시겠습니까?', function(){
+	        ajaxRequest('${pageContext.request.contextPath}/class/comment/delete',
+	            {cls_reply_no: id}, 'POST',
+	            function(res){ if(res.success) location.reload(); }
+	        );
+	    });
+	}
+	
 	function toggleReply(id){ $('#reply-' + id).toggle(); }
-/*
+
 
 var classId = ${cls.class_id};
 
@@ -202,7 +241,7 @@ function addToCart(id){
 function buyNow(id){
     location.href = '${pageContext.request.contextPath}/cart?classId=' + id;
 }
-
+/*
 function submitComment(){
     var content  = $('#cmtContent').val().trim();
     var isPrivate = $('#cmtPrivate').is(':checked') ? 'Y' : 'N';
@@ -219,14 +258,6 @@ function submitReply(parentId, btn){
         {classId: classId, content: content, parentId: parentId}, 'POST',
         function(res){ if(res.success) location.reload(); }
     );
-}
-function deleteCmt(id){
-    showConfirm('삭제하시겠습니까?', function(){
-        ajaxRequest('${pageContext.request.contextPath}/lecture/comment/delete',
-            {cmtId: id}, 'POST',
-            function(res){ if(res.success) location.reload(); }
-        );
-    });
 }
 */
 </script>

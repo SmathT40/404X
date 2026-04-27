@@ -39,9 +39,18 @@ textarea.form-control {
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 <div class="container mt-5">
-    <h2 class="mb-4">새 강의 등록</h2>
-    <form action="${pageContext.request.contextPath}/host/class/insert" method="post" enctype="multipart/form-data">
-        
+
+    <h2 class="mb-4">
+	    <c:choose>
+	         	<c:when test="${not empty classDto}"> 강의 수정</c:when>
+            	<c:otherwise>새 강의 등록</c:otherwise>
+		</c:choose>
+	</h2>
+    <form action="${pageContext.request.contextPath}/host/class/${empty classDto ? 'insert' : 'update'}" 
+      method="post" enctype="multipart/form-data">
+ <c:if test="${not empty classDto}">
+    <input type="hidden" name="class_id" value="${classDto.class_id}">
+</c:if>       
 <div class="category-section mb-4">
     <label class="form-label-sm">강의 카테고리</label>
     <div class="form-row">
@@ -49,7 +58,8 @@ textarea.form-control {
             <select id="mainCategory" name="parent_code" class="form-control custom-select-sm" onchange="loadSubCategories(this.value)" required>
                 <option value="">대분류</option>
                 <c:forEach var="main" items="${categoryList}">
-                    <option value="${main.category_code}">${main.category_name}</option>
+                    <option value="${main.category_code}" 
+            		${main.category_code == parentCode ? 'selected' : ''}>${main.category_name}</option>
                 </c:forEach>
             </select>
         </div>
@@ -63,17 +73,17 @@ textarea.form-control {
 
 <div class="form-group mb-3">
     <label class="form-label-sm">강의 제목</label>
-    <input type="text" name="cls_title" class="form-control form-control-sm weight-700" placeholder="제목을 입력하세요" required>
+    <input type="text" name="cls_title" value="${classDto.cls_title}" class="form-control form-control-sm weight-700" placeholder="제목을 입력하세요" required>
 </div>
 
 <div class="form-row mb-3">
     <div class="col-4">
         <label class="form-label-sm">판매가(원)</label>
-        <input type="number" name="cls_price" class="form-control form-control-sm text-right" value="0" required>
+        <input type="number" name="cls_price" value="${classDto.cls_price}" class="form-control form-control-sm text-right" required>
     </div>
     <div class="col-4">
         <label class="form-label-sm">수강기간(일)</label>
-        <input type="number" name="cls_exp" class="form-control form-control-sm" value="90" required>
+        <input type="number" name="cls_exp" value="${classDto.cls_exp}" class="form-control form-control-sm" required>
     </div>
 </div>
 
@@ -87,12 +97,18 @@ textarea.form-control {
 
         <div class="form-group">
             <label>강의 설명</label>
-            <textarea name="cls_content" class="form-control" rows="5" placeholder="강의에 대해 설명해주세요" required></textarea>
+            <textarea name="cls_content"class="form-control" rows="5" placeholder="강의에 대해 설명해주세요" required>${classDto.cls_content} </textarea>
         </div>
 
         <div class="text-right pb-5">
             <button type="button" class="btn btn-secondary" onclick="history.back()">취소</button>
-            <button type="submit" class="btn btn-primary">등록 신청</button>
+            
+            <button type="submit" class="btn btn-primary">
+            <c:choose>
+            	<c:when test="${not empty classDto}">수정</c:when>
+            	<c:otherwise>등록 신청</c:otherwise>
+            </c:choose>
+            </button>
         </div>
     </form>
 </div>

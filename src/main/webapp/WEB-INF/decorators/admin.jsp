@@ -50,13 +50,6 @@
 
 .sidebar-admin {
     width: 260px;
-    height: 100vh;      /* 화면 높이만큼 설정 */
-    position: sticky;   /* 스티커처럼 붙임 */
-    top: 0;             /* 화면 맨 위에 고정 */
-    overflow-y: auto;   /* 메뉴가 길어지면 사이드바 안에서 스크롤 가능하게 함 */
-}
-.sidebar-admin {
-    width: 260px;
     background-color: #1a1a1a;
     color: #fff;
     height: 100vh;      /* 화면 높이를 꽉 채워야 바닥이 생깁니다 */
@@ -66,6 +59,9 @@
     /* [추가] 내부 요소들을 세로로 정렬하고 간격을 조절할 수 있게 함 */
     display: flex;
     flex-direction: column;
+    overflow-y: auto;   /* 메뉴가 길어지면 사이드바 안에서 스크롤 가능하게 함 */
+}
+.sidebar-admin.instructor-mode {
 }
 
 .sidebar-admin ul {
@@ -89,6 +85,7 @@
     /* [추가] 혹시 모르니 바닥에 딱 고정 */
     margin-top: auto; 
 }
+
 </style>
 </head>
 <c:set var="userRole" value="${sessionScope.loginUser.user_role}" />
@@ -97,7 +94,7 @@
 <div class="admin-wrap">
 
     <%-- 관리자 사이드바 --%>
-    <aside class="sidebar-admin">
+    <aside class="sidebar-admin" >
         <div class="sidebar-logo">
             <a href="${pageContext.request.contextPath}/">404 X CLUB</a>
         </div>

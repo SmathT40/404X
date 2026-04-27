@@ -98,7 +98,7 @@ html {
 		        	<c:when test="${not empty classList}">
 		                <c:forEach var="cls" items="${classList}">
 		                    <tr onclick="location.href='${pageContext.request.contextPath}/class/detail?id=${cls.class_id}'" style="cursor:pointer;">
-		                        <td><input type="checkbox" class="chk-item" value="${cls.class_id}"></td>
+		                        <td><input type="checkbox" class="chk-item" value="${cls.class_id}" onclick="event.stopPropagation();"></td>
 		                        <td>${cls.cls_title}</td>
 		                        <td>${cls.user_name}</td>
 		                        <td><fmt:formatNumber value="${cls.cls_price}" pattern="#,###"/>원</td>
@@ -109,7 +109,7 @@ html {
 		                                    <button class="btn btn-black btn-sm" onclick="event.stopPropagation(); approveOne(${cls.class_id})">승인</button>
 		                                </c:when>
 		                                <c:otherwise>
-		                                    <button class="btn btn-black btn-sm" onclick="event.stopPropagation(); location.href='${pageContext.request.contextPath}/admin/class/edit?id=${cls.class_id}'">수정</button>
+		                                    <button class="btn btn-black btn-sm" onclick="event.stopPropagation(); location.href='${pageContext.request.contextPath}/host/class/updateform?class_id=${cls.class_id}'">수정</button>
 		                                </c:otherwise>
 		                            </c:choose>
 		                            <c:choose>
