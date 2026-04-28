@@ -5,8 +5,6 @@
 <div class="admin-content">
 
     <div class="admin-tab-bar">
-        <a href="${pageContext.request.contextPath}/admin/board/setting"
-           class="tab-item ${activeTab == 'setting' ? 'active' : 'inactive'}">게시판관리</a>
         <a href="${pageContext.request.contextPath}/admin/board/list"
            class="tab-item ${activeTab == 'list' ? 'active' : 'inactive'}">전체 게시글</a>
     </div>
@@ -111,6 +109,7 @@
                                             <c:when test="${post.board_type == 0}">공지사항</c:when>
                                             <c:when test="${post.board_type == 1}">자유게시판</c:when>
                                             <c:when test="${post.board_type == 3}">문의사항</c:when>
+                                            <c:when test="${post.board_type == 2}">FAQ</c:when>
                                         </c:choose>
                                     </td>
                                     <td>${post.board_reg_date}</td>
