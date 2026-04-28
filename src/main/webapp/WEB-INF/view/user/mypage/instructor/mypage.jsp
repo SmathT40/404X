@@ -23,8 +23,8 @@
             <div class="form-label">프로필사진</div>
             <div style="width:100%;height:80px;border:1px solid #ddd;border-radius:4px;display:flex;align-items:center;padding:0 14px;font-size:13px;color:#aaa;background:#f9f9f9;">
                 <c:choose>
-                    <c:when test="${not empty instructorInfo.profileImg}">
-                        <img src="${instructorInfo.profileImg}" style="height:60px;border-radius:4px;">
+                    <c:when test="${not empty instructorInfo.host_profile_img}">
+                        <img src="${instructorInfo.host_profile_img}" style="height:60px;border-radius:4px;">
                     </c:when>
                     <c:otherwise>사진이 들어갈 공간입니다.</c:otherwise>
                 </c:choose>
@@ -33,21 +33,19 @@
 
         <c:set var="info" value="${instructorInfo}"/>
         <div class="form-group"><div class="form-label">이름</div>
-            <input type="text" class="form-control" value="${info.userName}" readonly style="background:#f9f9f9;"></div>
+            <input type="text" class="form-control" value="${info.user_name}" readonly style="background:#f9f9f9;"></div>
         <div class="form-group"><div class="form-label">전화번호</div>
-            <input type="text" class="form-control" value="${info.userPhone}" readonly style="background:#f9f9f9;"></div>
+            <input type="text" class="form-control" value="${info.user_phone}" readonly style="background:#f9f9f9;"></div>
         <div class="form-group"><div class="form-label">이메일</div>
-            <input type="text" class="form-control" value="${info.userEmail}" readonly style="background:#f9f9f9;"></div>
+            <input type="text" class="form-control" value="${info.user_email}" readonly style="background:#f9f9f9;"></div>
         <div class="form-group"><div class="form-label">강사소개</div>
-            <input type="text" class="form-control" value="${info.intro}" readonly style="background:#f9f9f9;"></div>
-        <div class="form-group"><div class="form-label">강의과목</div>
-            <input type="text" class="form-control" value="${info.subject}" readonly style="background:#f9f9f9;"></div>
+            <input type="text" class="form-control" value="${info.host_intro}" readonly style="background:#f9f9f9;"></div>
         <div class="form-group"><div class="form-label">은행명</div>
-            <input type="text" class="form-control" value="${info.bankName}" readonly style="background:#f9f9f9;"></div>
+            <input type="text" class="form-control" value="${info.host_bank_name}" readonly style="background:#f9f9f9;"></div>
         <div class="form-group"><div class="form-label">계좌번호</div>
-            <input type="text" class="form-control" value="${info.accountNo}" readonly style="background:#f9f9f9;"></div>
+            <input type="text" class="form-control" value="${info.host_bank_account}" readonly style="background:#f9f9f9;"></div>
         <div class="form-group"><div class="form-label">예금주명</div>
-            <input type="text" class="form-control" value="${info.accountName}" readonly style="background:#f9f9f9;"></div>
+            <input type="text" class="form-control" value="${info.host_account_owner}" readonly style="background:#f9f9f9;"></div>
     </div>
 </div>
 </main>

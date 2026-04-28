@@ -25,7 +25,7 @@
               method="post" enctype="multipart/form-data">
 
             <div style="border-bottom:1px solid #eee;padding-bottom:8px;margin-bottom:16px;">
-                <span style="font-weight:600;">${isEdit ? '강사정보 수정' : '강사등록신청'}</span>
+                <span style="font-weight:600;">${isEdit ? '강사정보 수정' : '강사등록 신청'}</span>
             </div>
 
             <div class="form-group">
@@ -40,35 +40,31 @@
 
             <div class="form-group">
                 <div class="form-label">이름</div>
-                <input type="text" name="userName" class="form-control" value="${instructorInfo.userName}">
+                <input type="text" name="user_name" class="form-control" value="${instructorInfo.user_name}">
             </div>
             <div class="form-group">
                 <div class="form-label">전화번호</div>
-                <input type="text" name="userPhone" class="form-control" value="${instructorInfo.userPhone}">
+                <input type="text" name="user_phone" class="form-control" value="${instructorInfo.user_phone}">
             </div>
             <div class="form-group">
                 <div class="form-label">이메일</div>
-                <input type="email" name="userEmail" class="form-control" value="${instructorInfo.userEmail}">
+                <input type="email" name="user_email" class="form-control" value="${instructorInfo.user_email}">
             </div>
             <div class="form-group">
                 <div class="form-label">강사소개</div>
-                <input type="text" name="intro" class="form-control" value="${instructorInfo.intro}" placeholder="안녕하세요 금융분야 JAVA 개발자 김명신 입니다.">
-            </div>
-            <div class="form-group">
-                <div class="form-label">강의과목</div>
-                <input type="text" name="subject" class="form-control" value="${instructorInfo.subject}" placeholder="JAVA">
+                <input type="text" name="host_intro" class="form-control" value="${instructorInfo.host_intro}" placeholder="안녕하세요 금융분야 JAVA 개발자 김명신 입니다.">
             </div>
             <div class="form-group">
                 <div class="form-label">은행명</div>
-                <input type="text" name="bankName" class="form-control" value="${instructorInfo.bankName}" placeholder="카카오뱅크">
+                <input type="text" name="host_bank_name" class="form-control" value="${instructorInfo.host_bank_name}" placeholder="카카오뱅크">
             </div>
             <div class="form-group">
                 <div class="form-label">계좌번호</div>
-                <input type="text" name="accountNo" class="form-control" value="${instructorInfo.accountNo}" placeholder="3333-333333-333">
+                <input type="text" name="host_bank_account" class="form-control" value="${instructorInfo.host_bank_account}" placeholder="3333-333333-333">
             </div>
             <div class="form-group">
                 <div class="form-label">예금주명</div>
-                <input type="text" name="accountName" class="form-control" value="${instructorInfo.accountName}">
+                <input type="text" name="host_account_owner" class="form-control" value="${instructorInfo.host_account_owner}">
             </div>
 
             <div style="text-align:center;margin-top:28px;">
