@@ -79,4 +79,25 @@ function gotoCheckout(){
     if(!ids.length){ showAlert('구매할 항목을 선택해주세요.'); return; }
     location.href = '${pageContext.request.contextPath}/payment/checkout?cartIds=' + ids.join(',');
 }
+
+//총금액 계산 0428 0143
+function calcTotal(){
+    var total = 0;
+    $('.chk-item:checked').each(function(){
+        var row = $(this).closest('tr');
+        var priceText = row.find('td:eq(3)').text().replace(/[^0-9]/g, '');
+        total += parseInt(priceText) || 0;
+    });
+    $('#totalPrice').text(total.toLocaleString() + '원');
+}
+
+$(function(){
+    // 체크박스 변경시 총금액 업데이트
+    $(document).on('change', '.chk-item, .chk-all', function(){
+        if($(this).hasClass('chk-all')){
+            $('.chk-item').prop('checked', $(this).is(':checked'));
+        }
+        calcTotal();
+    });
+});
 </script>

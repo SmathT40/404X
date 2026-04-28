@@ -30,9 +30,9 @@
                             <td>${pay.pay_date}</td>
                             <td>
                                 <c:choose>
-                                    <c:when test="${pay.pay_status == 0}"><span class="badge badge-gray">대기</span></c:when>
+                      
                                     <c:when test="${pay.pay_status == 1}"><span class="badge badge-blue">결제완료</span></c:when>
-                                    <c:when test="${pay.pay_status == 2}"><span class="badge badge-red">취소</span></c:when>
+                                    <c:when test="${pay.pay_status == -1}"><span class="badge badge-red">결제취소</span></c:when>
                                 </c:choose>
                             </td>
                         </tr>
