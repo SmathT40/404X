@@ -95,7 +95,8 @@ textarea.form-control {
         <div class="form-group">
             <label>강의 썸네일</label>
             <div class="custom-file">
-                <input type="file" name="thumbnail_file" class="custom-file-input" id="clsThumbnail">
+                <input type="file" name="thumbnail_file" class="custom-file-input" id="clsThumbnail"
+                 onchange="$('.custom-file-label').text(this.files[0].name)">
                 <label class="custom-file-label" for="clsThumbnail">이미지 파일을 선택하세요</label>
             </div>
         </div>
