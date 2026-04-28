@@ -21,7 +21,7 @@ public interface ClassMapper {
 	        "  <when test='subCode != null'> AND c.category_code = #{subCode} </when>" +
 	        "  <when test='catCode != null'> AND c.category_code IN (SELECT category_code FROM category WHERE parent_code = #{catCode}) </when>" +
 	        "</choose>" +
-	        "ORDER BY c.cls_no " + 
+	        "ORDER BY c.category_code ASC, c.cls_no DESC " + 
 	        "LIMIT #{limit} OFFSET #{offset}" +
 	        "</script>")
 	List<ClassDto> selectClassList(Map<String, Object> params);

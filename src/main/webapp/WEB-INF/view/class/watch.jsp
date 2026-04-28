@@ -179,7 +179,7 @@
 <script>
 
 var classId = ${lec.class_id};
-var lecId = ${lec.lec_id}
+var lecId = ${lec.lec_id};
 
 function submitComment(){
     var content  = $('#cmtContent').val().trim();
@@ -247,6 +247,45 @@ function deleteCmt(id){
 
 function toggleReply(id){ 
 	$('#reply-' + id).toggle(); 
+}
+
+//진도율 체크용 hto 0428
+let currentIntervalTime = 0;   // 이번 전송 주기(30초) 동안 쌓인 시간
+const saveInterval = 30;       // 30초마다 서버로 전송
+const totalTime = parseInt("${lec.lec_time}"); 
+const goalTime = Math.floor(totalTime / 2);    // 완강 기준(50%)
+
+const timer = setInterval(() => {
+    currentIntervalTime++;
+
+    // 1. 30초가 되었을 때 서버에 누적 시간 전송
+    if (currentIntervalTime >= saveInterval) {
+        console.log("30초 시청 데이터 서버로 전송 중...");
+        sendProgress(saveInterval); // 30초를 보냄
+        currentIntervalTime = 0;    // 보냈으니 다시 0부터 카운트 시작
+    }
+}, 1000);
+
+// 서버로 데이터를 보내는 함수
+function sendProgress(secondsToAdd) {
+    $.ajax({
+        url: "${pageContext.request.contextPath}/progress/update",
+        type: "POST",
+        data: {
+            lec_id: "${lec.lec_id}",
+            stay_time: secondsToAdd, // "방금 본 30초를 더해라"
+            goal_time: goalTime,      // "기준은 이 시간이다"
+            lec_prog_status: 0        // 기본 상태값 (DB 쿼리에서 판단하므로 0 고정)
+        },
+        success: function(res) {
+            if(res === "success") {
+                console.log("진도 누적 성공 (+" + secondsToAdd + "초)");
+            }
+        },
+        error: function() {
+            console.error("진도 업데이트 통신 실패");
+        }
+    });
 }
 
 /*

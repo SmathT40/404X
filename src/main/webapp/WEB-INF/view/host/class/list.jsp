@@ -39,7 +39,7 @@
                                     <td><a href="${pageContext.request.contextPath}/class/detail?id=${cls.class_id}">${cls.cls_title}</a></td>
                                     <td>${cls.user_name}</td>
                                     <td><fmt:formatNumber value="${cls.cls_price}" pattern="#,###"/>원</td>
-                                    <td>${cls.cls_reg_date}</td>
+                                    <td><fmt:formatDate value="${cls.cls_reg_date}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                                     <td>
                                         <c:choose>
                                             <c:when test="${cls.cls_status == '-1'}"><span class="badge badge-red">삭제</span></c:when>

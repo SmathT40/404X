@@ -1,7 +1,6 @@
 package service;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,13 @@ public class UserClassroomService {
                 
                 // 💡 만약 daysLeft가 0보다 작으면 자동으로 '만료' 상태로 간주하는 로직을 
                 // 여기서 추가하여 cls_state_status를 3으로 임시 변경할 수도 있습니다.
+            }
+            //hto 0428 진도율 계산
+            if (dto.getTotal_cnt() > 0) {
+                int percent = (int) ((double) dto.getComplete_cnt() / dto.getTotal_cnt() * 100);
+                dto.setProgress(percent);
+            } else {
+                dto.setProgress(0);
             }
         }
         return list;

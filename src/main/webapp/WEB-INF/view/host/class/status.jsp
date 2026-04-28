@@ -62,7 +62,7 @@
                             <tr>
                                 <td style="padding-left:45px;">${lec.lec_no}</td>
                                 <td><span class="text-dark font-weight-bold">${lec.lec_title}</span></td>
-                                <td>${lec.lec_time}</td>
+                                <td>${lec.lec_time_str}</td>
                                 <td>
                                     <div class="d-flex justify-content-center gap-2">
                                         <a href="${pageContext.request.contextPath}/host/class/lecupdate?lec_id=${lec.lec_id}" class="btn btn-ghost btn-sm py-1">수정</a>
