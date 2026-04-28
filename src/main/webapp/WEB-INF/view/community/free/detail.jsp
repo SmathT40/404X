@@ -39,31 +39,84 @@
                 <textarea id="cmtContent" class="form-control" placeholder="댓글 내용을 입력해주세요."
                           style="height:80px;resize:none;"></textarea>
                 <div class="comment-write-actions">
+                    <%-- 비공개 체크박스 추가 --%>
+                    <label class="radio-label" style="font-size:12px;">
+                        <input type="checkbox" id="cmtPrivate"> 비공개
+                    </label>
                     <button class="btn btn-black btn-sm" onclick="submitComment()">등록</button>
                 </div>
             </div>
         </c:if>
-        <c:forEach var="cmt" items="${replyList}">
-            <div class="comment-item">
-                <div class="comment-avatar">
-                    <c:if test="${not empty cmt.profile_img}"><img src="${cmt.profile_img}"></c:if>
-                </div>
-                <div style="flex:1;">
-                    <div class="comment-meta" style="display:flex;justify-content:space-between;">
-                        <span>
-                            <span class="comment-name">${cmt.user_id}</span>
-                            <span>${cmt.reply_reg_date}</span>
-                        </span>
-                        <c:if test="${sessionScope.loginUser.user_id == cmt.user_id}">
-                            <span style="color:#aaa;cursor:pointer;font-size:12px;">
-                                <a href="#" onclick="deleteCmt(${cmt.reply_no});return false;" style="color:#aaa;">삭제</a>
-                            </span>
-                        </c:if>
+
+        <div id="replyList">
+            <c:forEach var="cmt" items="${replyList}">
+                <div class="comment-item">
+                    <div style="flex:1;">
+                        <div class="comment-meta">
+                            <span class="comment-name">${cmt.user_name}</span>
+                            <span>${cmt.cls_reply_reg_date}</span>
+                        </div>
+                        <div class="comment-content">
+                            <c:choose>
+                                <c:when test="${cmt.cls_reply_private == 1}">
+                                    <c:choose>
+                                        <c:when test="${sessionScope.loginUser.user_id eq cmt.user_id || sessionScope.loginUser.user_role >= 1}">
+                                            <span style="color:#333;">🔒 ${cmt.cls_reply_content}</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span style="color:#999;font-style:italic;">🔒 비공개 댓글입니다. 작성자와 강사만 볼 수 있습니다.</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:when>
+                                <c:otherwise>
+                                    ${cmt.cls_reply_content}
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+                        <div class="comment-actions-row">
+                            <c:if test="${cmt.cls_reply_private == 0 || (sessionScope.loginUser.user_id eq cmt.user_id || sessionScope.loginUser.user_role >= 1)}">
+                                <span onclick="toggleReply(${cmt.cls_reply_no})">&#128172; 댓글달기</span>
+                            </c:if>
+                            <c:if test="${sessionScope.loginUser.user_id eq cmt.user_id || sessionScope.loginUser.user_role >= 1}">
+                                <span onclick="deleteCmt(${cmt.cls_reply_no})">삭제</span>
+                            </c:if>
+                        </div>
+                        <div id="reply-${cmt.cls_reply_no}" style="display:none;margin-top:8px;">
+                            <textarea class="form-control" placeholder="댓글 내용을 입력해주세요." style="height:60px;resize:none;"></textarea>
+                            <div style="text-align:right;margin-top:4px;">
+                                <button class="btn btn-black btn-sm" onclick="submitReply(${cmt.cls_reply_no}, this)">등록</button>
+                            </div>
+                        </div>
+                        <c:forEach var="reply" items="${cmt.replyList}">
+                            <div class="reply-item">
+                                <div class="comment-meta">
+                                    <span class="comment-name">${reply.user_name}</span>
+                                    <span>${reply.cls_reply_reg_date}</span>
+                                </div>
+                                <c:choose>
+                                    <c:when test="${cmt.cls_reply_private == 1}">
+                                        <c:choose>
+                                            <c:when test="${sessionScope.loginUser.user_id eq cmt.user_id || sessionScope.loginUser.user_id eq reply.user_id || sessionScope.loginUser.user_role >= 1}">
+                                                <span style="color:#333;">🔒 ${reply.cls_reply_content}</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span style="color:#999;font-style:italic;font-size:13px;">🔒비공개 댓글입니다.</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${reply.cls_reply_content}
+                                    </c:otherwise>
+                                </c:choose>
+                                <c:if test="${sessionScope.loginUser.user_id eq reply.user_id || sessionScope.loginUser.user_role >= 1}">
+                                    <span onclick="deleteCmt(${reply.cls_reply_no})" style="cursor:pointer;font-size:12px;color:#aaa;"><br>삭제</span>
+                                </c:if>
+                            </div>
+                        </c:forEach>
                     </div>
-                    <div class="comment-content">${cmt.reply_content}</div>
                 </div>
-            </div>
-        </c:forEach>
+            </c:forEach>
+        </div>
     </div>
 
     <div class="post-nav">
@@ -109,17 +162,51 @@ function doDelete(id){
 
 function submitComment(){
     var content = $('#cmtContent').val().trim();
+    var isPrivate = $('#cmtPrivate').is(':checked') ? 1 : 0; // 비공개 추가
     if(!content){ showAlert('내용을 입력해주세요.'); return; }
-    ajaxRequest('${pageContext.request.contextPath}/community/board/comment/insert',
-        {board_no: board_no, reply_content: content}, 'POST',
-        function(res){ if(res.success) location.reload(); });
+    $.ajax({
+        url: '${pageContext.request.contextPath}/class/comment/insert',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            board_no: board_no,
+            cls_reply_content: content,
+            cls_reply_private: isPrivate,
+            cls_parent_id: null
+        }),
+        success: function(res){
+            if(res.success) location.reload();
+            else showAlert('등록에 실패했습니다.');
+        },
+        error: function(){ showAlert('서버 통신 오류가 발생했습니다.'); }
+    });
+}
+
+function submitReply(parentId, btn){
+    var content = $(btn).closest('div').prev('textarea').val().trim();
+    if(!content){ showAlert('내용을 입력해주세요.'); return; }
+    $.ajax({
+        url: '${pageContext.request.contextPath}/class/comment/insert',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            board_no: board_no,
+            cls_reply_content: content,
+            cls_parent_id: parentId,
+            cls_reply_private: 0
+        }),
+        success: function(res){ if(res.success) location.reload(); }
+    });
 }
 
 function deleteCmt(id){
-    showConfirm('댓글을 삭제하시겠습니까?', function(){
-        ajaxRequest('${pageContext.request.contextPath}/community/board/comment/delete',
-            {reply_no: id}, 'POST',
-            function(res){ if(res.success) location.reload(); });
+    showConfirm('삭제하시겠습니까?', function(){
+        ajaxRequest('${pageContext.request.contextPath}/class/comment/delete',
+            {cls_reply_no: id}, 'POST',
+            function(res){ if(res.success) location.reload(); }
+        );
     });
 }
+
+function toggleReply(id){ $('#reply-' + id).toggle(); }
 </script>

@@ -67,6 +67,24 @@
 </main>
 
 <script>
+function sendFile(file) {
+    var data = new FormData();
+    data.append("file", file);
+    $.ajax({
+        url: '${pageContext.request.contextPath}/community/board/uploadImage',
+        type: 'POST',
+        data: data,
+        contentType: false,
+        processData: false,
+        success: function(res) {
+            $('#summernote').summernote('insertImage', res.url);
+        },
+        error: function() {
+            showAlert('이미지 업로드에 실패했습니다.');
+        }
+    });
+}
+
 $(function(){
     $("#summernote").summernote({
         height: 300,
