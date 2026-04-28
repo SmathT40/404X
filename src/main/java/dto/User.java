@@ -29,4 +29,6 @@ public class User {
 	private String host_bank_account;
 	private String host_account_owner;
 	private String host_profile_img;
+	private String user_login_type;
 }
+

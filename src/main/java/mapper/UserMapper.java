@@ -11,10 +11,11 @@ public interface UserMapper {
 	@Select("select count(*) from users where user_id = #{user_id}")
 	int checkId(String user_id);
 	
+	//0427 추가
 	@Insert("insert into users (user_id, user_pw, user_name, user_phone, "
-			+ "user_birth, user_email, user_role, user_join_date)"
-			+ "values (#{user_id}, #{user_pw}, #{user_name}, #{user_phone}, "
-			+ "#{user_birth}, #{user_email}, 0, NOW())")
+	        + "user_birth, user_email, user_role, user_join_date, user_login_type)"
+	        + "values (#{user_id}, #{user_pw}, #{user_name}, #{user_phone}, "
+	        + "#{user_birth}, #{user_email}, 0, NOW(), #{user_login_type})")
 	void insertUser(User user);
 
 	@Select("select * from users where user_id = #{user_id} and user_pw = #{user_pw}")
@@ -30,5 +31,9 @@ public interface UserMapper {
 	@Update("update users set user_pw = #{tempPw} where user_id = #{user_id}")
 	void updateTempPw(@Param("user_id") String user_id, @Param("tempPw") String tempPw);
 
-	
+	// =========================================================================
+	// --- 네이버 로그인 추가 0427 ---
+	// =========================================================================
+	@Select("SELECT * FROM users WHERE user_id = #{value}")
+	User findByUserId(String user_id);
 }

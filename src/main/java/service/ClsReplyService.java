@@ -43,5 +43,24 @@ public class ClsReplyService {
         int result = clsReplyMapper.delete(cls_reply_no, userId, userRole);
         return result > 0;
     }
+  
+	//4 27 추가
+	public List<ClsReplyDto> getBoardReplyList(int board_no) {
+	    List<ClsReplyDto> parentList = clsReplyMapper.selectBoardParentReplies(board_no);
+	    for (ClsReplyDto parent : parentList) {
+	        int parentNo = parent.getCls_reply_no();
+	        List<ClsReplyDto> childList = clsReplyMapper.selectChildReplies(parentNo);
+	        parent.setReplyList(childList);
+	    }
+	    return parentList;
+	}
+	public List<ClsReplyDto> getMyCommentList(String userId, int pageNum, int limit) {
+	    List<ClsReplyDto> list = clsReplyMapper.selectMyCommentList(userId, (pageNum-1)*limit, limit);
+	    return list;
+	}
 
-}
+	public int getMyCommentTotalPage(String userId, int limit) {
+	    int count = clsReplyMapper.countMyComment(userId);
+	    return (int) Math.ceil((double) count / limit);
+	}
+	}
