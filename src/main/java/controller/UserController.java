@@ -133,7 +133,7 @@ public class UserController {
         
         return result;
     }
-
+  
     // ================= [csw 팀원이 짠 마이페이지 로직] =================
     @GetMapping("/mypage/myPost")
     public String myPost(@RequestParam(defaultValue="1") int postPage,
@@ -141,8 +141,8 @@ public class UserController {
                          HttpSession session, Model model) {
 
         // 로그인 세션 연동
-        String userId = (String) session.getAttribute("user_id");
-
+    	User loginUser = (User) session.getAttribute("loginUser");
+    	String userId = loginUser != null ? loginUser.getUser_id() : null;
         // 내가 쓴 게시글
         List<Board> myPostList = boardService.getMyPostList(userId, postPage, 10);
         int postTotalPage = boardService.getMyPostTotalPage(userId, 10);
@@ -156,6 +156,23 @@ public class UserController {
         model.addAttribute("cmtTotalPage", 1);
 
         return "user/mypage/myPost";
+    }
+    @Autowired
+    private PaymentService paymentService;
+
+ // =========================================================================
+ // --- 결제내역 추가 4월 24일---
+ // =========================================================================
+    @GetMapping("/mypage/payment")
+    public String payment(@RequestParam(defaultValue="1") int page,
+                          HttpSession session, Model model) {
+        User loginUser = (User) session.getAttribute("loginUser");
+        String userId = loginUser != null ? loginUser.getUser_id() : null;
+
+        model.addAttribute("payList", paymentService.getPayList(userId, page, 10));
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPage", paymentService.getPayTotalPage(userId, 10));
+        return "user/mypage/payment";
     }
     
     @GetMapping("/user/logout")

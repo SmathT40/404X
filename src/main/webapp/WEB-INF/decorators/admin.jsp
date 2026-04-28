@@ -107,6 +107,7 @@
                     <li><a href="${pageContext.request.contextPath}/admin/dashboard">&#128202; 대시보드</a></li>
                     <li><a href="${pageContext.request.contextPath}/admin/member/list">&#128100; 회원관리</a></li>
                     <li><a href="${pageContext.request.contextPath}/admin/class/list">&#128218; 강의관리</a></li>
+                    <li><a href="${pageContext.request.contextPath}/category/admin/list">📁 카테고리관리</a></li>
                     <li><a href="${pageContext.request.contextPath}/admin/board/list">&#128203; 게시판관리</a></li>
                     <li><a href="${pageContext.request.contextPath}/admin/payment/main">&#128176; 결제관리</a></li>
                 </ul>
@@ -117,8 +118,8 @@
                 <div class="sidebar-title">강사 메뉴</div>
                 <ul>
                     <li><a href="${pageContext.request.contextPath}/mypage/instructor">&#127968; 강사 홈</a></li>
-                    <li><a href="${pageContext.request.contextPath}/host/class/list">&#128218; 내 강의</a></li>
-                    <li><a href="${pageContext.request.contextPath}/host/class/write">&#10133; 강의 등록</a></li>
+                    <li><a href="${pageContext.request.contextPath}/host/class/status">&#128218; 내 강의</a></li>
+                    <li><a href="${pageContext.request.contextPath}/host/class/classForm">&#10133; 강의 등록</a></li>
                     <li><a href="${pageContext.request.contextPath}/mypage/instructor/editInfo">&#9999; 정보 수정</a></li>
                 </ul>
             </c:when>

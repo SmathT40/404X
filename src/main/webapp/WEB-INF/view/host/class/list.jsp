@@ -66,7 +66,7 @@
 
         <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:20px;">
             <a href="${pageContext.request.contextPath}/host/class/classForm"   class="btn btn-ghost">클래스등록</a>
-            <a href="${pageContext.request.contextPath}/host/class/lectureForm" class="btn btn-black">강의등록</a>
+            <a href="${pageContext.request.contextPath}/host/class/lectureForm" class="btn btn-black">강좌등록</a>
         </div>
 
     </div>
