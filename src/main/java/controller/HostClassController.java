@@ -60,17 +60,25 @@ public class HostClassController {
 		return "host/class/classForm";
 	}
 	@PostMapping("insert")
-	public String insertClass(ClassDto dto,HttpSession session, RedirectAttributes rttr) {
-		User loginUser = (User) session.getAttribute("loginUser");
+	public String insertClass(ClassDto dto,
+	                          @RequestParam(value="thumbnail_file", required=false) MultipartFile thumbnail,
+	                          HttpServletRequest request,
+	                          HttpSession session, RedirectAttributes rttr) {
+	    User loginUser = (User) session.getAttribute("loginUser");
 	    dto.setUser_id(loginUser.getUser_id());
-	    
-	    // 2. 파일 업로드 로직이 있다면 여기서 실행 후 파일명만 dto에 세팅
-	    // String fileName = fileService.saveFile(file);
-	    // dto.setCls_thumbnail(fileName);
-		rttr.addFlashAttribute("completeMsg", "클래스 신청이 완료되었습니다.");
-		hostClassService.insertClass(dto);
-		return "redirect:/host/class/list";
+	    try {
+	        if (thumbnail != null && !thumbnail.isEmpty()) {
+	            String thumbnailUrl = hostClassService.uploadThumbnail(thumbnail, request);
+	            dto.setCls_thumbnail(thumbnailUrl);
+	        }
+	        hostClassService.insertClass(dto);
+	        rttr.addFlashAttribute("completeMsg", "클래스 신청이 완료되었습니다.");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return "redirect:/host/class/list";
 	}
+	    
 	
 	@GetMapping("lectureForm")
 	public String lectureForm(HttpSession session, Model model) {
@@ -125,10 +133,24 @@ public class HostClassController {
 	    return "host/class/classForm"; // 등록과 수정이 같이 쓰는 JSP
 	}
 	@PostMapping("update")
-	public String classUpdate(ClassDto dto, RedirectAttributes rttr) {
-		hostClassService.updateClass(dto);
-		rttr.addFlashAttribute("completeMsg", "클래스 정보가 성공적으로 수정되었습니다.");
-		return "redirect:/host/class/list";
+	public String classUpdate(ClassDto dto,
+	                          @RequestParam(value="thumbnail_file", required=false) MultipartFile thumbnail,
+	                          HttpServletRequest request,
+	                          RedirectAttributes rttr) {
+	    try {
+	        // =========================================================================
+	        // --- 썸네일 업로드 추가 0428 ---
+	        // =========================================================================
+	        if (thumbnail != null && !thumbnail.isEmpty()) {
+	            String thumbnailUrl = hostClassService.uploadThumbnail(thumbnail, request);
+	            dto.setCls_thumbnail(thumbnailUrl);
+	        }
+	        hostClassService.updateClass(dto);
+	        rttr.addFlashAttribute("completeMsg", "클래스 정보가 성공적으로 수정되었습니다.");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return "redirect:/host/class/list";
 	}
 	@GetMapping("status")
 	public String lectureStatus(HttpSession session, Model model) {

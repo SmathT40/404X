@@ -2,8 +2,11 @@ package service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import dto.ClassDto;
 import dto.LecDto;
@@ -38,5 +41,18 @@ public class HostClassService {
 
 	public void updateClass(ClassDto dto) {
 		hostClassMapper.updateClass(dto);
+	}
+	
+	// =========================================================================
+	// --- 썸네일 업로드 추가 0428 ---
+	// =========================================================================
+	public String uploadThumbnail(MultipartFile file, HttpServletRequest request) throws Exception {
+	    String uploadPath = request.getServletContext().getRealPath("/resources/upload/thumbnail/");
+	    java.io.File dir = new java.io.File(uploadPath);
+	    if (!dir.exists()) dir.mkdirs();
+	    
+	    String fileName = java.util.UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+	    file.transferTo(new java.io.File(uploadPath + fileName));
+	    return request.getContextPath() + "/resources/upload/thumbnail/" + fileName;
 	}
 }
