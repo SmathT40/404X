@@ -21,6 +21,13 @@
         <a href="${pageContext.request.contextPath}/community/board/list?boardid=3" class="tab-item">문의사항</a>
         <a href="${pageContext.request.contextPath}/community/board/list?boardid=2" class="tab-item active">FAQ</a>
     </div>
+    
+    <%-- 0428 관리자만 글쓰기 버튼 표시 --%>
+    <c:if test="${sessionScope.loginUser.user_role == 2}">
+        <div style="text-align:right;margin-bottom:16px;">
+            <a href="${pageContext.request.contextPath}/community/board/form?boardid=2" class="btn btn-black btn-sm">글쓰기</a>
+        </div>
+    </c:if>
 
     <c:choose>
         <c:when test="${not empty faqList}">

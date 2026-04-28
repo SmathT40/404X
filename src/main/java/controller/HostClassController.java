@@ -1,7 +1,10 @@
 package controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +14,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import dto.CategoryDto;
 import dto.ClassDto;
 import dto.LecDto;
 import dto.User;
+import service.BoardService;
 import service.CategoryService;
 import service.ClassService;
 import service.HostClassService;
@@ -138,6 +144,20 @@ public class HostClassController {
 	    model.addAttribute("lectureList", lectureList);
 	    return "host/class/status"; // 강좌 현황 페이지
 	}
-	
+	@Autowired
+	private BoardService boardService;
+
+	@ResponseBody
+	@PostMapping("/uploadImage")
+	public Map<String, Object> uploadImage(@RequestParam("file") MultipartFile file,
+	                                       HttpServletRequest request) {
+	    Map<String, Object> response = new HashMap<>();
+	    try {
+	        response.put("url", boardService.uploadSummernoteImage(file, request));
+	    } catch (Exception e) {
+	        response.put("error", "업로드 실패");
+	    }
+	    return response;
+	}
 
 }
