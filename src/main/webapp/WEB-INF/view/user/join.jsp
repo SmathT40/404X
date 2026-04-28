@@ -79,7 +79,7 @@
         <%-- 개인정보 동의 --%>
         <div class="form-group">
             <label class="check-label" style="background:#f9f9f9;border:1px solid #eee;border-radius:8px;padding:12px 16px;display:flex;gap:10px;">
-                <input type="checkbox" id="agreePrivacy" name="agreePrivacy" value="Y">
+                <input type="checkbox" id="agreePrivacy" name="agreePrivacy" value="on">
                 <span><strong style="color:#e63946;">[필수]</strong> 개인정보처리방침에 동의합니다.
                     <a href="#" style="color:#e63946;font-size:12px;">[전문보기]</a>
                 </span>

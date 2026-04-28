@@ -82,7 +82,7 @@ public class HostClassController {
 	public String insertLec(LecDto dto,RedirectAttributes rttr) {
 		hostClassService.insertLec(dto);
 		rttr.addFlashAttribute("completeMsg", "강좌 등록이 완료되었습니다.");
-		return "redirect:/host/class/list";
+		return "redirect:/host/class/status";
 	}
 	@GetMapping("lecupdate")
 	public String updateLec(@RequestParam("lec_id") int lecId, HttpSession session, Model model) {
@@ -101,7 +101,7 @@ public class HostClassController {
 	public String updateLecProcess(LecDto dto, RedirectAttributes rttr) {
 	    hostClassService.updateLecture(dto);
 	    rttr.addFlashAttribute("completeMsg", "강좌 정보가 성공적으로 수정되었습니다.");
-	    return "redirect:/host/class/list"; 
+	    return "redirect:/host/class/status"; 
 	}
 	
 	@GetMapping("updateform")
@@ -123,6 +123,20 @@ public class HostClassController {
 		hostClassService.updateClass(dto);
 		rttr.addFlashAttribute("completeMsg", "클래스 정보가 성공적으로 수정되었습니다.");
 		return "redirect:/host/class/list";
+	}
+	@GetMapping("status")
+	public String lectureStatus(HttpSession session, Model model) {
+	    User loginUser = (User) session.getAttribute("loginUser");
+	    if (loginUser == null) return "redirect:/login";
+
+	    // 강사 본인의 ID를 파라미터로 전달
+	    String hostId = loginUser.getUser_id();
+	    
+	    // JOIN 쿼리를 통해 강좌 리스트와 소속 클래스 제목을 함께 가져옴
+	    List<LecDto> lectureList = classService.getLecByHost(hostId);
+	    
+	    model.addAttribute("lectureList", lectureList);
+	    return "host/class/status"; // 강좌 현황 페이지
 	}
 	
 

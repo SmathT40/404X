@@ -76,6 +76,12 @@ textarea.form-control {
     <input type="text" name="cls_title" value="${classDto.cls_title}" class="form-control form-control-sm weight-700" placeholder="제목을 입력하세요" required>
 </div>
 
+
+<%-- 관리자가 아닐 경우를 대비해 기존 값을 hidden으로 유지 (수정 시 값이 날아가지 않도록) --%>
+<c:if test="${sessionScope.loginUser.user_role != 2}">
+    <input type="hidden" name="cls_featured" value="${empty classDto ? 0 : classDto.cls_featured}">
+</c:if>
+
 <div class="form-row mb-3">
     <div class="col-4">
         <label class="form-label-sm">판매가(원)</label>
@@ -99,7 +105,17 @@ textarea.form-control {
             <label>강의 설명</label>
             <textarea name="cls_content"class="form-control" rows="5" placeholder="강의에 대해 설명해주세요" required>${classDto.cls_content} </textarea>
         </div>
-
+		<div>
+		    <%-- 관리자 전용 노출 설정 --%>
+		    <c:if test="${sessionScope.loginUser.user_role == 2}">
+		        <div class="custom-control custom-checkbox mr-3">
+		            <input type="checkbox" name="cls_featured" class="custom-control-input" id="isFeatured" 
+		                   value="1" ${classDto.cls_featured == 1 ? 'checked' : ''}>
+		            <label class="custom-control-label font-weight-bold" for="isFeatured" style="cursor:pointer; font-size: 14px;">
+		                상단 노출
+		            </label>
+		        </div>
+		    </c:if>
         <div class="text-right pb-5">
             <button type="button" class="btn btn-secondary" onclick="history.back()">취소</button>
             

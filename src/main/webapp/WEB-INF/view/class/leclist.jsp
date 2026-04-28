@@ -50,3 +50,14 @@
         </table>
     </div>
 </div>
+<script src="${pageContext.request.contextPath}/resources/js/common.js"></script>
+<script>
+$(document).ready(function() {
+    const msg = "${msg}";
+    
+    if (msg) {
+        openModal('', msg, function() {
+        }, false);
+    }
+});
+</script>

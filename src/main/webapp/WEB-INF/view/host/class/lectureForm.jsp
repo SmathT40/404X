@@ -87,7 +87,7 @@ textarea.form-control {
 
         <div class="form-group">
             <label>강좌 설명</label>
-            <textarea name="lec_content" class="form-control" rows="5" placeholder="강좌에 대해 설명해주세요" value="${lecDto.lec_content}"required></textarea>
+            <textarea name="lec_content" class="form-control" rows="5" placeholder="강좌에 대해 설명해주세요" required>${lecDto.lec_content}</textarea>
         </div>
 
         <div class="text-right pb-5">
