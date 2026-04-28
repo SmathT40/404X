@@ -19,7 +19,14 @@ public interface MyClassroomMapper {
 		        c.cls_title,
 		        c.user_id,
 		        u.user_name,       
-		        c.cls_exp
+		        c.cls_exp,
+		        (SELECT COUNT(*) FROM lec WHERE class_id = c.class_id) AS total_cnt,
+		        (SELECT COUNT(*) 
+		         FROM lec_progress lp 
+		         JOIN lec l ON lp.lec_id = l.lec_id 
+		         WHERE l.class_id = c.class_id 
+		           AND lp.user_id = s.user_id 
+		           AND lp.lec_prog_status = 1) AS complete_cnt
 		    FROM 
 		        cls_state s
 		    JOIN 
@@ -31,7 +38,6 @@ public interface MyClassroomMapper {
 		        AND s.cls_state_status IN (0, 1)
 		    """)
 	List<myClassDto> selectMyClass(String user_id);
-
 	
 	@Select("""
 		    SELECT 

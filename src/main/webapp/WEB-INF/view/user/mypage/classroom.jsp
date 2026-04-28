@@ -20,7 +20,7 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>강의번호</th><th>강의제목</th><th>진행률</th><th>강사명</th><th>강의만료일</th>
+                    <th>강의번호</th><th>강의제목</th><th>차시</th><th>진도율</th><th>강사명</th><th>강의만료일</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,7 +31,8 @@
                             <tr onclick="location.href='${pageContext.request.contextPath}/class/leclist?class_id=${cls.class_id}'" style="cursor:pointer;">
                                 <td>${cls.class_id}</td>
                                 <td>${cls.cls_title}</td>
-                                <td>적당한비율</td>
+                                <td>${cls.complete_cnt} / ${cls.total_cnt}</td>
+                                <td>${cls.progress}%</td>
                                 <td>${cls.user_name}</td>
                                 <td>${cls.cls_end_date}</td>
                             </tr>

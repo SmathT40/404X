@@ -70,7 +70,7 @@ textarea.form-control {
         <div class="col-2">
         <label class="form-label-sm">재생 시간</label>
 			<div class="col-auto">
-                <input type="text" name="lec_time" class="form-control form-control-sm text-center" value="${lecDto.lec_time}"placeholder="15:00" required>
+                <input type="text" name="lec_time_str" class="form-control form-control-sm text-center" value="${lecDto.lec_time_str}"placeholder="15:00" required>
             </div>
         </div>
     </div>
