@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dao.BoardDao;
+import dto.Board;
 import dto.ClsReplyDto;
 import mapper.ClsReplyMapper;
 
@@ -63,4 +65,17 @@ public class ClsReplyService {
 	    int count = clsReplyMapper.countMyComment(userId);
 	    return (int) Math.ceil((double) count / limit);
 	}
+	// =========================================================================
+		// --- 문의사항 답글완료 처리 추가 0428 1222---
+		// =========================================================================
+	@Autowired
+	private BoardDao boardDao;
+
+	public void updateBoardStatus(int board_no, int status) {
+	    Board board = boardDao.selectOne(board_no);
+	    if (board != null && board.getBoard_type() == 3) {
+	        clsReplyMapper.updateBoardStatus(board_no, status);
+	    }
+	}
+	
 	}

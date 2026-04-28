@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import dto.ClsReplyDto;
 
@@ -70,5 +71,10 @@ public interface ClsReplyMapper {
  @Select("SELECT COUNT(*) FROM cls_reply WHERE user_id = #{value} AND board_no IS NOT NULL")
  int countMyComment(String userId);
     
+//=========================================================================
+//--- 문의사항 답글완료 처리 추가 0428 1220---
+//=========================================================================
+ @Update("UPDATE board SET board_status = #{status} WHERE board_no = #{board_no}")
+ void updateBoardStatus(@Param("board_no") int board_no, @Param("status") int status);
 }
 

@@ -44,6 +44,12 @@ public class ClsReplyController {
         dto.setUser_id(loginUser.getUser_id());
         int result = clsReplyService.addReply(dto);
         
+         // =========================================================================
+        // --- 관리자가 문의사항 댓글 달면 자동 답글완료 처리 추가 0428 1223---
+        // =========================================================================
+        if (result > 0 && dto.getBoard_no() != null && loginUser.getUser_role() >= 2) {
+            clsReplyService.updateBoardStatus(dto.getBoard_no(), 1);
+        }
         // 3. 결과 반환
         resultMap.put("success", result > 0);
         return resultMap;

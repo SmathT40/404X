@@ -21,4 +21,5 @@ public class ClsReplyDto {
     
     private List<ClsReplyDto> replyList;
     
+    private String board_reg_date; //0428 1220 추가
 }
