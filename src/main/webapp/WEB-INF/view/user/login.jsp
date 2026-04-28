@@ -40,7 +40,7 @@
         </div>
 
         <%-- 로그인 버튼 --%>
-        <button type="submit" class="btn btn-black btn-full btn-lg" style="margin-bottom:10px;">로그인</button><hr>
+        <button type="submit" class="btn btn-black btn-full btn-lg" style="margin-bottom:10px;">로그인</button>
 
         <%-- 네이버 로그인 버튼 --%>
         <a href="${pageContext.request.contextPath}/user/naver/login" class="btn-naver">

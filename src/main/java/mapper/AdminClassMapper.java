@@ -50,4 +50,7 @@ public interface AdminClassMapper {
 		    </script>
 		""")
 	void updateStatuses(@Param("idList") List<String> idList, @Param("status") int status);
+	
+	@Select("SELECT c.*, u.user_name FROM cls c JOIN users u ON c.user_id = u.user_id WHERE c.cls_status = 0 ORDER BY c.cls_reg_date DESC LIMIT 5")
+	List<ClassDto> selectPendingClassList();
 }

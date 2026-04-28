@@ -23,4 +23,7 @@ public class AdminClassService {
         adminClassMapper.updateStatuses(idList, status);
     }
 
+	public List<ClassDto> getPendingClassList() {
+	    return adminClassMapper.selectPendingClassList();
+	}
 }
