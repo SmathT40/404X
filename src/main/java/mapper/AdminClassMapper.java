@@ -33,7 +33,7 @@ public interface AdminClassMapper {
 		                </choose>
 		            </if>
 		        </where>
-		        ORDER BY c.cls_reg_date DESC
+		        ORDER BY c.cls_featured DESC, c.cls_reg_date DESC
 		    </script>
 		    """)
 	List<ClassDto> getClassList(@Param("searchType") String searchType,@Param("searchContent") String searchContent,@Param("clsStatus") Integer clsStatus);
@@ -53,4 +53,20 @@ public interface AdminClassMapper {
 	
 	@Select("SELECT c.*, u.user_name FROM cls c JOIN users u ON c.user_id = u.user_id WHERE c.cls_status = 0 ORDER BY c.cls_reg_date DESC LIMIT 5")
 	List<ClassDto> selectPendingClassList();
+	
+	@Update("UPDATE cls SET cls_featured = 0 WHERE cls_featured = 1")
+	void resetAllFeatured();
+	
+	@Update("""
+	        <script>
+	            UPDATE cls 
+	            SET cls_featured = 1 
+	            WHERE class_id IN 
+	            <foreach item="id" collection="list" open="(" separator="," close=")">
+	                #{id}
+	            </foreach>
+	        </script>
+	        """)
+	void updateFeatured(List<String> idList);
+
 }

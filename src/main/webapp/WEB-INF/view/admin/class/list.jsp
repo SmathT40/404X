@@ -68,6 +68,10 @@ html {
     font-weight: 700;
     margin-right: auto;
 }
+
+#modalBody {
+    white-space: pre-line !important;
+}
 </style>
 
 <div class="admin-tab-bar">
@@ -92,6 +96,7 @@ html {
 
     <div class="admin-actions-row">
         <span class="admin-page-title">전체 클래스</span>
+        <button class="btn btn-ghost btn-sm" onclick="featuredSelected()">상단노출</button>
         <button class="btn btn-ghost btn-sm" onclick="deleteSelected()">선택삭제</button>
         <button class="btn btn-ghost btn-sm" onclick="approveSelected()">선택승인</button>
         <button class="btn btn-ghost btn-sm" onclick="rejectSelected()">선택보류</button>
@@ -115,7 +120,10 @@ html {
                         <c:forEach var="cls" items="${classList}">
                             <tr onclick="location.href='${pageContext.request.contextPath}/class/detail?id=${cls.class_id}'" style="cursor:pointer;">
                                 <td><input type="checkbox" class="chk-item" value="${cls.class_id}" onclick="event.stopPropagation();"></td>
-                                <td>${cls.cls_title}</td>
+                                <td>
+                                <c:if test="${cls.cls_featured == 1}">&#128204;</c:if>
+                                ${cls.cls_title}
+                                </td>
                                 <td>${cls.user_name}</td>
                                 <td><fmt:formatNumber value="${cls.cls_price}" pattern="#,###"/>원</td>
                                 <td><fmt:formatDate value="${cls.cls_reg_date}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
@@ -180,6 +188,11 @@ function doSearch() {
     location.href = url;
 }
 
+function featured(id) {
+    showConfirm('승인하시겠습니까?', function() {
+        ajaxRequest(ctx + '/admin/class/approve', {classIds: id}, 'POST', function(res) { if (res.success) location.reload(); });
+    });
+}
 function approveOne(id) {
     showConfirm('승인하시겠습니까?', function() {
         ajaxRequest(ctx + '/admin/class/approve', {classIds: id}, 'POST', function(res) { if (res.success) location.reload(); });
@@ -214,6 +227,19 @@ function deleteSelected() {
     if (!ids.length) { showAlert('삭제할 항목을 선택해주세요.'); return; }
     showConfirm('선택 항목을 삭제하시겠습니까?', function() {
         ajaxRequest(ctx + '/admin/class/delete', {classIds: ids.join(',')}, 'POST', function(res) { if (res.success) location.reload(); });
+    });
+}
+function featuredSelected() {
+    var ids = []; $('.chk-item:checked').each(function() { ids.push($(this).val()); });
+    if (!ids.length) { 
+        showConfirm('상단노출을 전체 해제하시겠습니까?', function() {
+            ajaxRequest(ctx + '/admin/class/feat', {classIds: ids.join(',')}, 'POST', function(res) { if (res.success) location.reload(); });
+        });
+        return;
+    }
+    if (ids.length > 3) { showAlert('최대 3개까지 선택 가능합니다.'); return; }
+    showConfirm('선택 항목을 상단 노출하시겠습니까? \n 최대 3개까지 노출 됩니다.', function() {
+        ajaxRequest(ctx + '/admin/class/feat', {classIds: ids.join(',')}, 'POST', function(res) { if (res.success) location.reload(); });
     });
 }
 
