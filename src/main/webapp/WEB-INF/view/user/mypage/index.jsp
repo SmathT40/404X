@@ -89,6 +89,7 @@
 </div>
 
 <script>
+/*
 function doInstructorReg(){
     var code = $('#instrCode').val().trim();
     if(!code){ showAlert('인증코드를 입력해주세요.'); return; }
@@ -103,6 +104,32 @@ function doInstructorReg(){
         }
     );
 }
+
+지금 인증코드 구현 안 했으니까 그냥 빈칸 입력해도 들어갈 수 있게 ***잠시*** 주석 처리 했음여
+*/
+
+function doInstructorReg(){
+    // 1. 입력값이 있는지 최소한의 체크만 (비어있으면 서운하니까 ㅋㅋㅋ)
+    var code = $('#instrCode').val().trim();
+    if(!code){ 
+        showAlert('테스트 모드: 아무 코드나 입력하면 통과됩니다!'); 
+        return; 
+    }
+
+    // 2. AJAX는 나중에 로직 완성되면 다시 살리고, 지금은 '무조건 성공' 시뮬레이션!
+    /*
+    ajaxRequest('${pageContext.request.contextPath}/user/instructorReg',
+        {auth_code: code}, 'POST',
+        function(res){ ... }
+    );
+    */
+
+    // 🚀 임시 하이패스 로직
+    showAlert('인증코드가 확인되었습니다. 신청 페이지로 이동합니다.', function(){ 
+        location.href='${pageContext.request.contextPath}/mypage/instructor/register'; 
+    });
+}
+
 function doWithdraw(){
     var pw = $('#withdrawPw').val().trim();
     if(!pw){ showAlert('비밀번호를 입력해주세요.'); return; }

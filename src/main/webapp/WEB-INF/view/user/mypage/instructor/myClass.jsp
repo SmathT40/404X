@@ -21,11 +21,11 @@
             <c:choose>
                 <c:when test="${not empty myClassList}">
                     <c:forEach var="cls" items="${myClassList}">
-                        <tr onclick="location.href='${pageContext.request.contextPath}/mypage/instructor/myClass/detail?id=${cls.classId}'" style="cursor:pointer;">
-                            <td>${cls.clsNo}</td>
-                            <td>${cls.clsTitle}</td>
-                            <td>${cls.subject}</td>
-                            <td>${cls.clsRegDate}</td>
+                        <tr onclick="location.href='${pageContext.request.contextPath}/mypage/instructor/myClass/detail?id=${cls.class_id}'" style="cursor:pointer;">
+                            <td>${cls.cls_no}</td>
+                            <td>${cls.cls_title}</td>
+                            <td>${cls.category_code}</td>
+                            <td>${cls.cls_reg_date}</td>
                         </tr>
                     </c:forEach>
                 </c:when>
