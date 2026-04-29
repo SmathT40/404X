@@ -55,7 +55,16 @@
             <textarea name="board_content" id="summernote"
                       class="form-control" style="width:100%;">${board.board_content}</textarea>
         </div>
-
+                 <%-- 관리자 전용 노출 설정 --%>
+		    <c:if test="${sessionScope.loginUser.user_role == 2}">
+		        <div class="custom-control custom-checkbox mr-3">
+		            <input type="checkbox" name="board_featured" class="custom-control-input" id="isFeatured" 
+		                   value="1" ${board.board_featured == 1 ? 'checked' : ''}>
+		            <label class="custom-control-label font-weight-bold" for="isFeatured" style="cursor:pointer; font-size: 14px;">
+		                상단 노출
+		            </label>
+		        </div>
+		         </c:if>
         <div style="display:flex;justify-content:center;gap:16px;margin-top:16px;">
             <a href="${pageContext.request.contextPath}/community/board/list?boardid=0"
                class="btn btn-ghost btn-lg" style="min-width:120px;">취소</a>
