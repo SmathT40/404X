@@ -52,6 +52,10 @@
         <a href="${pageContext.request.contextPath}/community/board/form?boardid=3"
            class="btn btn-ghost btn-sm">글쓰기</a>
     </div>
-
+    <jsp:include page="/WEB-INF/view/common/pagination.jsp">
+    <jsp:param name="currentPage" value="${currentPage}"/>
+    <jsp:param name="totalPage"   value="${totalPage}"/>
+    <jsp:param name="pageUrl"     value="/404X/community/board/list?boardid=3&pageNum="/>
+</jsp:include>
 </div>
 </main>
