@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,26 @@ public class AdminWithdrawController {
 			response.put("success", false);
 			response.put("message", "강퇴 처리 중 오류가 발생했습니다.");
 		}
+		return response;
+	}
+	
+	@PostMapping("/admin/member/withdrawMulti")
+	@ResponseBody
+	public Map<String, Object> withdrawMultiUsers(
+					@RequestParam("user_ids") List<String> user_ids) {
+		
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+			if (user_ids != null && !user_ids.isEmpty()) {
+				adminWithdrawService.withdrawMultiUsers(user_ids);
+			}
+			response.put("success", true);
+		} catch (Exception e) {
+			response.put("success", false);
+			response.put("message", "선택 삭제 중 오류가 발생했습니다.");
+		}
+		
 		return response;
 	}
 }

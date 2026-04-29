@@ -81,7 +81,7 @@ function deleteSelected(){
     var ids=[]; $('.chk-item:checked').each(function(){ ids.push($(this).val()); });
     if(!ids.length){ showAlert('삭제할 항목을 선택해주세요.'); return; }
     showConfirm('선택한 회원을 삭제하시겠습니까?', function(){
-        ajaxRequest(ctx+'/admin/member/deleteMulti',{user_ids:ids.join(',')},'POST', function(res){ if(res.success) location.reload(); });
+        ajaxRequest(ctx+'/admin/member/withdrawMulti',{user_ids:ids.join(',')},'POST', function(res){ if(res.success) location.reload(); });
     });
 }
 function withdrawMember(userId){
