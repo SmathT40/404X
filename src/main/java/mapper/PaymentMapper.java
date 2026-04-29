@@ -3,32 +3,19 @@ package mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import dto.Pay;
 
 public interface PaymentMapper {
-    @Insert(
-      "INSERT INTO pay (" +
-      "pay_uid," +
-      "pay_amount," +
-      "pay_method," +
-      "user_id," +
-      "pay_status," +
-      "pay_goods" +
-      ") VALUES (" +
-      "#{pay_uid}," +
-      "#{pay_amount}," +
-      "#{pay_method}," +
-      "#{user_id}," +
-      "#{pay_status}," +
-      "#{pay_goods}" +
-      ")"
-    )
-    void insertPay(
-        Pay pay
-    );
+	
+	//hto 0429
+	@Insert("INSERT INTO pay (order_id, pay_uid, pay_amount, pay_method, user_id, pay_status, pay_goods) " +
+	        "VALUES (#{order_id}, #{pay_uid}, #{pay_amount}, #{pay_method}, #{user_id}, #{pay_status}, #{pay_goods})")
+	@Options(useGeneratedKeys = true, keyProperty = "pay_no")
+	void insertPay(Pay pay);
 
     @Select(
       "SELECT COUNT(*) " +
@@ -66,5 +53,12 @@ public interface PaymentMapper {
 
  @Select("SELECT COUNT(*) FROM pay WHERE user_id = #{value}")
  int countPay(String userId);
+ 
+ //hto 0429
+ @Insert("INSERT INTO pay_detail (pay_no, class_id, detail_price) " +
+	        "VALUES (#{pay_no}, #{class_id}, #{detail_price})")
+ void insertPayDetail(@Param("pay_no") int pay_no, 
+	                     @Param("class_id") int class_id, 
+	                     @Param("detail_price") int detail_price);
 
 }

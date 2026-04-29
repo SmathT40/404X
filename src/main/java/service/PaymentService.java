@@ -177,7 +177,8 @@ public class PaymentService {
         String goods = (String) session.getAttribute("kakaoGoods");
         int total = (int) session.getAttribute("kakaoTotal");
         String cartIds = (String) session.getAttribute("kakaoCartIds");
-
+        // hto 0429 주문번호생성
+        String newOrderId = Pay.generateOrderId();
         // 카카오페이 승인 API 호출
         RestTemplate rt = new RestTemplate();
 
@@ -208,11 +209,19 @@ public class PaymentService {
         pay.setUser_id(userId);
         pay.setPay_status(1);
         pay.setPay_goods(goods);
+        //hto 0429
+        pay.setOrder_id(newOrderId);
         paymentDao.insertPay(pay);
 
         // 수강 상태 등록
+        // hto 0429
         List<ClassDto> checkoutList = getCheckoutList(cartIds, session);
         for (ClassDto item : checkoutList) {
+            // [핵심] 상세 테이블(pay_detail)에 기록
+            // pay.getPay_no()는 MyBatis의 useGeneratedKeys 덕분에 이미 채워져 있습니다.
+            paymentDao.insertPayDetail(pay.getPay_no(), item.getClass_id(), item.getCls_price());
+
+            // 수강 권한 부여
             if (paymentDao.existsClass(item.getClass_id(), userId) == 0) {
                 paymentDao.insertClassState(item.getClass_id(), userId);
             }

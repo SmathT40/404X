@@ -117,7 +117,14 @@
                                 <span style="color:#888; flex:1; text-align:center;">${pay.pay_goods}</span>
                                 <span><fmt:formatNumber value="${pay.pay_amount}" pattern="#,###"/>원</span>
                                 <span style="color:#aaa;">${pay.pay_date}</span>
-                                <button class="btn btn-black btn-sm" onclick="refundOne(${pay.pay_no})">환불</button>
+                                <c:choose>
+	                                <c:when test="${pay.pay_status == -1}">
+	                                    <button class="btn btn-ghost btn-sm" disabled>환불완료</button>
+	                                </c:when>
+	                                <c:otherwise>
+	                                    <button class="btn btn-black btn-sm" onclick="refundOne(${pay.pay_no})">환불</button>
+	                                </c:otherwise>
+                               </c:choose>
                             </div>
                         </c:forEach>
                     </c:when>
@@ -178,8 +185,8 @@
                     <tbody>
                         <c:forEach var="pay" items="${payList}">
                             <tr>
-                                <td><input type="checkbox" class="chk-item" value="${pay.pay_no}"></td>
-                                <td style="font-size:11px;color:#888;">${pay.pay_uid}</td>
+                                <td><input type="checkbox" class="chk-item" value="${pay.order_id}"></td>
+                                <td style="font-size:11px;color:#888;">${pay.order_id}</td>
                                 <td>${pay.user_id}</td>
                                 <td>${pay.pay_goods}</td>
                                 <td><fmt:formatNumber value="${pay.pay_amount}" pattern="#,###"/>원</td>
@@ -232,7 +239,7 @@
                     <tbody>
                         <c:forEach var="pay" items="${payList}">
                             <tr>
-                                <td style="font-size:11px;color:#888;">${pay.pay_uid}</td>
+                                <td style="font-size:11px;color:#888;">${pay.order_id}</td>
                                 <td>${pay.user_id}</td>
                                 <td>${pay.pay_goods}</td>
                                 <td><fmt:formatNumber value="${pay.pay_amount}" pattern="#,###"/>원</td>

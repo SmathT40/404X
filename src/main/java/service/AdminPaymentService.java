@@ -75,5 +75,6 @@ public class AdminPaymentService {
 
         // DB 상태 변경 (-1 = 환불)
         adminPaymentDao.updatePayStatus(pay_no, -1);
+        adminPaymentDao.updateClassStateRefund(pay_no, pay.getUser_id());
     }
 }

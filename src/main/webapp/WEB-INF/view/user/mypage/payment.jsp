@@ -17,14 +17,14 @@
 
     <table class="data-table">
         <thead>
-            <tr><th>강의번호</th><th>강의제목</th><th>결제금액</th><th>결제날짜</th><th>결제상태</th></tr>
+            <tr><th>주문번호</th><th>강의제목</th><th>결제금액</th><th>결제날짜</th><th>결제상태</th></tr>
         </thead>
         <tbody>
             <c:choose>
                 <c:when test="${not empty payList}">
                     <c:forEach var="pay" items="${payList}">
                         <tr>
-                            <td>${pay.pay_no}</td>
+                            <td>${pay.order_id}</td>
                             <td>${pay.pay_goods}</td>
                             <td><fmt:formatNumber value="${pay.pay_amount}" pattern="#,###"/>원</td>
                             <td>${pay.pay_date}</td>

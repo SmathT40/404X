@@ -68,11 +68,22 @@ public interface AdminPaymentMapper {
             "</script>")
     int countAllPayList(Map<String, Object> param);
 
-    // pay_uid 조회 (환불용)
+    // pay_uid 조회 (환불용) hto 0429 - 결제정보 조회(로직변경없음)
     @Select("SELECT * FROM pay WHERE pay_no = #{value}")
     Pay selectPayOne(int pay_no);
 
     // 결제 상태 변경
     @Update("UPDATE pay SET pay_status = #{status} WHERE pay_no = #{pay_no}")
     void updatePayStatus(@Param("pay_no") int pay_no, @Param("status") int status);
+    
+    //hto 0429
+    @Update("UPDATE pay SET pay_status = -1 WHERE pay_no = #{pay_no}")
+    void updatePayStatusRefund(int pay_no);
+    
+    @Update("UPDATE cls_state SET cls_state_status = -1 " +
+            "WHERE user_id = #{userId} " +
+            "AND classno IN (SELECT class_id FROM pay_detail WHERE pay_no = #{pay_no})")
+    void updateClassStateRefund(@Param("pay_no") int pay_no, @Param("userId") String userId);
+    
+    
 }
