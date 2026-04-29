@@ -148,7 +148,7 @@
                 <jsp:include page="/WEB-INF/view/common/pagination.jsp">
                     <jsp:param name="currentPage" value="${currentPage}"/>
                     <jsp:param name="totalPage"   value="${totalPage}"/>
-                    <jsp:param name="pageUrl"     value="/404X/admin/board/list?pageNum="/>
+                    <jsp:param name="pageUrl"     value="/404X/admin/board/list?page="/>
                 </jsp:include>
             </c:otherwise>
         </c:choose>

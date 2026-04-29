@@ -2,8 +2,6 @@
 <title>강좌 등록 및 수정 - 404 X CLUB</title>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 <style>
 .custom-select-sm, 
 .form-control-sm, 
@@ -38,8 +36,6 @@ textarea.form-control {
     font-weight: 700;
 }
 </style>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 <div class="container mt-5">
     <h2 class="mb-4">${empty lecDto ? '새 강좌 등록' : '강좌 정보 수정'}</h2>
 	<form action="${pageContext.request.contextPath}/host/class/${empty lecDto ? 'lecinsert' : 'lecupdate'}" 
@@ -87,7 +83,7 @@ textarea.form-control {
 
         <div class="form-group">
             <label>강좌 설명</label>
-            <textarea name="lec_content" class="form-control" rows="5" placeholder="강좌에 대해 설명해주세요" required>${lecDto.lec_content}</textarea>
+            <textarea name="lec_content" class="form-control" id="lec_content" rows="5" placeholder="강좌에 대해 설명해주세요" required>${lecDto.lec_content}</textarea>
         </div>
 
         <div class="text-right pb-5">
@@ -99,7 +95,39 @@ textarea.form-control {
         </div>
     </form>
 </div>
+<script>
+function sendFile(file) {
+    var data = new FormData();
+    data.append("file", file);
+    $.ajax({
+        url: '${pageContext.request.contextPath}/host/class/uploadImage',
+        type: 'POST',
+        data: data,
+        contentType: false,
+        processData: false,
+        success: function(res) {
+            $('#lec_content').summernote('insertImage', res.url);
+        },
+        error: function() {
+            showAlert('이미지 업로드에 실패했습니다.');
+        }
+    });
+}
 
+$(function(){
+    $('#lec_content').summernote({
+        height: 300,
+        width: '100%',
+        callbacks: {
+            onImageUpload: function(images) {
+                for(var i = 0; i < images.length; i++) {
+                    sendFile(images[i]);
+                }
+            }
+        }
+    });
+});
+</script>
 <div class="modal-overlay" id="commonModal">
     <div class="modal-box">
         <div class="modal-title" id="modalTitle">알림</div>
