@@ -74,4 +74,7 @@ public class BoardDao {
     public Board next(int board_type, int board_no) {
         return template.getMapper(cls).selectNext(board_type, board_no);
     }
+    public List<Board> selectFeaturedNotice() {
+        return template.getMapper(cls).selectFeaturedNotice();
+    }
 }

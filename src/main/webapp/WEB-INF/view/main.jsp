@@ -47,8 +47,8 @@
                     <c:when test="${not empty recentNoticeList}">
                         <c:forEach var="notice" items="${recentNoticeList}">
                             <div style="font-size:13px; color:#444; margin-bottom:8px;">
-                                <a href="${pageContext.request.contextPath}/community/notice/${notice.boardNo}">
-                                    ${notice.boardTitle}
+                                <a href="${pageContext.request.contextPath}/community/board/detail?boardid=0&board_no=${notice.board_no}">
+                                    ${notice.board_title}
                                 </a>
                             </div>
                         </c:forEach>
