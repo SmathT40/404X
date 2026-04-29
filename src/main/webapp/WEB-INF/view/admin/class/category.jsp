@@ -136,7 +136,7 @@ select.form-control {
 </style>
 
 <script>
-// 아코디언 토글 기능
+//아코디언 토글 기능
 function toggleSubMenu(element, code, name) {
     const $this = $(element);
     const $wrapper = $this.next('.sub-category-wrapper');
@@ -170,66 +170,49 @@ function initForm() {
 }
 
 
-
 //카테고리 저장
 function fn_save() {
     if(!$('#form_category_code').val() || !$('#form_category_name').val()) {
-        alert('모든 항목을 입력해주세요.');
+        showAlert('모든 항목을 입력해주세요.'); // alert -> showAlert
         return;
     }
 
     const formData = $('#categoryForm').serialize();
     
-    // 현재 모드 판별 (분류 코드가 읽기 전용이면 '수정', 아니면 '신규')
     const isUpdate = $('#form_category_code').prop('readonly');
     const url = isUpdate ? '/category/admin/update' : '/category/admin/add';
     const msg = isUpdate ? '수정하시겠습니까?' : '저장하시겠습니까?';
 
-    if(!confirm(msg)) return;
-
-    $.post('${pageContext.request.contextPath}' + url, formData, function(res) {
-        if(res === 'success') {
-            alert(isUpdate ? '수정되었습니다.' : '저장되었습니다.');
-            location.reload();
-        } else {
-            alert('처리에 실패했습니다. 서버 로그를 확인하세요.');
-        }
+    // confirm -> showConfirm (확인 버튼 클릭 시에만 이후 로직 실행)
+    showConfirm(msg, function() {
+        $.post('${pageContext.request.contextPath}' + url, formData, function(res) {
+            if(res === 'success') {
+                showAlert(isUpdate ? '수정되었습니다.' : '저장되었습니다.', function() {
+                    location.reload();
+                });
+            } else {
+                showAlert('처리에 실패했습니다. 서버 로그를 확인하세요.');
+            }
+        });
     });
 }
 
-/*
-function fn_save() {
-    if(!$('#form_category_code').val() || !$('#form_category_name').val()) {
-        alert('모든 항목을 입력해주세요.');
-        return;
-    }
-
-    const formData = $('#categoryForm').serialize();
-    
-    // 주소는 레이아웃 적용을 위해 관리자 경로로 호출
-    $.post('${pageContext.request.contextPath}/category/admin/add', formData, function(res) {
-        if(res === 'success') {
-            alert('저장되었습니다.');
-            location.reload();
-        } else {
-            alert('저장에 실패했습니다. 권한이나 중복 코드를 확인하세요.');
-        }
-    });
-}
-*/
-
-//카테고리 제거
+// 카테고리 제거
 function fn_delete() {
     const code = $('#form_category_code').val();
-    if(!confirm('정말 삭제하시겠습니까?\n하위 카테고리가 있는 대분류는 삭제되지 않을 수 있습니다.')) return;
-
-    $.post('${pageContext.request.contextPath}/category/admin/delete', { category_code: code }, function(res) {
-        if(res === 'success') {
-            alert('삭제되었습니다.');
-            location.reload();
-        } else {
-            alert('삭제 실패. 하위 데이터가 있는지 확인하세요.');
-        }
+    
+    const msg = '정말 삭제하시겠습니까? \n 하위 카테고리가 있는 대분류는 삭제되지 않을 수 있습니다.';
+    
+    showConfirm(msg, function() {
+        $.post('${pageContext.request.contextPath}/category/admin/delete', { category_code: code }, function(res) {
+            if(res === 'success') {
+                showAlert('삭제되었습니다.', function() {
+                    location.reload();
+                });
+            } else {
+                showAlert('삭제 실패. 하위 데이터가 있는지 확인하세요.');
+            }
+        });
     });
 }
 </script>

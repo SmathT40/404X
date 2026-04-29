@@ -69,11 +69,6 @@
             </c:choose>
         </tbody>
     </table>
-    <jsp:include page="/WEB-INF/view/common/pagination.jsp">
-        <jsp:param name="currentPage" value="${currentPage}"/>
-        <jsp:param name="totalPage"   value="${totalPage}"/>
-        <jsp:param name="pageUrl"     value="/class/list?cat=${param.cat}&sub=${param.sub}&page="/>
-    </jsp:include>
-
+<%-- 0429 pagination 삭제 --%>
 </div>
 </main>

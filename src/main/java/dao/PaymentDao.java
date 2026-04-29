@@ -1,6 +1,8 @@
 package dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,4 +53,13 @@ public class PaymentDao {
  public int countPay(String userId) {
      return sqlSession.selectOne(NAMESPACE + "countPay", userId);
  }
+
+ //hto 0429
+ public void insertPayDetail(int pay_no, int class_id, int price) {
+	    Map<String, Object> param = new HashMap<>();
+	    param.put("pay_no", pay_no);
+	    param.put("class_id", class_id);
+	    param.put("detail_price", price);
+	    sqlSession.insert(NAMESPACE + "insertPayDetail", param);
+	}
 }
