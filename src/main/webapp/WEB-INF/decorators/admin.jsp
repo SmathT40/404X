@@ -106,6 +106,7 @@
                 <ul>
                     <li><a href="${pageContext.request.contextPath}/admin/dashboard">&#128202; 대시보드</a></li>
                     <li><a href="${pageContext.request.contextPath}/admin/member/list">&#128100; 회원관리</a></li>
+                    <li><a href="${pageContext.request.contextPath}/admin/host/list">🤓 강사관리</a></li>
                     <li><a href="${pageContext.request.contextPath}/admin/class/list">&#128218; 강의관리</a></li>
                     <li><a href="${pageContext.request.contextPath}/category/admin/list">📁 카테고리관리</a></li>
                     <li><a href="${pageContext.request.contextPath}/admin/board/list">&#128203; 게시판관리</a></li>
