@@ -28,7 +28,7 @@
 	 --%>
 	<div id="map" style="width:100%; height:450px; border-radius:12px; border:1px solid #ddd;"></div>
 	
-	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHboWu4NHSUfn6dDZmgq2OPteL4OPoviY&callback=initMap&v=weekly"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHboWu4NHSUfn6dDZmgq2OPteL4OPoviY&callback=initMap&v=weekly&loading=async"></script>
 	<script>
 	    async function initMap() {
 	        const myLocation = { lat: 37.476623, lng: 126.880175 }; // 학원 좌표

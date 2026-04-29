@@ -7,7 +7,7 @@
 <div class="user-content">
 
     <div class="mypage-tab-bar">
-        <a href="${pageContext.request.contextPath}/mypage"           class="tab-item">마이페이지</a>
+        <a href="${pageContext.request.contextPath}/mypage/index"           class="tab-item">마이페이지</a>
         <a href="${pageContext.request.contextPath}/mypage/classroom" class="tab-item">내강의실</a>
         <a href="${pageContext.request.contextPath}/mypage/myPost"    class="tab-item">내가쓴글</a>
         <a href="${pageContext.request.contextPath}/mypage/payment"   class="tab-item active">결제내역</a>
