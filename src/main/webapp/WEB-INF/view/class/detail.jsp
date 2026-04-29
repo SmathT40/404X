@@ -164,83 +164,113 @@
 <div style="height:80px;"></div><%-- 하단 버튼 높이 보정 --%>
 
 <script>
+var classId = ${cls.class_id};
 
-	var classId = ${cls.class_id};
-	
-	function submitComment(){
-	    var content  = $('#cmtContent').val().trim();
-	    // 우리 DB 구조에 맞게 체크하면 1(비공개), 아니면 0(공개)
-	    var isPrivate = $('#cmtPrivate').is(':checked') ? 1 : 0; 
-	    
-	    if(!content){ showAlert('내용을 입력해주세요.'); return; }
+function submitComment(){
+    var content  = $('#cmtContent').val().trim();
+    // 우리 DB 구조에 맞게 체크하면 1(비공개), 아니면 0(공개)
+    var isPrivate = $('#cmtPrivate').is(':checked') ? 1 : 0; 
+    
+    if(!content){ showAlert('내용을 입력해주세요.'); return; }
 
-	    $.ajax({
-	        url: '${pageContext.request.contextPath}/class/comment/insert',
-	        type: 'POST',
-	        contentType: 'application/json', // JSON으로 보낸다고 명시
-	        data: JSON.stringify({
-	            class_id: classId,              // DTO 필드명과 일치
-	            cls_reply_content: content,      // DTO 필드명과 일치
-	            cls_reply_private: isPrivate,    // DTO 필드명과 일치
-	            cls_parent_id: null              // 원댓글은 null
-	        }),
-	        success: function(res){
-	            if(res.success) {
-	                location.reload(); // 성공 시 새로고침해서 댓글 확인
-	            } else {
-	                showAlert('등록에 실패했습니다.');
-	            }
-	        },
-	        error: function() {
-	            showAlert('서버 통신 오류가 발생했습니다.');
-	        }
-	    });
-	}
+    $.ajax({
+        url: '${pageContext.request.contextPath}/class/comment/insert',
+        type: 'POST',
+        contentType: 'application/json', // JSON으로 보낸다고 명시
+        data: JSON.stringify({
+            class_id: classId,              // DTO 필드명과 일치
+            cls_reply_content: content,      // DTO 필드명과 일치
+            cls_reply_private: isPrivate,    // DTO 필드명과 일치
+            cls_parent_id: null              // 원댓글은 null
+        }),
+        success: function(res){
+            if(res.success) {
+                location.reload(); // 성공 시 새로고침해서 댓글 확인
+            } else {
+                showAlert('등록에 실패했습니다.');
+            }
+        },
+        error: function() {
+            showAlert('서버 통신 오류가 발생했습니다.');
+        }
+    });
+}
 
-	function submitReply(parentId, btn){
-	    // 버튼 기준으로 위쪽에 있는 textarea의 값을 가져옴
-	    var content = $(btn).closest('div').prev('textarea').val().trim();
-	    
-	    if(!content){ showAlert('내용을 입력해주세요.'); return; }
+function submitReply(parentId, btn){
+    // 버튼 기준으로 위쪽에 있는 textarea의 값을 가져옴
+    var content = $(btn).closest('div').prev('textarea').val().trim();
+    
+    if(!content){ showAlert('내용을 입력해주세요.'); return; }
 
-	    $.ajax({
-	        url: '${pageContext.request.contextPath}/class/comment/insert',
-	        type: 'POST',
-	        contentType: 'application/json',
-	        data: JSON.stringify({
-	            class_id: classId,
-	            cls_reply_content: content,
-	            cls_parent_id: parentId, // 부모 댓글 번호를 담음
-	            cls_reply_private: 0     // 대댓글은 기본적으로 공개 (필요시 수정)
-	        }),
-	        success: function(res){
-	            if(res.success) {
-	                location.reload();
-	            }
-	        }
-	    });
-	}
-	function deleteCmt(id){
-	    showConfirm('삭제하시겠습니까?', function(){
-	        ajaxRequest('${pageContext.request.contextPath}/class/comment/delete',
-	            {cls_reply_no: id}, 'POST',
-	            function(res){ if(res.success) location.reload(); }
-	        );
-	    });
-	}
-	
-	function toggleReply(id){ $('#reply-' + id).toggle(); }
+    $.ajax({
+        url: '${pageContext.request.contextPath}/class/comment/insert',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            class_id: classId,
+            cls_reply_content: content,
+            cls_parent_id: parentId, // 부모 댓글 번호를 담음
+            cls_reply_private: 0     // 대댓글은 기본적으로 공개 (필요시 수정)
+        }),
+        success: function(res){
+            if(res.success) {
+                location.reload();
+            }
+        }
+    });
+}
+function deleteCmt(id){
+    showConfirm('삭제하시겠습니까?', function(){
+        ajaxRequest('${pageContext.request.contextPath}/class/comment/delete',
+            {cls_reply_no: id}, 'POST',
+            function(res){ if(res.success) location.reload(); }
+        );
+    });
+}
+
+function toggleReply(id){ $('#reply-' + id).toggle(); }
 
 
 var classId = ${cls.class_id};
 
-function addToCart(id){
-    ajaxRequest('${pageContext.request.contextPath}/cart/add', {classId: id}, 'POST',
-        function(res){ showAlert(res.success ? '장바구니에 추가되었습니다.' : res.msg); });
+//1. addToCart 함수를 조금 수정 (성공 시 실행할 함수를 인자로 받음)
+function addToCart(id, callback){
+    ajaxRequest('${pageContext.request.contextPath}/payment/cart/add', {class_id: id}, 'POST',
+        function(res){ 
+            if(res.success) {
+                if(callback) {
+                    callback(); // 성공했을 때만 다음 동작(이동) 수행
+                } else {
+                    showAlert('장바구니에 추가되었습니다.');
+                }
+            } else {
+                showAlert(res.msg);
+            }
+        });
 }
 function buyNow(id){
-    location.href = '${pageContext.request.contextPath}/cart?classId=' + id;
+    ajaxRequest('${pageContext.request.contextPath}/payment/cart/add', {class_id: id}, 'POST', function(res){
+        // res.success가 true이거나, 
+        // 혹은 실패했더라도 메시지가 "이미 장바구니..."라면 그냥 이동시킨다!
+        if(res.success || res.msg.indexOf('이미 장바구니') > -1) {
+            location.href = '${pageContext.request.contextPath}/payment/checkout?cartIds=' + 0;
+        } else {
+            showAlert(res.msg);
+        }
+    });
 }
+
+/*
+// 2. buyNow 함수 수정
+function buyNow(id){
+    // 장바구니에 담는 게 성공하면, 그때 결제 페이지로 가라!
+    addToCart(id, function() {
+        // 바로 구매는 보통 이 상품 하나만 결제하는 경우가 많으므로
+        // 체크박스 로직(gotoCheckout) 대신 직접 경로를 지정하는 게 안전합니다.
+        location.href = '${pageContext.request.contextPath}/payment/checkout?cartIds=' + 0;
+    });
+}
+*/
 /*
 function submitComment(){
     var content  = $('#cmtContent').val().trim();

@@ -35,6 +35,7 @@
         </c:when>
         <c:otherwise>
             <div style="text-align:center;color:#aaa;padding:40px;">등록된 공지사항이 없습니다.</div>
+            
         </c:otherwise>
     </c:choose>
 
@@ -44,8 +45,12 @@
                class="btn btn-black btn-sm">글쓰기</a>
         </div>
       </c:if>  
-
 </div>
+<jsp:include page="/WEB-INF/view/common/pagination.jsp">
+    <jsp:param name="currentPage" value="${currentPage}"/>
+    <jsp:param name="totalPage"   value="${totalPage}"/>
+    <jsp:param name="pageUrl"     value="/404X/community/board/list?boardid=0&page="/>
+</jsp:include>
 </main>
 
 <script>

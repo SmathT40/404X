@@ -3,7 +3,6 @@ package mapper;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -22,7 +21,7 @@ public interface ClassMapper {
 	        "  <when test='subCode != null'> AND c.category_code = #{subCode} </when>" +
 	        "  <when test='catCode != null'> AND c.category_code IN (SELECT category_code FROM category WHERE parent_code = #{catCode}) </when>" +
 	        "</choose>" +
-	        "ORDER BY c.cls_no " + 
+	        "ORDER BY c.category_code ASC, c.cls_no DESC " + 
 	        "LIMIT #{limit} OFFSET #{offset}" +
 	        "</script>")
 	List<ClassDto> selectClassList(Map<String, Object> params);
@@ -86,6 +85,14 @@ public interface ClassMapper {
 		    ORDER BY lec_no ASC LIMIT 1
 		""")
 	LecDto getNext(@Param("class_id") int id, @Param("lec_no") int no);
+
+	@Select("""
+			SELECT l.*, 
+			     c.cls_title  FROM lec l
+			 	JOIN cls c ON l.class_id = c.class_id
+			 	WHERE c.user_id = #{hostId}  ORDER BY l.class_id ASC, l.lec_no ASC
+			""")
+	List<LecDto> selectLecByHost(String hostId);
 
 //	@Insert("INSERT INTO cls (user_id, category_code, cls_title, cls_exp, cls_price, cls_thumbnail, cls_content) " +
 //        "VALUES (#{user_id}, #{category_code}, #{cls_title}, #{cls_exp}, #{cls_price}, #{cls_thumbnail}, #{cls_content})")

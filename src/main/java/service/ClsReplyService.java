@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dao.BoardDao;
+import dto.Board;
 import dto.ClsReplyDto;
 import mapper.ClsReplyMapper;
 
@@ -43,5 +45,37 @@ public class ClsReplyService {
         int result = clsReplyMapper.delete(cls_reply_no, userId, userRole);
         return result > 0;
     }
+  
+	//4 27 추가
+	public List<ClsReplyDto> getBoardReplyList(int board_no) {
+	    List<ClsReplyDto> parentList = clsReplyMapper.selectBoardParentReplies(board_no);
+	    for (ClsReplyDto parent : parentList) {
+	        int parentNo = parent.getCls_reply_no();
+	        List<ClsReplyDto> childList = clsReplyMapper.selectChildReplies(parentNo);
+	        parent.setReplyList(childList);
+	    }
+	    return parentList;
+	}
+	public List<ClsReplyDto> getMyCommentList(String userId, int pageNum, int limit) {
+	    List<ClsReplyDto> list = clsReplyMapper.selectMyCommentList(userId, (pageNum-1)*limit, limit);
+	    return list;
+	}
 
-}
+	public int getMyCommentTotalPage(String userId, int limit) {
+	    int count = clsReplyMapper.countMyComment(userId);
+	    return (int) Math.ceil((double) count / limit);
+	}
+	// =========================================================================
+		// --- 문의사항 답글완료 처리 추가 0428 1222---
+		// =========================================================================
+	@Autowired
+	private BoardDao boardDao;
+
+	public void updateBoardStatus(int board_no, int status) {
+	    Board board = boardDao.selectOne(board_no);
+	    if (board != null && board.getBoard_type() == 3) {
+	        clsReplyMapper.updateBoardStatus(board_no, status);
+	    }
+	}
+	
+	}

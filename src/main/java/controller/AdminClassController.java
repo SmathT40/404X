@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,15 @@ public class AdminClassController {
             response.put("success", false);
         }
         return response;
+    }
+    @PostMapping("/feat")
+    @ResponseBody
+    public Map<String, Object> featuredClass(@RequestParam("classIds") String classIds) {
+        List<String> idList = Arrays.asList(classIds.split(","));
+        
+        adminClassService.updateFeatured(idList);
+        
+        return Map.of("success", true); 
     }
 
 }

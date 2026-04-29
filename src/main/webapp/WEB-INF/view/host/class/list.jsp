@@ -39,7 +39,7 @@
                                     <td><a href="${pageContext.request.contextPath}/class/detail?id=${cls.class_id}">${cls.cls_title}</a></td>
                                     <td>${cls.user_name}</td>
                                     <td><fmt:formatNumber value="${cls.cls_price}" pattern="#,###"/>원</td>
-                                    <td>${cls.cls_reg_date}</td>
+                                    <td><fmt:formatDate value="${cls.cls_reg_date}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                                     <td>
                                         <c:choose>
                                             <c:when test="${cls.cls_status == '-1'}"><span class="badge badge-red">삭제</span></c:when>
@@ -66,7 +66,7 @@
 
         <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:20px;">
             <a href="${pageContext.request.contextPath}/host/class/classForm"   class="btn btn-ghost">클래스등록</a>
-            <a href="${pageContext.request.contextPath}/host/class/lectureForm" class="btn btn-black">강의등록</a>
+            <a href="${pageContext.request.contextPath}/host/class/lectureForm" class="btn btn-black">강좌등록</a>
         </div>
 
     </div>

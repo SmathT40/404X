@@ -70,7 +70,7 @@ textarea.form-control {
         <div class="col-2">
         <label class="form-label-sm">재생 시간</label>
 			<div class="col-auto">
-                <input type="text" name="lec_time" class="form-control form-control-sm text-center" value="${lecDto.lec_time}"placeholder="15:00" required>
+                <input type="text" name="lec_time_str" class="form-control form-control-sm text-center" value="${lecDto.lec_time_str}"placeholder="15:00" required>
             </div>
         </div>
     </div>
@@ -87,7 +87,7 @@ textarea.form-control {
 
         <div class="form-group">
             <label>강좌 설명</label>
-            <textarea name="lec_content" class="form-control" rows="5" placeholder="강좌에 대해 설명해주세요" value="${lecDto.lec_content}"required></textarea>
+            <textarea name="lec_content" class="form-control" rows="5" placeholder="강좌에 대해 설명해주세요" required>${lecDto.lec_content}</textarea>
         </div>
 
         <div class="text-right pb-5">

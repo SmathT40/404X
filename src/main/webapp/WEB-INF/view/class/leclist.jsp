@@ -29,7 +29,7 @@
                             <div style="font-weight: 600; font-size: 16px; margin-bottom: 4px;">${lec.lec_title}</div>
                             <div style="font-size: 14px; color: #888;">${lec.lec_content}</div>
                         </td>
-                        <td style="padding: 20px; color: #666; font-size: 14px;">${lec.lec_time}</td>
+                        <td style="padding: 20px; color: #666; font-size: 14px;">${lec.lec_time_str}</td>
                         <td style="padding: 20px; text-align: center;">
                             <button onclick="location.href=' ${pageContext.request.contextPath}/class/watch?class_id=${lec.class_id}&lec_id=${lec.lec_id}'" 
                                     style="background: #4f46e5; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">
@@ -50,3 +50,14 @@
         </table>
     </div>
 </div>
+<script src="${pageContext.request.contextPath}/resources/js/common.js"></script>
+<script>
+$(document).ready(function() {
+    const msg = "${msg}";
+    
+    if (msg) {
+        openModal('', msg, function() {
+        }, false);
+    }
+});
+</script>

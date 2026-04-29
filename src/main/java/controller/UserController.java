@@ -15,10 +15,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import dto.Board;
+import dto.ClsReplyDto;
 import dto.User;
 import service.BoardService;
+import service.ClsReplyService;
 import service.PaymentService;
 import service.UserService;
+
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import java.util.UUID;
 
 @Controller
 public class UserController {
@@ -133,29 +140,56 @@ public class UserController {
         
         return result;
     }
+ // =========================================================================
+ // --- 내가 쓴 댓글 연동 추가 0427 ---
+ // =========================================================================
+ @Autowired
+ private ClsReplyService clsReplyService;
 
-    // ================= [csw 팀원이 짠 마이페이지 로직] =================
-    @GetMapping("/mypage/myPost")
-    public String myPost(@RequestParam(defaultValue="1") int postPage,
-                         @RequestParam(defaultValue="1") int cmtPage,
-                         HttpSession session, Model model) {
+ // ================= [csw 팀원이 짠 마이페이지 로직] =================
+ @GetMapping("/mypage/myPost")
+ public String myPost(@RequestParam(defaultValue="1") int postPage,
+                      @RequestParam(defaultValue="1") int cmtPage,
+                      HttpSession session, Model model) {
 
-        // 로그인 세션 연동
-        String userId = (String) session.getAttribute("user_id");
+     // 로그인 세션 연동
+     User loginUser = (User) session.getAttribute("loginUser");
+     String userId = loginUser != null ? loginUser.getUser_id() : null;
 
-        // 내가 쓴 게시글
-        List<Board> myPostList = boardService.getMyPostList(userId, postPage, 10);
-        int postTotalPage = boardService.getMyPostTotalPage(userId, 10);
+     // 내가 쓴 게시글
+     List<Board> myPostList = boardService.getMyPostList(userId, postPage, 10);
+     int postTotalPage = boardService.getMyPostTotalPage(userId, 10);
 
-        model.addAttribute("myPostList", myPostList);
-        model.addAttribute("postPage", postPage);
-        model.addAttribute("postTotalPage", postTotalPage == 0 ? 1 : postTotalPage);
+     model.addAttribute("myPostList", myPostList);
+     model.addAttribute("postPage", postPage);
+     model.addAttribute("postTotalPage", postTotalPage == 0 ? 1 : postTotalPage);
 
-        // 내가 쓴 댓글 (댓글 팀원 완성 후 연동)
-        model.addAttribute("cmtPage", cmtPage);
-        model.addAttribute("cmtTotalPage", 1);
+     // 내가 쓴 댓글 0427 연동
+     List<ClsReplyDto> myCommentList = clsReplyService.getMyCommentList(userId, cmtPage, 10);
+     int cmtTotalPage = clsReplyService.getMyCommentTotalPage(userId, 10);
 
-        return "user/mypage/myPost";
+     model.addAttribute("myCommentList", myCommentList);
+     model.addAttribute("cmtPage", cmtPage);
+     model.addAttribute("cmtTotalPage", cmtTotalPage == 0 ? 1 : cmtTotalPage);
+
+     return "user/mypage/myPost";
+ }
+    @Autowired
+    private PaymentService paymentService;
+
+ // =========================================================================
+ // --- 결제내역 추가 4월 24일---
+ // =========================================================================
+    @GetMapping("/mypage/payment")
+    public String payment(@RequestParam(defaultValue="1") int page,
+                          HttpSession session, Model model) {
+        User loginUser = (User) session.getAttribute("loginUser");
+        String userId = loginUser != null ? loginUser.getUser_id() : null;
+
+        model.addAttribute("payList", paymentService.getPayList(userId, page, 10));
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPage", paymentService.getPayTotalPage(userId, 10));
+        return "user/mypage/payment";
     }
     
     @GetMapping("/user/logout")
@@ -163,4 +197,86 @@ public class UserController {
     	session.invalidate();
     	return "redirect:/";
     }
+    
+ // =========================================================================
+ // --- 네이버 로그인 추가 0427---
+ // =========================================================================
+ private static final String NAVER_CLIENT_ID = "37Y_6Jg0f0lNq3EcSSpo";
+ private static final String NAVER_CLIENT_SECRET = "Ox3uMJoxE1";
+ private static final String NAVER_REDIRECT_URI = "http://localhost:8081/404X/user/naver/callback";
+
+ @GetMapping("/user/naver/login")
+ public String naverLogin(HttpSession session) {
+     String state = UUID.randomUUID().toString();
+     session.setAttribute("naverState", state);
+     String url = "https://nid.naver.com/oauth2.0/authorize"
+             + "?response_type=code"
+             + "&client_id=" + NAVER_CLIENT_ID
+             + "&redirect_uri=" + NAVER_REDIRECT_URI
+             + "&state=" + state;
+     return "redirect:" + url;
+ }
+
+ @GetMapping("/user/naver/callback")
+ public String naverCallback(@RequestParam String code,
+                              @RequestParam String state,
+                              HttpSession session, Model model) {
+     try {
+         String savedState = (String) session.getAttribute("naverState");
+         if (!state.equals(savedState)) return "redirect:/user/login";
+
+         RestTemplate rt = new RestTemplate();
+         String tokenUrl = "https://nid.naver.com/oauth2.0/token"
+                 + "?grant_type=authorization_code"
+                 + "&client_id=" + NAVER_CLIENT_ID
+                 + "&client_secret=" + NAVER_CLIENT_SECRET
+                 + "&code=" + code
+                 + "&state=" + state;
+
+         Map<String, Object> tokenRes = rt.getForObject(tokenUrl, Map.class);
+         String accessToken = (String) tokenRes.get("access_token");
+
+         HttpHeaders headers = new HttpHeaders();
+         headers.add("Authorization", "Bearer " + accessToken);
+         HttpEntity<String> entity = new HttpEntity<>(headers);
+
+         Map<String, Object> profileRes = rt.exchange(
+             "https://openapi.naver.com/v1/nid/me",
+             org.springframework.http.HttpMethod.GET,
+             entity, Map.class
+         ).getBody();
+
+         Map<String, Object> response = (Map<String, Object>) profileRes.get("response");
+         String naverId = "naver_" + (String) response.get("id");
+         String userName = (String) response.get("name");
+         String userEmail = (String) response.get("email");
+         String userPhone = (String) response.get("mobile");
+         String birthday = (String) response.get("birthday"); // MM-DD 형식
+         String birthyear = (String) response.get("birthyear"); // YYYY 형식
+         
+         String userBirth = (birthyear != null && birthday != null) ? birthyear + "-" + birthday : null;
+         
+         User existUser = userService.findByUserId(naverId);
+         if (existUser == null) {
+             User newUser = new User();
+             newUser.setUser_id(naverId);
+             newUser.setUser_pw("NAVER_LOGIN");
+             newUser.setUser_name(userName);
+             newUser.setUser_email(userEmail != null ? userEmail : "");
+             newUser.setUser_phone(userPhone != null ? userPhone : "");
+             newUser.setUser_birth(userBirth);
+             newUser.setUser_role(0);
+             newUser.setUser_login_type("NAVER");
+             userService.joinUser(newUser);
+             existUser = userService.findByUserId(naverId);
+         }
+
+         session.setAttribute("loginUser", existUser);
+         return "redirect:/";
+
+     } catch (Exception e) {
+         e.printStackTrace();
+         return "redirect:/user/login";
+     }
+ }
 }

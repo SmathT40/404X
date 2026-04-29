@@ -32,4 +32,6 @@ public class User {
 	
 	// 추가, 회원관리에서 써먹을 거
 	private int class_count;
+	private String user_login_type;
 }
+

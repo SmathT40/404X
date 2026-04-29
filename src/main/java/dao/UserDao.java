@@ -41,4 +41,11 @@ public class UserDao {
 	public void updateTempPw(String user_id, String tempPw) {
 		userMapper.updateTempPw(user_id, tempPw);
 	}
+	
+	// =========================================================================
+	// --- 네이버 로그인 추가 0427---
+	// =========================================================================
+	public User findByUserId(String user_id) {
+	    return userMapper.findByUserId(user_id);
+	}
 }

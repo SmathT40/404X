@@ -64,7 +64,8 @@ public interface HostClassMapper {
 			    cls_exp = #{cls_exp},
 		        cls_price = #{cls_price},
 		        cls_thumbnail = #{cls_thumbnail},
-		        cls_content = #{cls_content}
+		        cls_content = #{cls_content},
+		        cls_featured = #{cls_featured}
 		    WHERE 
 		        class_id = #{class_id}
 		""")

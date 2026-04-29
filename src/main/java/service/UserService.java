@@ -49,5 +49,12 @@ public class UserService {
 		mailService.sendTempPassword(user_email, tempPw);
 		return true;
 	}
+	
+	// =========================================================================
+	// --- 네이버 로그인 추가 0427---
+	// =========================================================================
+	public User findByUserId(String user_id) {
+	    return userDao.findByUserId(user_id);
+	}
 
 }

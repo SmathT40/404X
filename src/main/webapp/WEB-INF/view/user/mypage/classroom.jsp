@@ -20,20 +20,23 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>강의번호</th><th>강의제목</th><th>진행률</th><th>강사명</th><th>강의기간</th>
+                    <th>강의번호</th><th>강의제목</th><th>차시</th><th>진도율</th><th>강사명</th><th>강의만료일</th>
                 </tr>
             </thead>
             <tbody>
                 <c:choose>
-                    <c:when test="${not empty classList}">
-                        <c:forEach var="cls" items="${classList}">
-                            <tr onclick="location.href='${pageContext.request.contextPath}/lecture/watch?id=${cls.classId}'" style="cursor:pointer;">
-                                <td>${cls.clsNo}</td>
-                                <td>${cls.clsTitle}</td>
+                    <c:when test="${not empty myclassList}">
+                        <c:forEach var="cls" items="${myclassList}">
+                        <c:if test="${cls.cls_state_status == 1}">
+                            <tr onclick="location.href='${pageContext.request.contextPath}/class/leclist?class_id=${cls.class_id}'" style="cursor:pointer;">
+                                <td>${cls.class_id}</td>
+                                <td>${cls.cls_title}</td>
+                                <td>${cls.complete_cnt} / ${cls.total_cnt}</td>
                                 <td>${cls.progress}%</td>
-                                <td>${cls.userName}</td>
-                                <td>${cls.startDate} ~ ${cls.endDate}</td>
+                                <td>${cls.user_name}</td>
+                                <td>${cls.cls_end_date}</td>
                             </tr>
+                        </c:if>
                         </c:forEach>
                     </c:when>
                     <c:otherwise>
@@ -55,20 +58,22 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>강의번호</th><th>강의제목</th><th>진행률</th><th>강사명</th><th>강의기간</th>
+                    <th>강의번호</th><th>강의제목</th><th>진행률</th><th>강사명</th><th>강의만료일</th>
                 </tr>
             </thead>
             <tbody>
                 <c:choose>
-                    <c:when test="${not empty classList}">
-                        <c:forEach var="cls" items="${classList}">
+                    <c:when test="${not empty myclassList}">
+                        <c:forEach var="cls" items="${myclassList}">
+                        <c:if test="${cls.cls_state_status == 0}">
                             <tr>
-                                <td>${cls.clsNo}</td>
-                                <td>${cls.clsTitle}</td>
+                                <td>${cls.class_id}</td>
+                                <td>${cls.cls_title}</td>
                                 <td>100%</td>
-                                <td>${cls.userName}</td>
-                                <td>${cls.startDate} ~ ${cls.endDate}</td>
+                                <td>${cls.user_name}</td>
+                                <td>${cls.cls_end_date}</td>
                             </tr>
+                        </c:if>
                         </c:forEach>
                     </c:when>
                     <c:otherwise>

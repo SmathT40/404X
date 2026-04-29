@@ -36,8 +36,6 @@ textarea.form-control {
     font-weight: 700;
 }
 </style>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 <div class="container mt-5">
 
     <h2 class="mb-4">
@@ -46,8 +44,9 @@ textarea.form-control {
             	<c:otherwise>새 강의 등록</c:otherwise>
 		</c:choose>
 	</h2>
-    <form action="${pageContext.request.contextPath}/host/class/${empty classDto ? 'insert' : 'update'}" 
-      method="post" enctype="multipart/form-data">
+	<%--0428 --%>
+   <form id="classForm" action="${pageContext.request.contextPath}/host/class/${empty classDto ? 'insert' : 'update'}" 
+  method="post" enctype="multipart/form-data">
  <c:if test="${not empty classDto}">
     <input type="hidden" name="class_id" value="${classDto.class_id}">
 </c:if>       
@@ -76,6 +75,12 @@ textarea.form-control {
     <input type="text" name="cls_title" value="${classDto.cls_title}" class="form-control form-control-sm weight-700" placeholder="제목을 입력하세요" required>
 </div>
 
+
+<%-- 관리자가 아닐 경우를 대비해 기존 값을 hidden으로 유지 (수정 시 값이 날아가지 않도록) --%>
+<c:if test="${sessionScope.loginUser.user_role != 2}">
+    <input type="hidden" name="cls_featured" value="${empty classDto ? 0 : classDto.cls_featured}">
+</c:if>
+
 <div class="form-row mb-3">
     <div class="col-4">
         <label class="form-label-sm">판매가(원)</label>
@@ -90,20 +95,31 @@ textarea.form-control {
         <div class="form-group">
             <label>강의 썸네일</label>
             <div class="custom-file">
-                <input type="file" name="thumbnail_file" class="custom-file-input" id="clsThumbnail">
+                <input type="file" name="thumbnail_file" class="custom-file-input" id="clsThumbnail"
+                 onchange="$('.custom-file-label').text(this.files[0].name)">
                 <label class="custom-file-label" for="clsThumbnail">이미지 파일을 선택하세요</label>
             </div>
         </div>
 
         <div class="form-group">
             <label>강의 설명</label>
-            <textarea name="cls_content"class="form-control" rows="5" placeholder="강의에 대해 설명해주세요" required>${classDto.cls_content} </textarea>
+            <textarea name="cls_content" id="cls_content" class="form-control" rows="5" placeholder="강의에 대해 설명해주세요" required>${classDto.cls_content} </textarea>
         </div>
-
+		<div>
+		    <%-- 관리자 전용 노출 설정 --%>
+		    <c:if test="${sessionScope.loginUser.user_role == 2}">
+		        <div class="custom-control custom-checkbox mr-3">
+		            <input type="checkbox" name="cls_featured" class="custom-control-input" id="isFeatured" 
+		                   value="1" ${classDto.cls_featured == 1 ? 'checked' : ''}>
+		            <label class="custom-control-label font-weight-bold" for="isFeatured" style="cursor:pointer; font-size: 14px;">
+		                상단 노출
+		            </label>
+		        </div>
+		    </c:if>
         <div class="text-right pb-5">
             <button type="button" class="btn btn-secondary" onclick="history.back()">취소</button>
             
-            <button type="submit" class="btn btn-primary">
+            <button type="button" class="btn btn-primary" onclick="submitForm()">
             <c:choose>
             	<c:when test="${not empty classDto}">수정</c:when>
             	<c:otherwise>등록 신청</c:otherwise>
@@ -157,5 +173,48 @@ function loadSubCategories(parentCode) {
             alert("데이터를 가져오지 못했습니다.");
         }
     });
+}
+
+//=========================================================================
+//--- 썸머노트 이미지 업로드 추가 0428---
+//=========================================================================
+function sendFile(file) {
+ var data = new FormData();
+ data.append("file", file);
+ $.ajax({
+     url: '${pageContext.request.contextPath}/host/class/uploadImage',
+     type: 'POST',
+     data: data,
+     contentType: false,
+     processData: false,
+     success: function(res) {
+         $('#cls_content').summernote('insertImage', res.url);
+     },
+     error: function() {
+         showAlert('이미지 업로드에 실패했습니다.');
+     }
+ });
+}
+
+$(function(){
+ $('#cls_content').summernote({
+     height: 300,
+     width: '100%',
+     callbacks: {
+         onImageUpload: function(images) {
+             for(var i = 0; i < images.length; i++) {
+                 sendFile(images[i]);
+             }
+         }
+     }
+ });
+});
+function submitForm(){
+    var content = $('#cls_content').summernote('code');
+    if(!content || content == '<p><br></p>'){
+        showAlert('강의 설명을 입력해주세요.');
+        return;
+    }
+    $('#classForm').submit();
 }
 </script>

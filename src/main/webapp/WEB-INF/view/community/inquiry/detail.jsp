@@ -2,13 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <title>문의 상세 - 404 X CLUB</title>
 
-<head>
-    <style>
-        .comment-section { margin-top:40px;border-top:2px solid #eee;padding-top:20px; }
-        .comment-title { font-size:15px;font-weight:600;margin-bottom:16px; }
-    </style>
-</head>
-
 <main class="content-area">
 <div class="user-content" style="max-width:860px;">
 
@@ -46,6 +39,10 @@
                 <textarea id="cmtContent" class="form-control"
                           placeholder="댓글 내용을 입력해주세요." style="height:80px;resize:none;"></textarea>
                 <div class="comment-write-actions">
+                    <%-- 비공개 체크박스 추가 --%>
+                    <label class="radio-label" style="font-size:12px;">
+                        <input type="checkbox" id="cmtPrivate"> 비공개
+                    </label>
                     <button class="btn btn-black btn-sm" onclick="submitComment()">등록</button>
                 </div>
             </div>
@@ -54,10 +51,29 @@
             <div class="comment-item">
                 <div style="flex:1;">
                     <div class="comment-meta">
-                        <span class="comment-name">${cmt.user_id}</span>
-                        <span>${cmt.reply_reg_date}</span>
+                        <span class="comment-name">${cmt.user_name}</span>
+                        <span>${cmt.cls_reply_reg_date}</span>
                     </div>
-                    <div class="comment-content">${cmt.reply_content}</div>
+                    <div class="comment-content">
+                        <c:choose>
+                            <c:when test="${cmt.cls_reply_private == 1}">
+                                <c:choose>
+                                    <c:when test="${sessionScope.loginUser.user_id eq cmt.user_id || sessionScope.loginUser.user_role >= 1}">
+                                        <span style="color:#333;">🔒 ${cmt.cls_reply_content}</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span style="color:#999;font-style:italic;">🔒 비공개 댓글입니다. 작성자와 관리자만 볼 수 있습니다.</span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:when>
+                            <c:otherwise>
+                                ${cmt.cls_reply_content}
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                    <c:if test="${sessionScope.loginUser.user_id eq cmt.user_id || sessionScope.loginUser.user_role >= 1}">
+                        <span onclick="deleteCmt(${cmt.cls_reply_no})" style="font-size:12px;color:#aaa;cursor:pointer;">삭제</span>
+                    </c:if>
                 </div>
             </div>
         </c:forEach>
@@ -106,9 +122,28 @@ function doDelete(id){
 
 function submitComment(){
     var content = $('#cmtContent').val().trim();
+    var isPrivate = $('#cmtPrivate').is(':checked') ? 1 : 0; // 비공개 추가
     if(!content){ showAlert('내용을 입력해주세요.'); return; }
-    ajaxRequest('${pageContext.request.contextPath}/community/board/comment/insert',
-        {board_no: board_no, reply_content: content}, 'POST',
-        function(res){ if(res.success) location.reload(); });
+    $.ajax({
+        url: '${pageContext.request.contextPath}/class/comment/insert',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            board_no: board_no,
+            cls_reply_content: content,
+            cls_reply_private: isPrivate,
+            cls_parent_id: null
+        }),
+        success: function(res){ if(res.success) location.reload(); }
+    });
+}
+
+function deleteCmt(id){
+    showConfirm('삭제하시겠습니까?', function(){
+        ajaxRequest('${pageContext.request.contextPath}/class/comment/delete',
+            {cls_reply_no: id}, 'POST',
+            function(res){ if(res.success) location.reload(); }
+        );
+    });
 }
 </script>

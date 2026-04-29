@@ -13,6 +13,7 @@ import java.util.Map;
 import dto.Board;
 import dto.User;
 import service.BoardService;
+import service.ClsReplyService;
 
 @Controller
 @RequestMapping("/community/board")
@@ -35,6 +36,7 @@ public class BoardController {
         switch(boardid) {
             case 0: return "community/notice/detail";
             case 1: return "community/free/detail";
+            case 2: return "community/faq/detail";
             case 3: return "community/inquiry/detail";
             default: return "community/free/detail";
         }
@@ -44,6 +46,7 @@ public class BoardController {
         switch(boardid) {
             case 0: return "community/notice/form";
             case 1: return "community/free/form";
+            case 2: return "community/faq/form";
             case 3: return "community/inquiry/form";
             default: return "community/free/form";
         }
@@ -68,7 +71,10 @@ public class BoardController {
         model.addAttribute("boardid", boardid);
         return getListView(boardid);
     }
-
+    //4월 27일 수정
+    @Autowired
+    private ClsReplyService clsReplyService;
+    
     @GetMapping("/detail")
     public String detail(@RequestParam int boardid,
                          @RequestParam int board_no,
@@ -77,6 +83,7 @@ public class BoardController {
         model.addAttribute("prevPost", boardService.getPrev(boardid, board_no));
         model.addAttribute("nextPost", boardService.getNext(boardid, board_no));
         model.addAttribute("boardid", boardid);
+        model.addAttribute("replyList", clsReplyService.getBoardReplyList(board_no));
         return getDetailView(boardid);
     }
 
@@ -152,4 +159,5 @@ public class BoardController {
         }
         return response;
     }
+   
 }

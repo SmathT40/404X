@@ -15,7 +15,11 @@ public class ClsReplyDto {
     private int cls_reply_private;
     private String cls_reply_reg_date;
     private Integer cls_parent_id; // NULL 허용을 위해 Integer
+    private Integer board_no;
+    private String board_title;
+    private int board_type;
     
     private List<ClsReplyDto> replyList;
     
+    private String board_reg_date; //0428 1220 추가
 }

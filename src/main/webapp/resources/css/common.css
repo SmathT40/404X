@@ -119,6 +119,8 @@ img {
 }
 
 .btn-naver {
+    display: block;        
+    text-align: center;
     background: #03C75A;
     color: #fff;
     border-color: #03C75A;
