@@ -1,5 +1,6 @@
 package service;
 
+import java.util.List;
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
@@ -43,4 +44,37 @@ public class MailService {
             e.printStackTrace();
         }
     }
+    
+ // =========================================================================
+ // --- 관리자 메일 발송 추가 0429 ---
+ // =========================================================================
+ public void sendAdminMail(List<String> emailList, String subject, String htmlContent) {
+     Properties props = new Properties();
+     props.put("mail.smtp.auth", "true");
+     props.put("mail.smtp.starttls.enable", "true");
+     props.put("mail.smtp.host", "smtp.gmail.com");
+     props.put("mail.smtp.port", "587");
+     props.put("mail.smtp.starttls.required", "true");
+     props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+
+     Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+         protected PasswordAuthentication getPasswordAuthentication() {
+             return new PasswordAuthentication(FROM_EMAIL, APP_PASSWORD);
+         }
+     });
+
+     try {
+         for (String email : emailList) {
+             Message message = new MimeMessage(session);
+             message.setFrom(new InternetAddress(FROM_EMAIL));
+             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+             message.setSubject(subject);
+             message.setContent(htmlContent, "text/html; charset=UTF-8");
+             Transport.send(message);
+         }
+     } catch (Exception e) {
+         e.printStackTrace();
+     }
+  }
 }
+

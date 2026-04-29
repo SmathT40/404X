@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <title>회원 관리 - 404 X CLUB</title>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="admin-content">
     <div class="admin-page">
@@ -27,12 +27,12 @@
     					<c:when test="${not empty userList}">
         					<c:forEach var="mem" items="${userList}">
             					<tr>
-                					<td><input type="checkbox" class="chk-item" value="${mem.user_id}"></td>
+                					<td><input type="checkbox" class="chk-item" value="${mem.user_id}" data-email="${mem.user_email}"></td>
                 					<td>${mem.user_name}</td>
                 					<td>${mem.user_id}</td>
                 					<td>${mem.user_email}</td>
                 					<td>${mem.class_count}</td>
-                					<td>${mem.user_join_date}</td>
+                					<td><fmt:formatDate value="${mem.user_join_date}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                 					<td style="display:flex;gap:6px;">
                     					<button class="btn btn-ghost btn-sm" onclick="withdrawMember('${mem.user_id}')">탈퇴</button>
                 					</td>
@@ -66,16 +66,16 @@
         </div>
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 <script>
 var ctx = '${pageContext.request.contextPath}';
 function doSearch(){ location.href=ctx+'/admin/member/list?keyword='+encodeURIComponent($('#keyword').val()); }
 function sendMail(){
-    var ids=[]; $('.chk-item:checked').each(function(){ ids.push($(this).val()); });
-    if(!ids.length){ showAlert('메일을 발송할 회원을 선택해주세요.'); return; }
-    showAlert('메일이 발송되었습니다.');
+    var emails=[]; 
+    $('.chk-item:checked').each(function(){ 
+        emails.push($(this).data('email')); 
+    });
+    if(!emails.length){ showAlert('메일을 발송할 회원을 선택해주세요.'); return; }
+    location.href = ctx + '/admin/mail/form?emails=' + emails.join(',');
 }
 function deleteSelected(){
     var ids=[]; $('.chk-item:checked').each(function(){ ids.push($(this).val()); });
