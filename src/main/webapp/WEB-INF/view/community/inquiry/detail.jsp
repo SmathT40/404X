@@ -44,6 +44,7 @@
                         <input type="checkbox" id="cmtPrivate"> 비공개
                     </label>
                     <button class="btn btn-black btn-sm" onclick="submitComment()">등록</button>
+                    
                 </div>
             </div>
         </c:if>
@@ -71,9 +72,15 @@
                             </c:otherwise>
                         </c:choose>
                     </div>
-                    <c:if test="${sessionScope.loginUser.user_id eq cmt.user_id || sessionScope.loginUser.user_role >= 1}">
-                        <span onclick="deleteCmt(${cmt.cls_reply_no})" style="font-size:12px;color:#aaa;cursor:pointer;">삭제</span>
-                    </c:if>
+					<!-- 0429 승준 수정 -->
+					   <div class="comment-actions-row">
+                            <c:if test="${cmt.cls_reply_private == 0 || (sessionScope.loginUser.user_id eq cmt.user_id || sessionScope.loginUser.user_role >= 1)}">
+                                <span onclick="toggleReply(${cmt.cls_reply_no})">&#128172; 댓글달기</span>
+                            </c:if>
+                            <c:if test="${sessionScope.loginUser.user_id eq cmt.user_id || sessionScope.loginUser.user_role >= 1}">
+                                <span onclick="deleteCmt(${cmt.cls_reply_no})">삭제</span>
+                            </c:if>
+                        </div>
                 </div>
             </div>
         </c:forEach>
