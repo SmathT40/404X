@@ -61,8 +61,8 @@
     </table>
 
     <div style="text-align:right; margin-top:16px;">
-        <a href="${pageContext.request.contextPath}/mypage/instructor/settlement/form" class="btn btn-ghost btn-sm">정산내역 등록</a>
-    </div>
+    	<a href="${pageContext.request.contextPath}/mypage/instructor/settlement/form?target_id=${target_id}" class="btn btn-ghost btn-sm">정산내역 등록</a>
+	</div>
 
     <jsp:include page="/WEB-INF/view/common/pagination.jsp">
         <jsp:param name="currentPage" value="${currentPage}"/>
