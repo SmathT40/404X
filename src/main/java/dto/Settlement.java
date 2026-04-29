@@ -15,4 +15,5 @@ public class Settlement {
 	private int pay_amount;
 	private String settle_content;
 	private Date settle_date;
+	private String target_id;
 }

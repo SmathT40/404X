@@ -7,11 +7,16 @@
     <h2 class="section-title">정산내역</h2>
 
     <form id="settleForm"
-          action="${pageContext.request.contextPath}/mypage/instructor/settlement/register}"
+          action="${pageContext.request.contextPath}/mypage/instructor/settlement/register"
           method="post">
 
+        <c:if test="${empty st}">
+            <input type="hidden" name="target_id" value="${target_id}">
+        </c:if>
+        
         <c:if test="${not empty st}">
             <input type="hidden" name="settle_id" value="${st.settle_id}">
+            <input type="hidden" name="target_id" value="${st.target_id}">
         </c:if>
 
         <div style="border-bottom:1px solid #eee;padding-bottom:8px;margin-bottom:16px;">
@@ -29,7 +34,7 @@
         </div>
 
         <div style="text-align:center;display:flex;justify-content:center;gap:16px; margin-top:30px;">
-            <a href="${pageContext.request.contextPath}/mypage/instructor/settlement" class="btn btn-ghost btn-lg" style="min-width:120px;">취소</a>
+            <a href="${pageContext.request.contextPath}/mypage/instructor/settlement?target_id=${not empty st ? st.target_id : target_id}" class="btn btn-ghost btn-lg" style="min-width:120px;">취소</a>
             <button type="submit" class="btn btn-black btn-lg" style="min-width:120px;">${empty st ? '등록' : '수정'}</button>
         </div>
 

@@ -26,40 +26,52 @@ public class InstructorSettlementController {
 	
 	@GetMapping("/mypage/instructor/settlement")
 	public String showSettlementList(HttpSession session,
-									Model model,
-									@RequestParam(value = "page", defaultValue = "1") int page) {
-		
-		User loginUser = (User) session.getAttribute("loginUser");
-		if (loginUser == null) {
-			return "redirect:/user/login";
-		}
-		
-		String user_id = loginUser.getUser_id();
-		
-		int pageSize = 10;
-		int offset = (page - 1) * pageSize;
-		
-		int totalCount = instructorSettlementService.getSettlementCount(user_id);
-		
-		int totalPage = (int) Math.ceil((double) totalCount / pageSize);
-		if (totalPage == 0) {
-			totalPage = 1;
-		}
-		
-		List<Settlement> settlementList = instructorSettlementService.getSettlementList(user_id, offset, pageSize);
+	                                Model model,
+	                                // 🚀 1. 파라미터로 target_id를 받을 수 있게 추가!
+	                                @RequestParam(value = "target_id", required = false) String target_id,
+	                                @RequestParam(value = "page", defaultValue = "1") int page) {
+	    
+	    User loginUser = (User) session.getAttribute("loginUser");
+	    if (loginUser == null) {
+	        return "redirect:/user/login";
+	    }
+	    
+	    // 어떤 목록을 보여줄 지를 결정하는 것.
+	    // target_id가 없으면(강사 본인 접속) 로그인한 아이디를 쓰고, 
+	    // target_id가 있으면(관리자가 특정 강사 페이지 접속) 그 아이디를 써야 해.
+	    String searchId = (target_id == null || target_id.isEmpty()) ? loginUser.getUser_id() : target_id;
+	    
+	    int pageSize = 10;
+	    int offset = (page - 1) * pageSize;
+	    
+	    // 대상자 아이디 던질 것.
+	    int totalCount = instructorSettlementService.getSettlementCount(searchId);
+	    
+	    int totalPage = (int) Math.ceil((double) totalCount / pageSize);
+	    if (totalPage == 0) {
+	        totalPage = 1;
+	    }
+	    
+	    // 대상자 아이디로 가져올 것.
+	    List<Settlement> settlementList = instructorSettlementService.getSettlementList(searchId, offset, pageSize);
 
-		model.addAttribute("settlementList", settlementList);
-		model.addAttribute("currentPage", page);
-		model.addAttribute("totalPage", 1);
-		
-		return "user/mypage/instructor/settlement";
+	    model.addAttribute("settlementList", settlementList);
+	    model.addAttribute("currentPage", page);
+	    
+	    // 이제는 페이징 되지롱
+	    model.addAttribute("totalPage", totalPage);
+	    
+	    // 글쓰기 할 때 target_id에 대상자 이름 집어 넣기
+	    model.addAttribute("target_id", searchId);
+	    
+	    return "user/mypage/instructor/settlement";
 	}
-	// ***************************나중에 페이징 로직 넣어야 함***************************
 	
 	
 	@GetMapping("/mypage/instructor/settlement/form")
 	public String showSettlementForm(HttpSession session,
 									Model model,
+									@RequestParam(value = "target_id", required = false) String target_id,
 									@RequestParam(value = "id", defaultValue = "0") int settle_id) {
 		User loginUser = (User) session.getAttribute("loginUser");
 		if (loginUser == null) {
@@ -69,8 +81,12 @@ public class InstructorSettlementController {
 		}
 		
 		if (settle_id > 0) {
+			// 이거슨 수정이여!
 			Settlement st = instructorSettlementService.getSettlementDetail(settle_id);
 			model.addAttribute("st", st);
+		} else {
+			// 이거슨 신규 등록이여!
+			model.addAttribute("target_id", target_id);
 		}
 		return "user/mypage/instructor/settlementForm";
 	}
@@ -107,8 +123,6 @@ public class InstructorSettlementController {
 		} else {
 			instructorSettlementService.insertSettlement(st);
 		}
-		
-		instructorSettlementService.insertSettlement(st);
 		
 		return "redirect:/mypage/instructor/settlement";
 	}
