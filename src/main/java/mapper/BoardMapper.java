@@ -57,4 +57,8 @@ public interface BoardMapper {
     // 내가 쓴 게시글 수
     @Select("SELECT COUNT(*) FROM board WHERE user_id = #{userId} AND board_type IN (1, 3)")
     int countMyPost(@Param("userId") String userId);
+    
+    //0429 메인에 공지사항 보이기
+    @Select("SELECT board_no, board_title, board_reg_date FROM board WHERE board_type = 0 AND board_featured = 1 ORDER BY board_no DESC LIMIT 3")
+    List<Board> selectFeaturedNotice();
 }

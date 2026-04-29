@@ -2,14 +2,25 @@ package controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import dao.BoardDao;
 
 @Controller
 public class MainController {
 
+	@Autowired
+    private BoardDao boardDao;
+	
     @GetMapping("/")
-    public String mainPage() {
+    public String mainPage(Model model) {
+        // =========================================================================
+        // --- 메인 공지사항 상단고정 3개 추가 0429 ---
+        // =========================================================================
+        model.addAttribute("recentNoticeList", boardDao.selectFeaturedNotice());
         return "main"; // /WEB-INF/views/index.jsp를 호출
     }
     @GetMapping("/reset")
@@ -21,6 +32,8 @@ public class MainController {
 	public String about(){
 		return "board/about";
 	}
+	
+	
 //	@GetMapping("/test-login/{role}")
 //	public String testLogin(@PathVariable String role, HttpSession session) {
 //	    User testUser = new User();
