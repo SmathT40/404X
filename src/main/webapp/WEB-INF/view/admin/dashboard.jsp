@@ -197,7 +197,7 @@
         <div class="dash-section">
             <div class="dash-section-header">
                 <span class="dash-section-title">호스트 권한 요청</span>
-                <a href="${pageContext.request.contextPath}/admin/host/list" class="btn btn-ghost btn-sm">+</a>
+                <a href="${pageContext.request.contextPath}/admin/host/request" class="btn btn-ghost btn-sm">+</a>
             </div>
             <c:choose>
                 <c:when test="${not empty hostRequestList}">
@@ -205,7 +205,7 @@
                         <div class="dash-row">
                             <span style="font-weight:600;">${req.user_name}</span>
                             <span style="color:#888;">${req.user_email}</span>
-                            <span style="color:#aaa;font-size:11px;">${req.user_join_date}</span>
+                            <span style="color:#aaa;font-size:11px;"><fmt:formatDate value="${req.user_join_date}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
                             <div style="display:flex;gap:6px;">
                                 <button class="btn btn-black btn-sm" onclick="setRole('${req.user_id}', true)">승인</button>
                                 <button class="btn btn-ghost btn-sm" onclick="setRole('${req.user_id}', false)">거절</button>
@@ -223,7 +223,7 @@
         <div class="dash-section">
             <div class="dash-section-header">
                 <span class="dash-section-title">클래스 등록 요청</span>
-                <a href="${pageContext.request.contextPath}/admin/class/list" class="btn btn-ghost btn-sm">+</a>
+                <a href="${pageContext.request.contextPath}/admin/host/request" class="btn btn-ghost btn-sm">+</a>
             </div>
             <c:choose>
                 <c:when test="${not empty classRequestList}">
@@ -231,7 +231,7 @@
                         <div class="dash-row">
                             <span style="font-weight:600;">${cls.cls_title}</span>
                             <span style="color:#888;">${cls.user_name}</span>
-                            <span style="color:#aaa;font-size:11px;">${cls.cls_reg_date}</span>
+                            <span style="color:#aaa;font-size:11px;"><fmt:formatDate value="${cls.cls_reg_date}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
                             <div style="display:flex;gap:6px;">
                                 <button class="btn btn-black btn-sm" onclick="setRole('${req.user_id}', true)">승인</button>
                                 <button class="btn btn-ghost btn-sm" onclick="setRole('${req.user_id}', false)">거절</button>

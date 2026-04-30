@@ -29,7 +29,7 @@ public interface AdminDashboardMapper {
     @Select("SELECT * FROM pay ORDER BY pay_no DESC LIMIT 5")
     List<Pay> selectRecentPayList();
     
-    @Select("SELECT user_id, user_name, user_email, user_join_date FROM users WHERE host_status = 0 AND user_role = 1 LIMIT 5")
+    @Select("SELECT user_id, user_name, user_email, user_join_date FROM users WHERE host_status = 1 LIMIT 5")
     List<User> selectHostRequestList();
 
 }
