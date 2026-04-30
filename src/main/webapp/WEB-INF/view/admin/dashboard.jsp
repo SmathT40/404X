@@ -203,12 +203,12 @@
                 <c:when test="${not empty hostRequestList}">
                     <c:forEach var="req" items="${hostRequestList}">
                         <div class="dash-row">
-                            <span style="font-weight:600;">${req.userName}</span>
-                            <span style="color:#888;">${req.userEmail}</span>
-                            <span style="color:#aaa;font-size:11px;">${req.userJoinDate}</span>
+                            <span style="font-weight:600;">${req.user_name}</span>
+                            <span style="color:#888;">${req.user_email}</span>
+                            <span style="color:#aaa;font-size:11px;">${req.user_join_date}</span>
                             <div style="display:flex;gap:6px;">
-                                <button class="btn btn-black btn-sm" onclick="setRole('${req.userId}', 1)">승인</button>
-                                <button class="btn btn-ghost btn-sm" onclick="setRole('${req.userId}', 0)">거절</button>
+                                <button class="btn btn-black btn-sm" onclick="setRole('${req.user_id}', true)">승인</button>
+                                <button class="btn btn-ghost btn-sm" onclick="setRole('${req.user_id}', false)">거절</button>
                             </div>
                         </div>
                     </c:forEach>
@@ -233,8 +233,8 @@
                             <span style="color:#888;">${cls.user_name}</span>
                             <span style="color:#aaa;font-size:11px;">${cls.cls_reg_date}</span>
                             <div style="display:flex;gap:6px;">
-                                <button class="btn btn-black btn-sm" onclick="approveClass(${cls.class_id})">승인</button>
-                                <button class="btn btn-ghost btn-sm" onclick="rejectClass(${cls.class_id})">거절</button>
+                                <button class="btn btn-black btn-sm" onclick="setRole('${req.user_id}', true)">승인</button>
+                                <button class="btn btn-ghost btn-sm" onclick="setRole('${req.user_id}', false)">거절</button>
                             </div>
                         </div>
                     </c:forEach>
@@ -263,6 +263,15 @@ function rejectClass(id) {
     showConfirm('거절하시겠습니까?', function() {
         ajaxRequest('${pageContext.request.contextPath}/admin/class/reject',
             {classIds: id}, 'POST',
+            function(res) { if (res.success) location.reload(); }
+        );
+    });
+}
+function setRole(userId, isApprove) {
+    var url = isApprove ? '/admin/host/approve' : '/admin/host/reject';
+    showConfirm(isApprove ? '승인하시겠습니까?' : '거절하시겠습니까?', function() {
+        ajaxRequest('${pageContext.request.contextPath}' + url,
+            {user_id: userId}, 'POST',
             function(res) { if (res.success) location.reload(); }
         );
     });

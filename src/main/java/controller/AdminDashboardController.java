@@ -30,7 +30,7 @@ public class AdminDashboardController {
         model.addAttribute("classRequestList", adminClassService.getPendingClassList());
 
         // 팀원 완성 후 연동
-        model.addAttribute("hostRequestList", null);
+        model.addAttribute("hostRequestList", adminDashboardMapper.selectHostRequestList());
 
         return "admin/dashboard";
     }
