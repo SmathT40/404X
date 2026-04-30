@@ -17,7 +17,8 @@ public interface InstructorMapper {
 	        "host_intro AS hostIntro, " +
 	        "host_description AS hostDescription, " +
 	        "host_profile_img AS hostProfileImg " +
-	        "FROM users WHERE user_role = 1")
+	        "FROM users WHERE user_role = 1 " + 
+	        "ORDER BY user_join_date ASC")
 	List<Instructor> getInstructorList();
 	
 	@Select("SELECT " +
