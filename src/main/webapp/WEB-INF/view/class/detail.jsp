@@ -157,7 +157,7 @@
 <div style="position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #eee;padding:14px 24px;display:flex;justify-content:center;gap:16px;z-index:800;">
     <button class="btn btn-ghost btn-lg" onclick="addToCart(${cls.class_id})">&#128722;</button>
     <a href="${pageContext.request.contextPath}/class/list" class="btn btn-ghost btn-lg" style="min-width:100px;">목록</a>
-    <a href="${pageContext.request.contextPath}/class/leclist?class_id=${cls.class_id}" class="btn btn-ghost btn-lg" style="min-width:100px;">임시버튼</a>
+    <a href="${pageContext.request.contextPath}/class/leclist?class_id=${cls.class_id}" class="btn btn-ghost btn-lg" style="min-width:100px;">강의상세</a>
     <button class="btn btn-black btn-lg" style="min-width:120px;" onclick="buyNow(${cls.class_id})">구매하기</button>
 </div>
 
@@ -259,35 +259,4 @@ function buyNow(id){
         }
     });
 }
-
-/*
-// 2. buyNow 함수 수정
-function buyNow(id){
-    // 장바구니에 담는 게 성공하면, 그때 결제 페이지로 가라!
-    addToCart(id, function() {
-        // 바로 구매는 보통 이 상품 하나만 결제하는 경우가 많으므로
-        // 체크박스 로직(gotoCheckout) 대신 직접 경로를 지정하는 게 안전합니다.
-        location.href = '${pageContext.request.contextPath}/payment/checkout?cartIds=' + 0;
-    });
-}
-*/
-/*
-function submitComment(){
-    var content  = $('#cmtContent').val().trim();
-    var isPrivate = $('#cmtPrivate').is(':checked') ? 'Y' : 'N';
-    if(!content){ showAlert('내용을 입력해주세요.'); return; }
-    ajaxRequest('${pageContext.request.contextPath}/lecture/comment/insert',
-        {classId: classId, content: content, openYn: isPrivate == 'Y' ? 'N' : 'Y'}, 'POST',
-        function(res){ if(res.success) location.reload(); }
-    );
-}
-function submitReply(parentId, btn){
-    var content = $(btn).closest('div').prev('textarea').val().trim();
-    if(!content){ showAlert('내용을 입력해주세요.'); return; }
-    ajaxRequest('${pageContext.request.contextPath}/lecture/comment/insert',
-        {classId: classId, content: content, parentId: parentId}, 'POST',
-        function(res){ if(res.success) location.reload(); }
-    );
-}
-*/
 </script>

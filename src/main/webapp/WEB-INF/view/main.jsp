@@ -102,6 +102,7 @@
            	<section class="card">
                 <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">
                     광고
+                    <img src="https://item.kakaocdn.net/do/218bdb82c9a7456ee2080fe14a464292934a8bea49f711d785ad9144e9c20713">
                 </h3>
 			</section>
         </div>
