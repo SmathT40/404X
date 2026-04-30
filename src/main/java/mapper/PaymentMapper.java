@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import dto.Pay;
 
@@ -27,22 +28,25 @@ public interface PaymentMapper {
         @Param("classId") int classId,
         @Param("userId") String userId
     );
-
-    @Insert(
-      "INSERT INTO cls_state (" +
-      "classno," +
-      "user_id," +
-      "cls_state_status" +
-      ") VALUES (" +
-      "#{classId}," +
-      "#{userId}," +
-      "1" +
-      ")"
-    )
-    void insertClassState(
-        @Param("classId") int classId,
-        @Param("userId") String userId
-    );
+    //upsert로 변경 0430 hto
+	@Update(
+			  "INSERT INTO cls_state (" +
+			  "  classno, " +
+			  "  user_id, " +
+			  "  cls_state_status" +
+			  ") VALUES (" +
+			  "  #{classId}, " +
+			  "  #{userId}, " +
+			  "  1" +
+			  ") " +
+			  "ON DUPLICATE KEY UPDATE " +
+			  "  cls_state_status = 1, " +
+			  "  cls_statereg_date = current_timestamp()" 
+			)
+	void insertClassState(
+	    @Param("classId") int classId, 
+	    @Param("userId") String userId
+	);
  // =========================================================================
  // --- 결제내역 조회 추가 4월 24일---
  // =========================================================================

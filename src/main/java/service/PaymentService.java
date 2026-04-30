@@ -222,9 +222,7 @@ public class PaymentService {
             paymentDao.insertPayDetail(pay.getPay_no(), item.getClass_id(), item.getCls_price());
 
             // 수강 권한 부여
-            if (paymentDao.existsClass(item.getClass_id(), userId) == 0) {
-                paymentDao.insertClassState(item.getClass_id(), userId);
-            }
+            paymentDao.insertClassState(item.getClass_id(), userId);
         }
 
         // 장바구니에서 결제한 항목 삭제

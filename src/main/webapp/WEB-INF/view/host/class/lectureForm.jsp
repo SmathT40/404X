@@ -220,7 +220,7 @@
                 <label class="lf-label">강좌 설명</label>
                 <div class="lf-editor-wrap">
                     <textarea name="lec_content" id="lec_content" class="lf-textarea"
-                              placeholder="강좌에 대해 설명해주세요" required>${lecDto.lec_content}</textarea>
+                              placeholder="강좌에 대해 설명해주세요">${lecDto.lec_content}</textarea>
                 </div>
             </div>
 

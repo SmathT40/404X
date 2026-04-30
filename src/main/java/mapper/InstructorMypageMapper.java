@@ -11,7 +11,7 @@ public interface InstructorMypageMapper {
 
 	@Select("select * from users where user_id = #{user_id}")
 	User getInstructorInfo(String user_id);
-
+	//0430 hto host_description 추가
 	// 강사 정보 수정
 	@Update("update users set "
 			+ "user_name = #{user_name}, "
@@ -20,7 +20,8 @@ public interface InstructorMypageMapper {
 			+ "host_intro = #{host_intro}, "
 			+ "host_bank_name = #{host_bank_name}, "
 			+ "host_bank_account = #{host_bank_account}, "
-			+ "host_account_owner = #{host_account_owner} "
+			+ "host_account_owner = #{host_account_owner}, "
+			+ "host_description = #{host_description} "
 			+ "where user_id = #{user_id}")
 	void updateInstructorInfo(User user);
 
@@ -30,6 +31,7 @@ public interface InstructorMypageMapper {
 			+ "user_phone = #{user_phone}, "
 			+ "user_email = #{user_email}, "
 			+ "host_intro = #{host_intro}, "
+			+ "host_description = #{host_description}, "
 			+ "host_bank_name = #{host_bank_name}, "
 			+ "host_bank_account = #{host_bank_account}, "
 			+ "host_account_owner = #{host_account_owner}, "

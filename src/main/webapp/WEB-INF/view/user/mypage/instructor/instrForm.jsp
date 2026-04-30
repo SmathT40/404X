@@ -56,7 +56,7 @@
             </div>
             <div class="form-group">
                 <div class="form-label">상세소개</div>
-                <input type="text" name="host_intro" class="form-control" value="${instructorInfo.host_description}" placeholder="상세한 소개">
+                <input type="text" name="host_description" class="form-control" value="${instructorInfo.host_description}" placeholder="상세한 소개">
             </div>
             <div class="form-group">
                 <div class="form-label">은행명</div>

@@ -30,13 +30,14 @@ html {
         <div class="admin-section" style="padding:0;">
             <table class="data-table" id="classList">
                 <thead>
-                    <tr><th>제목</th><th>강사명</th><th>가격</th><th>등록일</th><th>승인여부</th></tr>
+                    <tr><th><input type="checkbox" class="chk-all"></th><th>제목</th><th>강사명</th><th>가격</th><th>등록일</th><th>승인여부</th></tr>
                 </thead>
                 <tbody>
                     <c:choose>
                         <c:when test="${not empty classList}">
                             <c:forEach var="cls" items="${classList}">
                                 <tr>
+                                	<td><input type="checkbox" class="chk-item" value="${cls.class_id}"></td>
                                     <td><a href="${pageContext.request.contextPath}/class/detail?id=${cls.class_id}">${cls.cls_title}</a></td>
                                     <td>${cls.user_name}</td>
                                     <td><fmt:formatNumber value="${cls.cls_price}" pattern="#,###"/>원</td>
