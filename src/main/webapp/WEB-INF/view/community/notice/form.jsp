@@ -65,11 +65,14 @@
 		            </label>
 		        </div>
 		         </c:if>
+		         
+     <c:if test="${sessionScope.loginUser.user_role == 2}">   
         <div style="display:flex;justify-content:center;gap:16px;margin-top:16px;">
             <a href="${pageContext.request.contextPath}/community/board/list?boardid=0"
                class="btn btn-ghost btn-lg" style="min-width:120px;">취소</a>
             <button type="submit" class="btn btn-black btn-lg" style="min-width:120px;">등록</button>
         </div>
+     </c:if>  
 
     </form>
 </div>
