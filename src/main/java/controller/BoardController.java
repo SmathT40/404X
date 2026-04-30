@@ -71,7 +71,7 @@ public class BoardController {
         model.addAttribute("boardid", boardid);
         return getListView(boardid);
     }
-    //4월 27일 수정
+    //4월 27일 수정 csw
     @Autowired
     private ClsReplyService clsReplyService;
     
@@ -99,7 +99,7 @@ public class BoardController {
         model.addAttribute("boardid", boardid);
         return getFormView(boardid);
     }
-    //4월 24일 수정//
+    //4월 24일 수정// csw
     @PostMapping("/insert")
     public String insert(Board board,
                          @RequestParam(value = "boardid", required = false, defaultValue = "1") int boardid,

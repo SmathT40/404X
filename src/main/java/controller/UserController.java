@@ -178,7 +178,7 @@ public class UserController {
     private PaymentService paymentService;
 
  // =========================================================================
- // --- 결제내역 추가 4월 24일---
+ // --- 결제내역 추가 4월 24일 csw ---
  // =========================================================================
     @GetMapping("/mypage/payment")
     public String payment(@RequestParam(defaultValue="1") int page,
@@ -199,7 +199,7 @@ public class UserController {
     }
     
  // =========================================================================
- // --- 네이버 로그인 추가 0427---
+ // --- 네이버 로그인 추가 0427 csw ---
  // =========================================================================
  private static final String NAVER_CLIENT_ID = "37Y_6Jg0f0lNq3EcSSpo";
  private static final String NAVER_CLIENT_SECRET = "Ox3uMJoxE1";
