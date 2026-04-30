@@ -15,6 +15,7 @@
                 <a href="${pageContext.request.contextPath}/host/class/lectureForm" class="btn btn-black btn-sm">+ 새 강좌 등록</a>
             </div>
         </div>
+        <span class="text-muted small">강좌가 등록된 클래스만 노출됩니다.</span>
 
         <div class="admin-section" style="padding:0; background: transparent; border:none;">
             <div id="lectureAccordion">

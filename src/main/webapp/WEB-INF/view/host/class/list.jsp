@@ -2,8 +2,11 @@
 <title>내 강의 관리 - 404 X CLUB</title>
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"  %>
-
-
+<style>
+html {
+    overflow-y: scroll;
+}
+</style>
 <div class="admin-content">
     <div class="admin-tab-bar">
         <a href="${pageContext.request.contextPath}/host/class/status" class="tab-item inactive">클래스 현황</a>
@@ -57,16 +60,9 @@
                 </tbody>
             </table>
         </div>
-
-        <jsp:include page="/WEB-INF/view/common/pagination.jsp">
-            <jsp:param name="currentPage" value="${currentPage}"/>
-            <jsp:param name="totalPage"   value="${totalPage}"/>
-            <jsp:param name="pageUrl"     value="/host/class/list?page="/>
-            </jsp:include>
-
+        
         <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:20px;">
-            <a href="${pageContext.request.contextPath}/host/class/classForm"   class="btn btn-ghost">클래스등록</a>
-            <a href="${pageContext.request.contextPath}/host/class/lectureForm" class="btn btn-black">강좌등록</a>
+            <a href="${pageContext.request.contextPath}/host/class/classForm"   class="btn btn-black">클래스등록</a>
         </div>
 
     </div>

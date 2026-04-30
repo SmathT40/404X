@@ -59,4 +59,8 @@ public class AdminPaymentDao {
     public void updatePayStatus(int pay_no, int status) {
         template.getMapper(cls).updatePayStatus(pay_no, status);
     }
+    
+    public void updateClassStateRefund(int pay_no, String userId) {
+        template.getMapper(cls).updateClassStateRefund(pay_no, userId);
+    }
 }

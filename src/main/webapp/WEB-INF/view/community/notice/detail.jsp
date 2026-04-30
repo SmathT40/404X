@@ -25,7 +25,7 @@
     </c:if>
 
 
-   <%--    <c:if test="${sessionScope.loginUser.user_role == 2}"> --%>
+       <c:if test="${sessionScope.loginUser.user_role == 2}">
 
             <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:24px;">
 
@@ -51,7 +51,7 @@
 </div>
 
         
-   <%-- </c:if> --%>
+    </c:if> 
 
 
     <div class="post-nav">

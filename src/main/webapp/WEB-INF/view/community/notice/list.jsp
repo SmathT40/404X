@@ -25,7 +25,7 @@
                     <div style="font-size:12px;color:#e63946;margin-bottom:6px;">${post.board_reg_date}</div>
                     <div style="display:flex;justify-content:space-between;align-items:center;">
                         <div>
-                            <div style="font-size:15px;font-weight:600;margin-bottom:6px;">${post.board_title}</div>
+                            <div style="font-size:15px;font-weight:600;margin-bottom:6px;"><c:if test="${post.board_featured == 1}">&#128204;</c:if>${post.board_title}</div>
                             <div style="font-size:13px;color:#888;">${post.board_content}</div>
                         </div>
                         <span style="font-size:18px;color:#aaa;margin-left:16px;">&#8599;</span>
@@ -49,7 +49,7 @@
 <jsp:include page="/WEB-INF/view/common/pagination.jsp">
     <jsp:param name="currentPage" value="${currentPage}"/>
     <jsp:param name="totalPage"   value="${totalPage}"/>
-    <jsp:param name="pageUrl"     value="/404X/community/board/list?boardid=0&page="/>
+    <jsp:param name="pageUrl"     value="/404X/community/board/list?boardid=0&pageNum="/>
 </jsp:include>
 </main>
 

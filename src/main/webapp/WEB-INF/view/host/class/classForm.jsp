@@ -105,7 +105,6 @@ textarea.form-control {
             <label>강의 설명</label>
             <textarea name="cls_content" id="cls_content" class="form-control" rows="5" placeholder="강의에 대해 설명해주세요" required>${classDto.cls_content} </textarea>
         </div>
-		<div>
 		    <%-- 관리자 전용 노출 설정 --%>
 		    <c:if test="${sessionScope.loginUser.user_role == 2}">
 		        <div class="custom-control custom-checkbox mr-3">

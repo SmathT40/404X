@@ -17,6 +17,7 @@ public class Board {
     private int board_cnt;
     private int board_type;
     private int board_status;
+    private int board_featured;
 
 
 

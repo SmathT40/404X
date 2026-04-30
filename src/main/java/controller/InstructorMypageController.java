@@ -51,8 +51,8 @@ public class InstructorMypageController {
 		return "user/mypage/instructor/instrForm";
 	}
 	
-	// 강사 마이페이지 수정이랑 등록 같이 합쳐버림 ㅋ
-	@PostMapping({"/mypage/instructor/register", "/mypage/instructor/update"})
+	// 강사 등록용
+	@PostMapping("/mypage/instructor/register")
 	public String registerInstructor(User user, HttpSession session) {
 		User loginUser = (User) session.getAttribute("loginUser");
 		
@@ -62,8 +62,22 @@ public class InstructorMypageController {
 		}
 		
 		user.setUser_id(loginUser.getUser_id());
+		user.setHost_status(1);
 		
-		instructorMypageService.updateInstructorInfo(user);
+		instructorMypageService.registerInstructor(user);
+		
+		return "redirect:/mypage/instructor";
+	}
+	
+	// 강사 정보 수정용
+	@PostMapping("/mypage/instructor/update")
+	public String updateInstructor(User user, HttpSession session) {
+		User loginUser = (User) session.getAttribute("loginUser");
+		if (loginUser == null) return "redirect:/user/login";
+		
+		user.setUser_id(loginUser.getUser_id());
+		
+		instructorMypageService.updateInstructorInfo(user); 
 		
 		return "redirect:/mypage/instructor";
 	}

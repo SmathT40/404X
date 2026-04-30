@@ -20,4 +20,8 @@ public class InstructorMypageService {
 		instructorMypageDao.updateInstructorInfo(user);
 	}
 
+	public void registerInstructor(User user) {
+		instructorMypageDao.registerInstructor(user);
+	}
+
 }

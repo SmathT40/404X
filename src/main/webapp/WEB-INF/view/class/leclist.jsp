@@ -27,7 +27,7 @@
                         <td style="padding: 20px; font-weight: 700; color: #4f46e5; text-align: center;">${lec.lec_no}강</td>
                         <td style="padding: 20px;">
                             <div style="font-weight: 600; font-size: 16px; margin-bottom: 4px;">${lec.lec_title}</div>
-                            <div style="font-size: 14px; color: #888;">${lec.lec_content}</div>
+                            <%-- <div style="font-size: 14px; color: #888;">${lec.lec_content}</div> --%>
                         </td>
                         <td style="padding: 20px; color: #666; font-size: 14px;">${lec.lec_time_str}</td>
                         <td style="padding: 20px; text-align: center;">
