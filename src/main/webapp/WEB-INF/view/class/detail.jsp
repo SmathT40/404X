@@ -8,7 +8,7 @@
 
     <%-- 강의 제목/정보 --%>
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
-        <div>
+        <div>	
             <h1 style="font-size:22px;font-weight:700;margin-bottom:6px;">${cls.cls_title}</h1>
             <div style="font-size:13px;color:#888;">
                 ${cls.user_name} 강사 &nbsp;|&nbsp;
@@ -165,6 +165,7 @@
 
 <script>
 var classId = ${cls.class_id};
+const loginUser = ${not empty sessionScope.loginUser};
 
 function submitComment(){
     var content  = $('#cmtContent').val().trim();
@@ -235,6 +236,12 @@ var classId = ${cls.class_id};
 
 //1. addToCart 함수를 조금 수정 (성공 시 실행할 함수를 인자로 받음)
 function addToCart(id, callback){
+	if(!loginUser) {
+        openModal('알림', '로그인이 필요한 서비스입니다.', function() {
+            location.href = '${pageContext.request.contextPath}/user/login';
+        });
+        return; // 로그인 안 되어 있으면 여기서 중단
+    }
     ajaxRequest('${pageContext.request.contextPath}/payment/cart/add', {class_id: id}, 'POST',
         function(res){ 
             if(res.success) {
@@ -249,6 +256,12 @@ function addToCart(id, callback){
         });
 }
 function buyNow(id){
+	if(!loginUser) {
+        openModal('알림', '로그인이 필요한 서비스입니다.', function() {
+            location.href = '${pageContext.request.contextPath}/user/login';
+        });
+        return; // 로그인 안 되어 있으면 여기서 중단
+    }
     ajaxRequest('${pageContext.request.contextPath}/payment/cart/add', {class_id: id}, 'POST', function(res){
         // res.success가 true이거나, 
         // 혹은 실패했더라도 메시지가 "이미 장바구니..."라면 그냥 이동시킨다!

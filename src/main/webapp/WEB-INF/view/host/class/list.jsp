@@ -24,21 +24,19 @@ html {
             <span class="admin-page-title">전체 클래스</span>
             <div style="display:flex;gap:8px;">
                 <button class="btn btn-ghost btn-sm" onclick="doEdit()">수정</button>
-                <button class="btn btn-ghost btn-sm" onclick="deleteSelected()">선택삭제</button>
             </div>
         </div>
 
         <div class="admin-section" style="padding:0;">
             <table class="data-table" id="classList">
                 <thead>
-                    <tr><th><input type="checkbox" class="chk-all"></th><th>제목</th><th>강사명</th><th>가격</th><th>등록일</th><th>승인여부</th></tr>
+                    <tr><th>제목</th><th>강사명</th><th>가격</th><th>등록일</th><th>승인여부</th></tr>
                 </thead>
                 <tbody>
                     <c:choose>
                         <c:when test="${not empty classList}">
                             <c:forEach var="cls" items="${classList}">
                                 <tr>
-                                    <td><input type="checkbox" class="chk-item" value="${cls.class_id}"></td>
                                     <td><a href="${pageContext.request.contextPath}/class/detail?id=${cls.class_id}">${cls.cls_title}</a></td>
                                     <td>${cls.user_name}</td>
                                     <td><fmt:formatNumber value="${cls.cls_price}" pattern="#,###"/>원</td>
@@ -88,16 +86,6 @@ function doEdit(){
     $('.chk-item:checked').each(function(){ ids.push($(this).val()); });
     if(ids.length !== 1){ showAlert('수정할 클래스를 1개 선택해주세요.'); return; }
     location.href = '${pageContext.request.contextPath}/host/class/updateform?class_id=' + ids[0];
-}
-function deleteSelected(){
-    var ids = [];
-    $('.chk-item:checked').each(function(){ ids.push($(this).val()); });
-    if(!ids.length){ showAlert('삭제할 항목을 선택해주세요.'); return; }
-    showConfirm('선택한 클래스를 삭제하시겠습니까?', function(){
-        ajaxRequest('${pageContext.request.contextPath}/host/class/deleteMulti',
-            {classIds: ids.join(',')}, 'POST',
-            function(res){ if(res.success) location.reload(); });
-    });
 }
 $(document).ready(function() {
     const msg = "${completeMsg}";

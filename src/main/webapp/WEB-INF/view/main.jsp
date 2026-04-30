@@ -1,7 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <title>홈 - 404 X CLUB</title>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<script type="text/javascript">
+$(document).ready(function() {
+	const urlParams = new URLSearchParams(window.location.search);
+	const msg = urlParams.get('msg');
+    
+    if (msg) {
+        openModal('', msg, function() {
+        }, false);
+        history.replaceState({}, null, window.location.pathname);
+    }
+});
+</script>
 <main class="content-area">
 <div class="container">
 
@@ -99,7 +110,8 @@
                             <span>강의제목</span><span>강사이름</span><span>진도율</span><span>남은 기간</span>
                         </div>
                         <p style="font-size:13px; color:#aaa; text-align:center; padding:10px 0;">
-                            <a href="${pageContext.request.contextPath}/user/login" style="color:#e63946;">로그인이 필요합니다.</a>
+                        	<c:if test="${not empty sessionScope.loginUser}"><a style="color:#e63946;">수강정보가 없습니다.</a></c:if>
+                        	<c:if test="${empty sessionScope.loginUser}"><a href="${pageContext.request.contextPath}/user/login" style="color:#e63946;">로그인이 필요합니다.</a></c:if>
                         </p>
                     </c:otherwise>
                 </c:choose>

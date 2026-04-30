@@ -152,4 +152,14 @@ function doFindPw(){
         }
     );
 }
+$(document).ready(function() {
+	const urlParams = new URLSearchParams(window.location.search);
+	const msg = urlParams.get('msg');
+    
+    if (msg) {
+        openModal('', msg, function() {
+        }, false);
+        history.replaceState({}, null, window.location.pathname);
+    }
+});
 </script>
