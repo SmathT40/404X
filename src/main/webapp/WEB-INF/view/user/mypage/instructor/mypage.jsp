@@ -40,6 +40,8 @@
             <input type="text" class="form-control" value="${info.user_email}" readonly style="background:#f9f9f9;"></div>
         <div class="form-group"><div class="form-label">강사소개</div>
             <input type="text" class="form-control" value="${info.host_intro}" readonly style="background:#f9f9f9;"></div>
+        <div class="form-group"><div class="form-label">상세소개</div>
+            <input type="text" class="form-control" value="${info.host_description}" readonly style="background:#f9f9f9;"></div>
         <div class="form-group"><div class="form-label">은행명</div>
             <input type="text" class="form-control" value="${info.host_bank_name}" readonly style="background:#f9f9f9;"></div>
         <div class="form-group"><div class="form-label">계좌번호</div>

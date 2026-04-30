@@ -139,7 +139,7 @@ public class HostClassController {
 	                          RedirectAttributes rttr) {
 	    try {
 	        // =========================================================================
-	        // --- 썸네일 업로드 추가 0428 ---
+	        // --- 썸네일 업로드 추가 0428 csw ---
 	        // =========================================================================
 	        if (thumbnail != null && !thumbnail.isEmpty()) {
 	            String thumbnailUrl = hostClassService.uploadThumbnail(thumbnail, request);

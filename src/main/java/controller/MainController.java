@@ -21,7 +21,7 @@ public class MainController {
     @GetMapping("/")
     public String mainPage(Model model, HttpSession session) {
         // =========================================================================
-        // --- 메인 공지사항 상단고정 3개 추가 0429 ---
+        // --- 메인 공지사항 상단고정 3개 추가 0429 csw ---
         // =========================================================================
         model.addAttribute("recentNoticeList", boardDao.selectFeaturedNotice());
         

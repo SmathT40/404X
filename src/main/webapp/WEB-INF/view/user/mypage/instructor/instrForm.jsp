@@ -55,6 +55,10 @@
                 <input type="text" name="host_intro" class="form-control" value="${instructorInfo.host_intro}" placeholder="안녕하세요 금융분야 JAVA 개발자 김명신 입니다.">
             </div>
             <div class="form-group">
+                <div class="form-label">상세소개</div>
+                <input type="text" name="host_intro" class="form-control" value="${instructorInfo.host_description}" placeholder="상세한 소개">
+            </div>
+            <div class="form-group">
                 <div class="form-label">은행명</div>
                 <input type="text" name="host_bank_name" class="form-control" value="${instructorInfo.host_bank_name}" placeholder="카카오뱅크">
             </div>
