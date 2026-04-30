@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import dto.Pay;
+import dto.User;
 
 @Mapper
 public interface AdminDashboardMapper {
@@ -27,4 +28,8 @@ public interface AdminDashboardMapper {
     // 최근 결제 내역 5개
     @Select("SELECT * FROM pay ORDER BY pay_no DESC LIMIT 5")
     List<Pay> selectRecentPayList();
+    
+    @Select("SELECT user_id, user_name, user_email, user_join_date FROM users WHERE host_status = 0 AND user_role = 1 LIMIT 5")
+    List<User> selectHostRequestList();
+
 }
