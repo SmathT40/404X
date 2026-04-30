@@ -92,7 +92,7 @@ public class ClassController {
     }
 	
 	@GetMapping("/watch") // 실제 주소: /class/watch
-    public String watchPage(int lec_id, int class_id, Model model,HttpSession session,RedirectAttributes rttr) {
+    public String watchPage(int lec_id, int class_id, Model model,HttpSession session) {
 		User loginUser = (User) session.getAttribute("loginUser");
 		LecDto lec = classService.getLecOne(lec_id);
 		if (loginUser == null) {
@@ -100,10 +100,8 @@ public class ClassController {
 		}
 		if(loginUser.getUser_role() < 1) {
 			boolean isStudent = userClassroomService.checkEnrollment(loginUser.getUser_id(), class_id);
-			
 			if (!isStudent) {
-				rttr.addFlashAttribute("msg", "수강 신청이 필요한 강의입니다.");
-				return "redirect:/class/leclist?class_id=" + class_id;
+				return "redirect:/class/leclist?class_id=" + class_id + "&error=auth";
 			}
 		}
 		LecDto prevLec = classService.getPrev(class_id,lec.getLec_no());
