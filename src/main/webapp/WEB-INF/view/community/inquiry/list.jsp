@@ -51,7 +51,7 @@
     <div style="text-align:right;margin-top:12px;">
         <c:choose>
     <c:when test="${not empty sessionScope.loginUser}">
-        <a href="${pageContext.request.contextPath}/community/board/form?boardid=1" class="btn btn-black btn-sm">글쓰기</a>
+        <a href="${pageContext.request.contextPath}/community/board/form?boardid=3" class="btn btn-black btn-sm">글쓰기</a>
     </c:when>
     <c:otherwise>
         <a href="#" onclick="showAlert('로그인이 필요합니다.'); return false;" class="btn btn-black btn-sm">글쓰기</a>

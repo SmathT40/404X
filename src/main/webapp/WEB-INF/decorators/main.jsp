@@ -62,7 +62,7 @@
 	                <c:when test="${not empty sessionScope.loginUser}">
 	                 
 	                    <%-- 로그인 상태 --%>
-	                    <c:if test="${loginUser.user_role eq 2}"><a href="${pageContext.request.contextPath}/admin/class/list"> ⚙️</a></c:if>
+	                    <c:if test="${loginUser.user_role eq 2}"><a href="${pageContext.request.contextPath}/admin/dashboard"> ⚙️</a></c:if>
 	                    <c:if test="${loginUser.user_role eq 1}"><a href="${pageContext.request.contextPath}/host/class/list"> ⚙️</a></c:if>
 	                    <a href="${pageContext.request.contextPath}/mypage/classroom">&#128218; 내강의실</a>
 	                    <a href="${pageContext.request.contextPath}/mypage/index">&#128100; 마이페이지</a>
