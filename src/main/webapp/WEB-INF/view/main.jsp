@@ -13,7 +13,12 @@
 
             <c:choose>
                 <c:when test="${not empty bestClassList}">
-                    <c:forEach var="cls" items="${bestClassList}">
+                <%-- 0430 승준 수정
+                 <c:forEach var="cls" items="${bestClassList}"> 에서 아래로 수정 
+                 main 페이지 best 강의 2개만 나오게끔 수정되어있습니다.
+                 <c:forEach var="cls" items="${bestClassList}" begin="0" end="1">
+                 --%>
+                    <c:forEach var="cls" items="${bestClassList}" begin="0" end="1">
                     <a href="${pageContext.request.contextPath}/class/detail?id=${cls.class_id}">
                         <div style="margin-bottom:20px; padding-bottom:20px; border-bottom:1px solid #f0f0f0; ">
                             <div style="background:#eee; border-radius:8px; margin-bottom:10px;"><img src="${cls.cls_thumbnail}" style="width:100%;height:100%;object-fit:cover;"></div>
@@ -99,15 +104,14 @@
                     </c:otherwise>
                 </c:choose>
             </section>
-           	<section class="card">
+            <section class="card">
                 <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">
                     광고
                     <img src="https://item.kakaocdn.net/do/218bdb82c9a7456ee2080fe14a464292934a8bea49f711d785ad9144e9c20713">
                 </h3>
-			</section>
+            </section>
         </div>
     </div>
 
 </div>
 </main>
-
