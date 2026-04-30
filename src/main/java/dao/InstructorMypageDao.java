@@ -19,4 +19,8 @@ public class InstructorMypageDao {
 	public void updateInstructorInfo(User user) {
 		instructorMypageMapper.updateInstructorInfo(user);
 	}
+
+	public void registerInstructor(User user) {
+		instructorMypageMapper.registerInstructor(user);
+	}
 }
