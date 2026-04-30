@@ -31,10 +31,10 @@
                         </td>
                         <td style="padding: 20px; color: #666; font-size: 14px;">${lec.lec_time_str}</td>
                         <td style="padding: 20px; text-align: center;">
-                            <button onclick="location.href=' ${pageContext.request.contextPath}/class/watch?class_id=${lec.class_id}&lec_id=${lec.lec_id}'" 
-                                    style="background: #4f46e5; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">
-                                시청하기
-                            </button>
+							<button onclick="checkLoginAndWatch(${lec.class_id}, ${lec.lec_id})" 
+							        style="background: #4f46e5; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;">
+							    시청하기
+							</button>
                         </td>
                     </tr>
                    
@@ -60,4 +60,12 @@ $(document).ready(function() {
         }, false);
     }
 });
+const loginUser = ${not empty sessionScope.loginUser};
+function checkLoginAndWatch(classId, lecId) {
+    if (!loginUser) {
+        showAlert('로그인이 필요한 서비스입니다.');
+        return;
+    }
+    location.href = '${pageContext.request.contextPath}/class/watch?class_id=' + classId + '&lec_id=' + lecId;
+}
 </script>

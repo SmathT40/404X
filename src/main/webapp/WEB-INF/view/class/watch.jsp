@@ -177,15 +177,18 @@
 <div style="height:80px;"></div><%-- 하단 버튼 높이 보정 --%>
 
 <script>
-
+const loginUser = ${not empty sessionScope.loginUser};
 var classId = ${lec.class_id};
 var lecId = ${lec.lec_id};
 
 function submitComment(){
+    if(!loginUser) {
+		showAlert('로그인이 필요한 서비스입니다.');
+    	return;
+	}
     var content  = $('#cmtContent').val().trim();
     // 우리 DB 구조에 맞게 체크하면 1(비공개), 아니면 0(공개)
     var isPrivate = $('#cmtPrivate').is(':checked') ? 1 : 0; 
-    
     if(!content){ showAlert('내용을 입력해주세요.'); return; }
 
     $.ajax({
@@ -213,6 +216,10 @@ function submitComment(){
 }
 
 function submitReply(parentId, btn){
+    if(!loginUser) {
+		showAlert('로그인이 필요한 서비스입니다.');
+   		return;
+	}
     // 버튼 기준으로 위쪽에 있는 textarea의 값을 가져옴
     var content = $(btn).closest('div').prev('textarea').val().trim();
     

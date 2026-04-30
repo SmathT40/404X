@@ -168,6 +168,10 @@ var classId = ${cls.class_id};
 const loginUser = ${not empty sessionScope.loginUser};
 
 function submitComment(){
+	if(!loginUser) {
+		showAlert('로그인이 필요한 서비스입니다.');
+        return;
+	}
     var content  = $('#cmtContent').val().trim();
     // 우리 DB 구조에 맞게 체크하면 1(비공개), 아니면 0(공개)
     var isPrivate = $('#cmtPrivate').is(':checked') ? 1 : 0; 
@@ -198,6 +202,10 @@ function submitComment(){
 }
 
 function submitReply(parentId, btn){
+	if(!loginUser) {
+		showAlert('로그인이 필요한 서비스입니다.');
+        return;
+	}
     // 버튼 기준으로 위쪽에 있는 textarea의 값을 가져옴
     var content = $(btn).closest('div').prev('textarea').val().trim();
     
@@ -231,17 +239,12 @@ function deleteCmt(id){
 
 function toggleReply(id){ $('#reply-' + id).toggle(); }
 
-
-var classId = ${cls.class_id};
-
 //1. addToCart 함수를 조금 수정 (성공 시 실행할 함수를 인자로 받음)
 function addToCart(id, callback){
 	if(!loginUser) {
-        openModal('알림', '로그인이 필요한 서비스입니다.', function() {
-            location.href = '${pageContext.request.contextPath}/user/login';
-        });
-        return; // 로그인 안 되어 있으면 여기서 중단
-    }
+		showAlert('로그인이 필요한 서비스입니다.');
+        return;
+	}
     ajaxRequest('${pageContext.request.contextPath}/payment/cart/add', {class_id: id}, 'POST',
         function(res){ 
             if(res.success) {
@@ -257,11 +260,9 @@ function addToCart(id, callback){
 }
 function buyNow(id){
 	if(!loginUser) {
-        openModal('알림', '로그인이 필요한 서비스입니다.', function() {
-            location.href = '${pageContext.request.contextPath}/user/login';
-        });
-        return; // 로그인 안 되어 있으면 여기서 중단
-    }
+		showAlert('로그인이 필요한 서비스입니다.');
+        return;
+	}
     ajaxRequest('${pageContext.request.contextPath}/payment/cart/add', {class_id: id}, 'POST', function(res){
         // res.success가 true이거나, 
         // 혹은 실패했더라도 메시지가 "이미 장바구니..."라면 그냥 이동시킨다!

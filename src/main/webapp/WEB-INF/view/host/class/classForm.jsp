@@ -405,6 +405,18 @@ $(function() {
 });
 
 function submitForm() {
+	var mainCat = $('#mainCategory').val();
+    if (!mainCat) {
+    	showAlert('대분류 카테고리를 선택해주세요.');
+        $('#mainCategory').focus();
+        return;
+    }
+    var subCat = $('#subCategory').val();
+    if (!subCat) {
+    	showAlert('소분류 카테고리를 선택해주세요.');
+        $('#subCategory').focus();
+        return;
+    }
     var content = $('#cls_content').summernote('code');
     if (!content || content === '<p><br></p>') {
         showAlert('강의 설명을 입력해주세요.');

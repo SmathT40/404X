@@ -96,7 +96,7 @@ public class ClassController {
 		User loginUser = (User) session.getAttribute("loginUser");
 		LecDto lec = classService.getLecOne(lec_id);
 		if (loginUser == null) {
-		    return "redirect:/login"; 
+		    return "redirect:/user/login"; 
 		}
 		if(loginUser.getUser_role() < 1) {
 			boolean isStudent = userClassroomService.checkEnrollment(loginUser.getUser_id(), class_id);
