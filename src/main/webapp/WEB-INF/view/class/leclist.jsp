@@ -52,31 +52,25 @@
 </div>
 <script src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 <script>
-$(document).ready(function() {
-    // 1. URL 파라미터에서 error 값이 'auth'인지 확인
-    // URLSearchParams를 사용하면 편리합니다.
-    const urlParams = new URLSearchParams(window.location.search);
-    const error = urlParams.get('error');
-    
-    if (error === 'auth') {
-        // 2. 모달 띄우기
-        showAlert('수강 신청이 필요한 강의입니다.');
-
-        // 3. [핵심] 알림을 띄운 후 즉시 URL에서 error 파라미터만 제거
-        if (history.replaceState) {
-            urlParams.delete('error'); // 파라미터에서 error 삭제
-            const newUrl = window.location.pathname + '?' + urlParams.toString();
-            // 주소창을 'error'가 없는 깨끗한 주소로 교체 (페이지 이동 없음)
-            history.replaceState(null, null, newUrl);
-        }
-    }
-});
 const loginUser = ${not empty sessionScope.loginUser};
+
+//0501 hto 수강정보 세션에서 가져옴
+const enrolledClasses = [
+    <c:forEach var="id" items="${sessionScope.enrolledClasses}" varStatus="status">
+        ${id}${!status.last ? ',' : ''}
+    </c:forEach>
+];
+
 function checkLoginAndWatch(classId, lecId) {
     if (!loginUser) {
         showAlert('로그인이 필요한 서비스입니다.');
         return;
     }
+    if (!enrolledClasses.includes(Number(classId))) {
+        showAlert('수강 신청이 필요한 강의입니다.');
+        return;
+    }
+    
     location.href = '${pageContext.request.contextPath}/class/watch?class_id=' + classId + '&lec_id=' + lecId;
 }
 </script>

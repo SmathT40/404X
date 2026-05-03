@@ -224,7 +224,9 @@ public class PaymentService {
             // 수강 권한 부여
             paymentDao.insertClassState(item.getClass_id(), userId);
         }
-
+        //0501 hto 수강정보 세션 정리
+        session.removeAttribute("enrolledClasses");
+                
         // 장바구니에서 결제한 항목 삭제
         deleteCartMulti(cartIds, session);
 

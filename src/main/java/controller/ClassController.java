@@ -34,10 +34,6 @@ public class ClassController {
 	@Autowired
 	UserClassroomService userClassroomService;
 	
-	@GetMapping("/classtest")
-	public String classTest() {
-		return "class/classtest"; 
-	}
 	@GetMapping("/category")
 	public String categoryPage(@RequestParam("code") int code, Model model) {
 	    // 서비스에서 한 번에 묶인 데이터를 가져옴
@@ -88,24 +84,36 @@ public class ClassController {
         List<ClsReplyDto> replyList = clsReplyService.getReplyList(id,null);
         model.addAttribute("replyList", replyList);
         
-        return "class/detail"; // WEB-INF/view/class/detail.jsp 로 연결
+        return "class/detail";  
     }
 	
-	@GetMapping("/watch") // 실제 주소: /class/watch
-    public String watchPage(int lec_id, int class_id, Model model,HttpSession session) {
-		User loginUser = (User) session.getAttribute("loginUser");
-		LecDto lec = classService.getLecOne(lec_id);
-		if (loginUser == null) {
-		    return "redirect:/user/login"; 
-		}
-		if(loginUser.getUser_role() < 1) {
-			boolean isStudent = userClassroomService.checkEnrollment(loginUser.getUser_id(), class_id);
-			if (!isStudent) {
-				return "redirect:/class/leclist?class_id=" + class_id + "&error=auth";
-			}
-		}
+	@GetMapping("/watch")  
+	public String watchPage(int lec_id, int class_id, Model model, HttpSession session) {
+	    User loginUser = (User) session.getAttribute("loginUser");
+	    if (loginUser == null) return "redirect:/user/login";
+
+	    if (loginUser.getUser_role() < 1) {
+	        List<Integer> enrolledList = (List<Integer>) session.getAttribute("enrolledClasses");
+	        Long lastUpdated = (Long) session.getAttribute("enrolledLastUpdated");
+	        long currentTime = System.currentTimeMillis();
+	        
+	        // 최종 세션시간과 일정 시간 차이나면 다시 세션정보 불러옴. 테스트용으로 1 
+	        // 실제 서비스시에는 규모에 따라 5~30분(300000 ~ 1800000) 
+	        if (enrolledList == null || lastUpdated == null || (currentTime - lastUpdated > 1)) {
+	            enrolledList = userClassroomService.getEnrolledClasses(loginUser.getUser_id());
+	            session.setAttribute("enrolledClasses", enrolledList);
+	            session.setAttribute("enrolledLastUpdated", currentTime); 
+	        }
+
+	        // 리스트에 현재 접속하려는 class_id가 없으면 튕겨내기
+	        if (!enrolledList.contains(class_id)) {
+	            return "redirect:/class/leclist?class_id=" + class_id;
+	        }
+	    }
+	    LecDto lec = classService.getLecOne(lec_id);
 		LecDto prevLec = classService.getPrev(class_id,lec.getLec_no());
 		LecDto nextLec = classService.getNext(class_id,lec.getLec_no());
+		
 		List<ClsReplyDto> replyList = clsReplyService.getReplyList(class_id, lec_id);
 		model.addAttribute("lec", lec); 
 		model.addAttribute("prev", prevLec);

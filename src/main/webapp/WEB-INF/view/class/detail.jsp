@@ -167,6 +167,16 @@
 var classId = ${cls.class_id};
 const loginUser = ${not empty sessionScope.loginUser};
 
+//0501 hto 수강정보 세션에서 가져옴
+const enrolledClasses = [
+    <c:forEach var="id" items="${sessionScope.enrolledClasses}" varStatus="status">
+        ${id}${!status.last ? ',' : ''}
+    </c:forEach>
+];
+function checkEnrollment(classId) {
+    return enrolledClasses.includes(Number(classId));
+}
+
 function submitComment(){
 	if(!loginUser) {
 		showAlert('로그인이 필요한 서비스입니다.');
@@ -239,10 +249,15 @@ function deleteCmt(id){
 
 function toggleReply(id){ $('#reply-' + id).toggle(); }
 
-//1. addToCart 함수를 조금 수정 (성공 시 실행할 함수를 인자로 받음)
+
 function addToCart(id, callback){
 	if(!loginUser) {
 		showAlert('로그인이 필요한 서비스입니다.');
+        return;
+	}
+	//0501 hto 추가
+	if (checkEnrollment(classId)) {
+        showAlert('이미 수강 중인 강의입니다.');
         return;
 	}
     ajaxRequest('${pageContext.request.contextPath}/payment/cart/add', {class_id: id}, 'POST',
@@ -261,6 +276,11 @@ function addToCart(id, callback){
 function buyNow(id){
 	if(!loginUser) {
 		showAlert('로그인이 필요한 서비스입니다.');
+        return;
+	}
+	//0501 hto 추가
+	if (checkEnrollment(classId)) {
+        showAlert('이미 수강 중인 강의입니다.');
         return;
 	}
     ajaxRequest('${pageContext.request.contextPath}/payment/cart/add', {class_id: id}, 'POST', function(res){

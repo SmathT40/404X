@@ -1,6 +1,7 @@
 package service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,27 @@ public class UserClassroomService {
 	    LocalDate startDate = LocalDate.parse(enrollment.getCls_statereg_date().substring(0, 10));
 	    LocalDate endDate = startDate.plusDays(enrollment.getCls_exp());
 
-	    // 오늘이 종료일보다 이전이거나 같고, 상태가 수강중(1) 또는 완강(2)인 경우만 true
+	    // 오늘이 종료일보다 이전이거나 같고, 상태가 수강중인 경우만
 	    return !today.isAfter(endDate) && (enrollment.getCls_state_status() == 1);
+	}
+	public List<Integer> getEnrolledClasses(String user_id) {
+	    // 해당 유저의 모든 수강 정보 
+	    List<myClassDto> allList = myClassroomMapper.selectAllEnroll(user_id);
+	    
+	    // 유효한 class_id만 담을 빈 리스트 
+	    List<Integer> validIds = new ArrayList<>();
+	    LocalDate today = LocalDate.now();
+
+	    for (myClassDto enrollment : allList) {
+	        LocalDate startDate = LocalDate.parse(enrollment.getCls_statereg_date().substring(0, 10));
+	        LocalDate endDate = startDate.plusDays(enrollment.getCls_exp());
+
+	        // 오늘이 종료일 이전이고, 상태가 수강중(1)인 경우만 리스트에 추가
+	        if (!today.isAfter(endDate) && enrollment.getCls_state_status() == 1) {
+	            validIds.add(enrollment.getClass_id());
+	        }
+	    }
+	    
+	    return validIds;
 	}
 }
