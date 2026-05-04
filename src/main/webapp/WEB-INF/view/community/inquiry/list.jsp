@@ -24,7 +24,7 @@
                             <td>
                                 <%-- 비공개 게시글 처리 --%>
                                 <c:choose>
-                                    <c:when test="${post.board_private == 1 && sessionScope.loginUser.user_id != post.user_id && sessionScope.loginUser.user_role < 2}">
+                                    <c:when test="${post.board_private == 1 && (empty sessionScope.loginUser || (sessionScope.loginUser.user_id != post.user_id && sessionScope.loginUser.user_role < 2))}">
                                         🔒 비공개 게시글입니다.
                                     </c:when>
                                     <c:otherwise>

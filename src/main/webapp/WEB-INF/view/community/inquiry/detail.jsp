@@ -15,7 +15,7 @@
 
     <%-- 비공개 게시글 내용 처리 --%>
     <c:choose>
-        <c:when test="${board.board_private == 1 && sessionScope.loginUser.user_id != board.user_id && sessionScope.loginUser.user_role < 2}">
+        <c:when test="${board.board_private == 1 && (empty sessionScope.loginUser || (sessionScope.loginUser.user_id != board.user_id && sessionScope.loginUser.user_role < 2))}">
             <div style="text-align:center;color:#aaa;padding:40px;font-size:14px;">
                 🔒 비공개 게시글입니다. 작성자와 관리자만 볼 수 있습니다.
             </div>
