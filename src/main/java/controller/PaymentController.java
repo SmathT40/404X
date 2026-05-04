@@ -59,7 +59,7 @@ public class PaymentController {
         }
         return result;
     }
-
+   
     // 장바구니 개별 삭제
     @ResponseBody
     @PostMapping("/cart/delete")

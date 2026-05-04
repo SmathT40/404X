@@ -13,16 +13,26 @@
         <span>&#128065; ${board.board_cnt}</span>
     </div>
 
-    <div style="min-height:200px;line-height:1.9;font-size:14px;color:#333;margin-bottom:24px;">
-        ${board.board_content}
-    </div>
+    <%-- 비공개 게시글 내용 처리 --%>
+    <c:choose>
+        <c:when test="${board.board_private == 1 && sessionScope.loginUser.user_id != board.user_id && sessionScope.loginUser.user_role < 2}">
+            <div style="text-align:center;color:#aaa;padding:40px;font-size:14px;">
+                🔒 비공개 게시글입니다. 작성자와 관리자만 볼 수 있습니다.
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div style="min-height:200px;line-height:1.9;font-size:14px;color:#333;margin-bottom:24px;">
+                ${board.board_content}
+            </div>
 
-    <c:if test="${not empty board.fileurl}">
-        <div style="margin-bottom:24px;">
-            <a href="${pageContext.request.contextPath}/resources/upload/file/${board.fileurl}"
-               target="_blank">첨부파일: ${board.fileurl}</a>
-        </div>
-    </c:if>
+            <c:if test="${not empty board.fileurl}">
+                <div style="margin-bottom:24px;">
+                    <a href="${pageContext.request.contextPath}/resources/upload/file/${board.fileurl}"
+                       target="_blank">첨부파일: ${board.fileurl}</a>
+                </div>
+            </c:if>
+        </c:otherwise>
+    </c:choose>
 
     <c:if test="${sessionScope.loginUser.user_id == board.user_id}">
         <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:24px;">
@@ -39,7 +49,6 @@
                 <textarea id="cmtContent" class="form-control" placeholder="댓글 내용을 입력해주세요."
                           style="height:80px;resize:none;"></textarea>
                 <div class="comment-write-actions">
-                    <%-- 비공개 체크박스 추가 --%>
                     <label class="radio-label" style="font-size:12px;">
                         <input type="checkbox" id="cmtPrivate"> 비공개
                     </label>
@@ -162,7 +171,7 @@ function doDelete(id){
 
 function submitComment(){
     var content = $('#cmtContent').val().trim();
-    var isPrivate = $('#cmtPrivate').is(':checked') ? 1 : 0; // 비공개 추가
+    var isPrivate = $('#cmtPrivate').is(':checked') ? 1 : 0;
     if(!content){ showAlert('내용을 입력해주세요.'); return; }
     $.ajax({
         url: '${pageContext.request.contextPath}/class/comment/insert',
