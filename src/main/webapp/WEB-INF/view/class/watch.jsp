@@ -187,7 +187,6 @@ function submitComment(){
     	return;
 	}
     var content  = $('#cmtContent').val().trim();
-    // 우리 DB 구조에 맞게 체크하면 1(비공개), 아니면 0(공개)
     var isPrivate = $('#cmtPrivate').is(':checked') ? 1 : 0; 
     if(!content){ showAlert('내용을 입력해주세요.'); return; }
 
@@ -294,35 +293,4 @@ function sendProgress(secondsToAdd) {
         }
     });
 }
-
-/*
-var lectureId = ${lec.lec_id};
-function toggleReply(id){ $('#reply-' + id).toggle(); }
-function submitComment(){
-    var content = $('#cmtContent').val().trim();
-    if(!content){ showAlert('내용을 입력해주세요.'); return; }
-    ajaxRequest('${pageContext.request.contextPath}/lecture/comment/insert',
-        {lectureId: lectureId, content: content}, 'POST',
-        function(res){ if(res.success) location.reload(); });
-}
-function submitReply(parentId, btn){
-    var content = $(btn).closest('div').prev('textarea').val().trim();
-    if(!content){ showAlert('내용을 입력해주세요.'); return; }
-    ajaxRequest('${pageContext.request.contextPath}/lecture/comment/insert',
-        {lectureId: lectureId, content: content, parentId: parentId}, 'POST',
-        function(res){ if(res.success) location.reload(); });
-}
-function deleteCmt(id){
-    showConfirm('삭제하시겠습니까?', function(){
-        ajaxRequest('${pageContext.request.contextPath}/lecture/comment/delete', {cmtId: id}, 'POST',
-            function(res){ if(res.success) location.reload(); });
-    });
-}
-function doDelete(){
-    showConfirm('강의를 삭제하시겠습니까?', function(){
-        ajaxRequest('${pageContext.request.contextPath}/host/class/deleteLecture', {lectureId: lectureId}, 'POST',
-            function(res){ if(res.success) history.back(); });
-    });
-}
-*/
 </script>

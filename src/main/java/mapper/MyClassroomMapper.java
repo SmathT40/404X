@@ -51,4 +51,16 @@ public interface MyClassroomMapper {
 		""")
 	myClassDto selectEnrollmentCheck(@Param("user_id") String user_id, @Param("class_id") int class_id);
 
+	@Select("""
+		    SELECT 
+		        s.cls_state_status, 
+		        s.cls_statereg_date, 
+		        s.classno AS class_id,
+		        c.cls_exp
+		    FROM cls_state s
+		    JOIN cls c ON s.classno = c.class_id
+		    WHERE s.user_id = #{user_id}
+		""")
+	List<myClassDto> selectAllEnroll(String user_id);
+
 }
