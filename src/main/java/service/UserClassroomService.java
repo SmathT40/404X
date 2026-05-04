@@ -79,7 +79,7 @@ public class UserClassroomService {
 	            validIds.add(enrollment.getClass_id());
 	        }
 	    }
-	    
+	    System.out.println("유효한 강의 리스트: " + validIds);
 	    return validIds;
 	}
 }

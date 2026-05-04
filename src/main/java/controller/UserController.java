@@ -20,6 +20,7 @@ import dto.User;
 import service.BoardService;
 import service.ClsReplyService;
 import service.PaymentService;
+import service.UserClassroomService;
 import service.UserService;
 
 import org.springframework.web.client.RestTemplate;
@@ -36,6 +37,9 @@ public class UserController {
     // [csw 팀원이 추가한 서비스]
     @Autowired
     private BoardService boardService;
+    //hto 0504
+    @Autowired
+    UserClassroomService userClassroomService;
 
     // ================= [공통 회원가입/로그인] =================
     @GetMapping("/user/join")
@@ -108,6 +112,13 @@ public class UserController {
         
         if (loginUser != null) {
             session.setAttribute("loginUser", loginUser);
+            
+            //0504 hto 로그인시 세션에 수강정보 저장
+            if (loginUser.getUser_role() < 1) {
+                List<Integer> enrolledList = userClassroomService.getEnrolledClasses(loginUser.getUser_id());
+                session.setAttribute("enrolledClasses", enrolledList);
+                session.setAttribute("enrolledLastUpdated", System.currentTimeMillis());
+            }
             return "redirect:/"; // 로그인 성공
         } else {
             model.addAttribute("errorMsg", "아이디 또는 비밀번호가 일치하지 않습니다.");

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <title>내 강의실 - 404 X CLUB</title>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <style>
 /* 1. 테이블 넓이 고정 및 레이아웃 설정 */
 .data-table {
@@ -55,7 +56,8 @@
     </div>
 
     <h2 class="section-title">내강의실</h2>
-
+	<jsp:useBean id="now" class="java.util.Date" />
+	<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="today" />
     <%-- 수강중인 강의 --%>
     <div style="margin-bottom:40px;">
         <div style="font-weight:600;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #eee;">수강중인 강의</div>
@@ -69,7 +71,7 @@
                 <c:choose>
                     <c:when test="${not empty myclassList}">
                         <c:forEach var="cls" items="${myclassList}">
-                        <c:if test="${cls.cls_state_status == 1}">
+                        <c:if test="${cls.cls_state_status == 1 && cls.cls_end_date >= today}">
                             <tr onclick="location.href='${pageContext.request.contextPath}/class/leclist?class_id=${cls.class_id}'" style="cursor:pointer;">
                                 <td>${cls.class_id}</td>
                                 <td>${cls.cls_title}</td>
@@ -103,7 +105,7 @@
                 <c:choose>
                     <c:when test="${not empty myclassList}">
                         <c:forEach var="cls" items="${myclassList}">
-                        <c:if test="${cls.cls_state_status == 0}">
+                        <c:if test="${cls.cls_end_date < today || cls.cls_state_status != 1}">
                             <tr>
                                 <td>${cls.class_id}</td>
                                 <td>${cls.cls_title}</td>

@@ -2,6 +2,7 @@ package mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -70,4 +71,7 @@ public interface HostClassMapper {
 		        class_id = #{class_id}
 		""")
 	void updateClass(ClassDto dto);
+
+	@Delete("DELETE FROM lec WHERE lec_id = #{lecId}")
+	void deleteLec(int lecId);
 }

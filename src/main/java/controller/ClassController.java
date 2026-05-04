@@ -99,7 +99,7 @@ public class ClassController {
 	        
 	        // 최종 세션시간과 일정 시간 차이나면 다시 세션정보 불러옴. 테스트용으로 1 
 	        // 실제 서비스시에는 규모에 따라 5~30분(300000 ~ 1800000) 
-	        if (enrolledList == null || lastUpdated == null || (currentTime - lastUpdated > 1)) {
+	        if (enrolledList == null || lastUpdated == null || (currentTime - lastUpdated > 1000)) {
 	            enrolledList = userClassroomService.getEnrolledClasses(loginUser.getUser_id());
 	            session.setAttribute("enrolledClasses", enrolledList);
 	            session.setAttribute("enrolledLastUpdated", currentTime); 

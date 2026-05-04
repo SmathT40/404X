@@ -55,4 +55,8 @@ public class HostClassService {
 	    file.transferTo(new java.io.File(uploadPath + fileName));
 	    return request.getContextPath() + "/resources/upload/thumbnail/" + fileName;
 	}
+
+	public void deleteLecture(int lecId) {
+		hostClassMapper.deleteLec(lecId);
+	}
 }

@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>페이지를 찾기 싫습니다. - 404</title>
+    <title>페이지를 찾기 싫습니다. - 500</title>
     <style>
         /* 배경 이미지 설정 */
         body {
@@ -50,7 +50,7 @@
 </head>
 <body>
     <div class="error-container">
-        <div class="error-code">404</div>
+        <div class="error-code">500</div>
         <div class="error-msg">요청하신 페이지를 찾기 싫습니다.</div>
         <p>입력하신 주소가 정확한지 다시 한번 확인해주세요.</p>
         <p style="opacity: 0.7;">사실 니가 코딩을 잘못했겠지</p>
