@@ -28,7 +28,17 @@
                         <tr onclick="location.href='${pageContext.request.contextPath}/community/board/detail?boardid=1&board_no=${post.board_no}'"
                             style="cursor:pointer;">
                             <td>${post.board_no}</td>
-                            <td>${post.board_title}</td>
+                            <td>
+                                <%-- 비공개 게시글 처리 --%>
+                                <c:choose>
+                                    <c:when test="${post.board_private == 1}">
+                                        🔒 비공개 게시글입니다.
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${post.board_title}
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
                             <td style="text-align:center;">
                                 <c:if test="${not empty post.fileurl}">&#128196;</c:if>
                             </td>
@@ -47,20 +57,20 @@
 
     <div style="text-align:right;margin-top:12px;">
         <c:choose>
-        <c:when test="${not empty sessionScope.loginUser}">
-        <a href="${pageContext.request.contextPath}/community/board/form?boardid=1" class="btn btn-black btn-sm">글쓰기</a>
-      </c:when>
-    <c:otherwise>
-        <a href="#" onclick="showAlert('로그인이 필요합니다.'); return false;" class="btn btn-black btn-sm">글쓰기</a>
-    </c:otherwise>
-</c:choose>
+            <c:when test="${not empty sessionScope.loginUser}">
+                <a href="${pageContext.request.contextPath}/community/board/form?boardid=1" class="btn btn-black btn-sm">글쓰기</a>
+            </c:when>
+            <c:otherwise>
+                <a href="#" onclick="showAlert('로그인이 필요합니다.'); return false;" class="btn btn-black btn-sm">글쓰기</a>
+            </c:otherwise>
+        </c:choose>
     </div>
-    
+
     <jsp:include page="/WEB-INF/view/common/pagination.jsp">
-                    <jsp:param name="currentPage" value="${currentPage}"/>
-                    <jsp:param name="totalPage"   value="${totalPage}"/>
-                    <jsp:param name="pageUrl"     value="/404X/community/board/list?boardid=1&pageNum="/>
-     </jsp:include>
+        <jsp:param name="currentPage" value="${currentPage}"/>
+        <jsp:param name="totalPage"   value="${totalPage}"/>
+        <jsp:param name="pageUrl"     value="/404X/community/board/list?boardid=1&pageNum="/>
+    </jsp:include>
 </div>
 </main>
 
