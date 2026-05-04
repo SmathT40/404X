@@ -117,7 +117,13 @@ public class HostClassController {
 	    rttr.addFlashAttribute("completeMsg", "강좌 정보가 성공적으로 수정되었습니다.");
 	    return "redirect:/host/class/status"; 
 	}
-	
+	@GetMapping("lecdelete")
+	public String deleteLec(@RequestParam("lec_id") int lecId,HttpSession session) {
+	    User loginUser = (User) session.getAttribute("loginUser");
+	    if (loginUser == null|| loginUser.getUser_role() < 1) return "redirect:/host/class/status";
+	    hostClassService.deleteLecture(lecId);
+	    return "redirect:/host/class/status"; 
+	}
 	@GetMapping("updateform")
 	public String classUpdateForm(@RequestParam("class_id") int classId, HttpSession session, Model model) {
 	    //  로그인 체크 (강사 본인인지 확인하는 로직 추가 권장)

@@ -52,9 +52,13 @@
 </div>
 <script src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 <script>
-const loginUser = ${not empty sessionScope.loginUser};
-
+const loginUser = {
+	    isLogin: ${not empty sessionScope.loginUser},
+	    user_id: "${sessionScope.loginUser.user_id}",
+	    user_role: ${not empty sessionScope.loginUser.user_role ? sessionScope.loginUser.user_role : -1}
+	};
 //0501 hto 수강정보 세션에서 가져옴
+
 const enrolledClasses = [
     <c:forEach var="id" items="${sessionScope.enrolledClasses}" varStatus="status">
         ${id}${!status.last ? ',' : ''}
@@ -62,15 +66,19 @@ const enrolledClasses = [
 ];
 
 function checkLoginAndWatch(classId, lecId) {
-    if (!loginUser) {
+
+    if (!loginUser.isLogin) {
         showAlert('로그인이 필요한 서비스입니다.');
         return;
     }
-    if (!enrolledClasses.includes(Number(classId))) {
-        showAlert('수강 신청이 필요한 강의입니다.');
-        return;
+    const userRole = Number(loginUser.user_role);
+    const isEnrolled = enrolledClasses.includes(Number(classId));
+    if (userRole < 1) { 
+        if (!isEnrolled) {
+            showAlert('수강 신청이 필요한 강의입니다.');
+            return; 
+        }
     }
-    
     location.href = '${pageContext.request.contextPath}/class/watch?class_id=' + classId + '&lec_id=' + lecId;
 }
 </script>

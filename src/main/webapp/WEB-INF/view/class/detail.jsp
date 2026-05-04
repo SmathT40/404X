@@ -11,7 +11,7 @@
         <div>	
             <h1 style="font-size:22px;font-weight:700;margin-bottom:6px;">${cls.cls_title}</h1>
             <div style="font-size:13px;color:#888;">
-                ${cls.user_name} 강사 &nbsp;|&nbsp;
+                ${cls.user_name} 강사 &nbsp;| <a style="color:red;">${cls.cls_exp}일</a>
                 <!--  
                 수강기간 ${classVO.startDate} ~ ${classVO.endDate}
                 -->
